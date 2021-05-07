@@ -1,14 +1,23 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import App from './App/App';
-import reportWebVitals from './tools/reportWebVitals';
+import { reportWebVitals, getEnvConfig } from './tools';
 
 
-ReactDOM.render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-  document.getElementById('app')
-);
+(async () => {
+  // 如果不是正式，使用mock
+  if (getEnvConfig.PRODUCTION === false) (await import('./mocks')).default();
 
-reportWebVitals(process.env.NODE_ENV !== 'production' ? console.log : undefined);
+  const readerDom = getEnvConfig.PRODUCTION
+    ? (<StrictMode>
+        <App />
+      </StrictMode>)
+    : <App />;
+  ReactDOM.render(
+    readerDom,
+    document.getElementById('app')
+  );
+})();
+
+
+reportWebVitals(!getEnvConfig.PRODUCTION ? console.log : undefined);

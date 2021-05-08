@@ -8,16 +8,13 @@ import { reportWebVitals, getEnvConfig } from './tools';
   // 如果不是正式，使用mock
   if (getEnvConfig.PRODUCTION === false) (await import('./mocks')).default();
 
-  const readerDom = getEnvConfig.PRODUCTION
-    ? (<StrictMode>
-        <App />
-      </StrictMode>)
-    : <App />;
   ReactDOM.render(
-    readerDom,
+    <StrictMode>
+      <App />
+    </StrictMode>,
     document.getElementById('app')
   );
 })();
 
 
-reportWebVitals(!getEnvConfig.PRODUCTION ? console.log : undefined);
+reportWebVitals(getEnvConfig.DEVELOPMENT ? console.log : undefined);

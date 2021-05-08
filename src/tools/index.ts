@@ -1,5 +1,5 @@
 import reportWebVitals from './reportWebVitals';
-import getEnvConfig from './envConfig';
+import getEnvConfig from './env-config';
 
 
 export {

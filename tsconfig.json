@@ -21,7 +21,7 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "@types/react-app-env.d.ts",
+    "src/@types",
     "src"
   ]
 }

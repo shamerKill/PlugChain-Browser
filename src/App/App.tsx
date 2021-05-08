@@ -1,15 +1,9 @@
-import './App.css';
+import './reset.scss';
+import Routers from './routers';
 
-function App() {
-  fetch('http://www.baidu.com/api/demo')
-    .then(data => data.json())
-    .then(data => console.log(data))
-    .catch(err => console.log(err));
-
+const App = () => {
   return (
-    <div className="App">
-      <div>Hello World</div>
-    </div>
+    <Routers />
   );
 }
 

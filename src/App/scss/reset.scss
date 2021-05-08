@@ -61,3 +61,11 @@ input:-webkit-autofill , textarea:-webkit-autofill, select:-webkit-autofill {
 a {
   -webkit-tap-highlight-color:rgba(255,255,255,0);
 }
+
+
+#app {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}

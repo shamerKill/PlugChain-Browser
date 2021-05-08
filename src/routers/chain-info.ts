@@ -1,5 +1,5 @@
 import { RouteProps } from 'react-router-dom';
-import PageHome from '../App/pages/home';
+import PageHome from '../app/pages/home';
 export const chainInfoPath = '';
 
 export const chainInfoRouter: RouteProps[] = [

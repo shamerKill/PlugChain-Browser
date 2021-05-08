@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
-import App from './App/App';
+import App from './app/App';
 import { reportWebVitals, getEnvConfig } from './tools';
 
 
@@ -17,4 +17,4 @@ import { reportWebVitals, getEnvConfig } from './tools';
 })();
 
 
-reportWebVitals(getEnvConfig.DEVELOPMENT ? console.log : undefined);
+reportWebVitals(undefined);

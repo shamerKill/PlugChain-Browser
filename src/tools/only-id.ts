@@ -7,7 +7,7 @@ class CreateGlobalOne {
   // 获取随机值
   getRandom = () => {
     let str = randomString();
-    str = this.verifyRandom(str);
+    str = this.getRealRandom(str);
     this.globalArr.push(str);
     return str;
   }
@@ -17,12 +17,15 @@ class CreateGlobalOne {
     if (strIndex !== -1) this.globalArr.splice(strIndex, 1);
   }
   // 进行随机值检测
-  private verifyRandom = (str: string) => {
+  verifyRandom = (str: string) => this.globalArr.includes(str);
+  // 返回无重复值
+  private getRealRandom = (str: string) => {
     if (this.globalArr.includes(str)) return this.getRandom();
     return str;
   }
 }
 
 const createGlobalOne = new CreateGlobalOne();
-export const getGlobalOne = createGlobalOne.getRandom;
-export const delGlobalOne = createGlobalOne.delRandom;
+export const getOnlyId = createGlobalOne.getRandom;
+export const delOnlyId = createGlobalOne.delRandom;
+export const verifyOnlyId = createGlobalOne.verifyRandom;

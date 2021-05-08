@@ -1,9 +1,16 @@
-import './reset.scss';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 import Routers from './routers';
 
+import './scss/reset.scss';
+import './scss/App.scss';
+
 const App = () => {
+  const store = createStore(() => {});
   return (
-    <Routers />
+    <Provider store={store}>
+      <Routers />
+    </Provider>
   );
 }
 

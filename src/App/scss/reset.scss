@@ -1,10 +1,12 @@
 
 body, ul, h1, h2, h3, h4, h5, h6, p, dl, div, dd, hr, fieldset {
   margin: 0;
+  box-sizing: border-box;
 }
 
 ul, input, textarea, button, option, div, ol, fieldset, legend {
   padding: 0;
+  box-sizing: border-box;
 }
 
 html {
@@ -14,9 +16,9 @@ html {
 
 body {
   height: 100%;
+  overflow-y: scroll;
   transform: rotate(0);
 }
-
 
 body, body button, input, textarea {
   font-family: "Microsoft YaHei", "lucida grande", "lucida sans unicode", lucida, helvetica, "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;

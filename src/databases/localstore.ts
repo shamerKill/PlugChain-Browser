@@ -1,5 +1,5 @@
 import { getEnvConfig } from '../tools';
-import { InRootState } from './../@types/redux.d';
+import { InRootState } from '../@types/redux';
 
 const local = localStorage.getItem(getEnvConfig.SAVE_DATABASE_NAME);
 

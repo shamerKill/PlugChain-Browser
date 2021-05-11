@@ -1,16 +1,15 @@
-import { InRootState, ActionType } from './../@types/redux.d';
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { createEpicMiddleware, combineEpics } from 'redux-observable';
+import { InRootState, ActionType } from '../@types/redux';
+import { createStore, combineReducers } from 'redux';
 import { getEnvConfig } from '../tools';
+import { configReducer } from './reducers/config';
+import { TypeDataBaseConfig } from '../@types/database';
 
-const epicMiddleware = createEpicMiddleware();
 
-const rootReducers = combineReducers<InRootState, ActionType<any>>({
+const rootReducers = combineReducers<InRootState, ActionType<TypeDataBaseConfig>>({
+  config: configReducer,
 });
 
-const dataStore = createStore(rootReducers, applyMiddleware(epicMiddleware));
-
-epicMiddleware.run(combineEpics());
+const dataStore = createStore(rootReducers);
 
 dataStore.subscribe(() => {
   localStorage.setItem(getEnvConfig.SAVE_DATABASE_NAME, JSON.stringify(dataStore.getState()));

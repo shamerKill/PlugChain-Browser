@@ -1,0 +1,116 @@
+.layout-header {
+  background-color: #e8e8eb;
+}
+
+.layout-base {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.layout-footer {
+  height: 20%;
+  background-image: var(--background-image-contrast);
+  color: var(--color-primary-text-contrast);
+  .layout-footer-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .layout-footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+  }
+  .layout-footer-info {
+    .layout-footer-logo {
+      width: 20rem;
+      padding: 1rem 0;
+    }
+    .layout-footer-language {
+      opacity: var(--opacity-level-1);
+      font-size: (14/12)+rem;
+      padding-bottom: 2rem;
+    }
+    .layout-footer-button {
+      background: none;
+      color: var(--color-primary-text-contrast);
+      &:hover {
+        color: var(--color-primary);
+        cursor: pointer;
+      }
+    }
+    .layout-footer-text {
+      padding-bottom: 2rem;
+      opacity: var(--opacity-level-1);
+    }
+  }
+  .layout-footer-lists {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 0 1rem;
+    .layout-footer-list-title {
+      font-size: (20/12)+rem;
+      padding-bottom: (12/12)+rem;
+    }
+    .layout-footer-list-item {
+      opacity: var(--opacity-level-1);
+      font-size: (16/12)+rem;
+      line-height: (48/12)+rem;
+      a {
+        color: var(--color-primary-text-contrast);
+      }
+    }
+    .layout-footer-list-more {
+      a {
+        color: var(--color-primary-text-contrast);
+      }
+    }
+  }
+  .layout-friends-dl {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding-bottom: 1rem;
+    opacity: var(--opacity-level-1);
+    &::before {
+      content: '';
+      display: block;
+      background: var(--color-primary-background);
+      height: 1px;
+      width: 100%;
+      opacity: var(--opacity-level-2);
+      margin-bottom: 1rem;
+    }
+    .layout-friends-dt {
+      font-size: (14/12)+rem;
+      padding: 0 1rem;
+    }
+    .layout-friends-dd {
+      display: flex;
+      flex-wrap: wrap;
+      .layout-friends-img {
+        width: 8rem;
+        height: 2.2rem;
+        margin: 0.5rem 1rem;
+      }
+    }
+  }
+  @media (max-width: 640px) {
+    .layout-footer-inner {
+      padding: 0 1rem;
+    }
+    .layout-footer-lists {
+      width: 100%;
+    }
+  }
+  @media (min-width: 640px) {
+    .layout-footer-lists {
+      width: 30rem;
+      padding-right: 2rem;
+    }
+  }
+}

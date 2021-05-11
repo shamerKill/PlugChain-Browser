@@ -1,6 +1,6 @@
 import { getOnlyId } from './../tools/only-id';
 import { RouteProps } from 'react-router-dom';
-import { InRouteConfig } from './../@types/app.system.d';
+import { InRouteConfig } from '../@types/app.system';
 import { chainInfoRouter, chainInfoPath } from './chain-info';
 import { walletsRouter, walletsPath } from './wallets';
 

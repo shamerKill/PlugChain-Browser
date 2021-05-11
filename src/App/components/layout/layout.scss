@@ -16,6 +16,7 @@
   .layout-footer-inner {
     max-width: 1400px;
     margin: 0 auto;
+    padding: 0 2rem;
   }
   .layout-footer-content {
     display: flex;
@@ -110,7 +111,6 @@
   @media (min-width: 640px) {
     .layout-footer-lists {
       width: 30rem;
-      padding-right: 2rem;
     }
   }
 }

@@ -11,7 +11,7 @@ export type TypeComponentsControlLogo = {
   alt?: string;
 };
 
-const ComponentsControlLogo: FC<TypeComponentsControlLogo> = ({ link, src, className, alt, target }) => {
+const ComConLogo: FC<TypeComponentsControlLogo> = ({ link, src, className, alt, target }) => {
   return (
     <div className={formatClass(['control-logo', className])}>
       <a
@@ -25,4 +25,4 @@ const ComponentsControlLogo: FC<TypeComponentsControlLogo> = ({ link, src, class
   );
 };
 
-export default ComponentsControlLogo;
+export default ComConLogo;

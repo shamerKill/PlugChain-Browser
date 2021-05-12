@@ -1,7 +1,7 @@
 import { FC, Fragment } from 'react';
 import { formatClass } from '../../../tools';
-import ComponentsLayoutFooter from './footer';
-import ComponentsLayoutHeader from './header';
+import ComLayFooter from './footer';
+import ComLayHeader from './header';
 import './layout.scss';
 
 const ComponentsLayoutBase: FC = ({
@@ -9,11 +9,11 @@ const ComponentsLayoutBase: FC = ({
 }) => {
   return (
     <Fragment>
-      <ComponentsLayoutHeader />
+      <ComLayHeader />
       <div className={formatClass(['layout-base'])}>
         { children }
       </div>
-      <ComponentsLayoutFooter />
+      <ComLayFooter />
     </Fragment>
   );
 };

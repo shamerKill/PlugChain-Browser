@@ -14,3 +14,10 @@
     display: inline-block;
   } 
 }
+.control-button {
+  background: var(--color-primary);
+  color: var(--color-primary-info);
+  font-size: (14/12)+rem;
+  border-radius: 0.4rem;
+  padding: (6/12)+rem (10/12)+rem;
+}

@@ -1,10 +1,8 @@
 import { FC, useEffect, useState } from 'react';
-import { InRootState } from '../../../@types/redux';
-import useGetDispatch from '../../../databases/hook';
-import { changeConfig } from '../../../databases/store/config';
 import I18 from '../../../i18n/component';
+import { useLanguageHook } from '../../../services/config.services';
 import { formatClass, getOnlyId } from '../../../tools';
-import ComponentsControlLogo, { TypeComponentsControlLogo } from '../control/logo';
+import ComConLogo, { TypeComponentsControlLogo } from '../control/logo';
 
 const links = [
   { link: '/', src: require('../../../assets/logo/protocol-full-light.png') },
@@ -16,16 +14,9 @@ const links = [
   { link: '/', src: require('../../../assets/logo/protocol-full-light.png') },
 ];
 
-const ComponentsLayoutFooter: FC = () => {
+const ComLayFooter: FC = () => {
   const [friendsLink, setFriendsLink] = useState<TypeComponentsControlLogo[]>([]);
-  const [, setConfig] = useGetDispatch<InRootState['config']>('config');
-
-  const changeLanguage = (language: InRootState['config']['language']) => {
-    setConfig({
-      type: changeConfig,
-      data: { language },
-    });
-  };
+  const [, changeLanguage] = useLanguageHook();
   
   useEffect(() => {
     setFriendsLink(links);
@@ -37,7 +28,7 @@ const ComponentsLayoutFooter: FC = () => {
         <div className={formatClass(['layout-footer-content'])}>
           {/* Site Info */}
           <div className={formatClass(['layout-footer-info'])}>
-            <ComponentsControlLogo
+            <ComConLogo
               className={formatClass(['layout-footer-logo'])}
               link="/"
               src={require('../../../assets/logo/chain-full-light.png')} />
@@ -91,7 +82,7 @@ const ComponentsLayoutFooter: FC = () => {
           <dd className={formatClass(['layout-friends-dd'])}>
             {
               friendsLink.map(item => (
-                <ComponentsControlLogo
+                <ComConLogo
                   key={getOnlyId()}
                   className={formatClass(['layout-friends-img'])}
                   {...item} />
@@ -104,4 +95,4 @@ const ComponentsLayoutFooter: FC = () => {
   );
 };
 
-export default ComponentsLayoutFooter;
+export default ComLayFooter;

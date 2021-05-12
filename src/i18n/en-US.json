@@ -1,9 +1,9 @@
 {
   "blockChain": "BlockChain",
   "home": "Home",
-  "wallet": "wallet",
-  "signIn": "signIn",
-  "create": "create",
+  "wallet": "Wallet",
+  "signIn": "SignIn",
+  "create": "Create",
   "zhCN": "中文简体",
   "enUS": "English",
   "ONPBlockChainBrowser": "ONP BLOCKCHAIN BROWSER",

@@ -18,9 +18,9 @@ const I18: FC<{ text: string }> = ({ text }) => {
     }
   }, [language, setJson]);
   return (
-    <span>
+    <>
       { json[text] }
-    </span>
+    </>
   );
 };
 

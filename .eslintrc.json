@@ -1,0 +1,63 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "react-app",
+    "react-app/jest",
+    "eslint:recommended"
+  ],
+  "overrides": [
+    {
+      "files": "*.ts",
+      "rules": {
+        "no-extra-semi": ["error"],
+        "no-await-in-loop": ["warn"],
+        "no-dupe-args": ["error"],
+        "no-empty": ["warn"],
+        "no-extra-parens": ["error"],
+        "no-func-assign": ["error"],
+        "no-sparse-arrays": ["error"],
+        "no-unexpected-multiline": ["error"],
+        "no-prototype-builtins": ["error"],
+        "no-irregular-whitespace": ["warn", {
+          "skipComments": true,
+          "skipStrings": true,
+          "skipTemplates": true
+        }],
+        "use-isnan": ["error"],
+        "valid-typeof": ["warn"],
+        "accessor-pairs": ["warn"],
+        "curly": ["warn", "multi"],
+        "default-case": ["error"],
+        "dot-location": ["error", "property"],
+        "eqeqeq": ["error"],
+        "dot-notation": ["error"],
+        "no-div-regex": ["error"],
+        "no-empty-function": ["warn"],
+        "no-return-await": ["error"],
+        "no-useless-return": ["warn"],
+        "semi-spacing": ["error"],
+        "semi": ["warn", "always"],
+        "quotes": ["warn", "single"],
+        "no-trailing-spaces": ["warn", { "ignoreComments": true }],
+        "space-infix-ops": ["warn", {"int32Hint": true}],
+        "no-var": ["warn"],
+        "arrow-body-style": ["warn", "as-needed"],
+        "arrow-parens": ["warn", "as-needed"],
+        "no-duplicate-imports": ["warn", { "includeExports": true }],
+        "no-multiple-empty-lines": ["warn"],
+        "no-tabs": ["warn"],
+        "id-length": ["warn", { "min": 2, "max": 20 }],
+        "function-paren-newline": ["error", { "minItems": 3 }],
+        "camelcase": ["warn"],
+        "array-bracket-spacing": ["warn", "always"],
+        "block-spacing": ["warn", "always"],
+        "comma-dangle": ["warn", "always-multiline"],
+        "func-call-spacing": ["warn", "never"],
+        "implicit-arrow-linebreak": ["warn"],
+        "indent": ["error", 2],
+        "linebreak-style": ["warn"],
+        "no-unused-vars": ["warn"]
+      }
+    }
+  ]
+}

@@ -1,11 +1,15 @@
 .layout-header {
   background-color: #e8e8eb;
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem;
-  align-items: center;
-  position: relative;
-  z-index: 10;
+  .layout-header-inner {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
   .layout-header-logo {
     width: (205/12)+rem;
     min-width: (205/12)+rem;
@@ -126,6 +130,9 @@
   flex-direction: column;
   flex: 1;
   background-color: #e8e8eb;
+  .layout-base-fix {
+    max-width: 1400px;
+  }
 }
 
 .layout-footer {

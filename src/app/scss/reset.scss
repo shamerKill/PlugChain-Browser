@@ -1,0 +1,73 @@
+
+body, ul, h1, h2, h3, h4, h5, h6, p, dl, div, dd, hr, fieldset {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+ul, input, textarea, button, option, div, ol, fieldset, legend {
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  height: 100%;
+  overflow-y: scroll;
+  transform: rotate(0);
+}
+
+body, body button, input, textarea {
+  font-family: "Microsoft YaHei", "lucida grande", "lucida sans unicode", lucida, helvetica, "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
+}
+
+ul {
+  list-style: none;
+}
+
+img, button {
+  border-style: none;
+}
+
+a, input, button {
+  text-decoration: none;
+  outline: none;
+}
+
+input,
+textarea {
+  border: 0;
+  outline: none;
+  appearance: none;
+}
+
+input[type=number] {
+  appearance:textfield;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+body {
+  -webkit-overflow-scrolling: touch;
+}
+input:-webkit-autofill , textarea:-webkit-autofill, select:-webkit-autofill {
+  transition: background-color 500s ease-in-out 0s;
+}
+
+a {
+  -webkit-tap-highlight-color:rgba(255,255,255,0);
+}
+
+
+#app {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}

@@ -9,9 +9,10 @@ export type TypeComponentsControlButton = {
 const ComConButton: FC<TypeComponentsControlButton & ButtonHTMLAttributes<HTMLButtonElement>> = ({
   children,
   onClick,
+  className,
 }) => {
   return (
-    <button className={formatClass(['control-button'])} onClick={onClick}>
+    <button className={formatClass(['control-button', className])} onClick={onClick}>
       { children }
     </button>
   );

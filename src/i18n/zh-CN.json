@@ -4,6 +4,8 @@
   "wallet": "钱包",
   "signIn": "登录",
   "create": "创建",
+  "createAccount": "创建账户",
+  "language": "语言",
   "zhCN": "中文简体",
   "enUS": "English",
   "ONPBlockChainBrowser": "ONP区块链浏览器",

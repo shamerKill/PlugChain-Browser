@@ -20,4 +20,36 @@
   font-size: (14/12)+rem;
   border-radius: 0.4rem;
   padding: (6/12)+rem (10/12)+rem;
+  border: 1px solid var(--color-primary-info);
+}
+.control-select {
+  position: relative;
+  .control-select-select {
+    background: none;
+    display: flex;
+    align-items: center;
+  }
+  .control-select-icon {
+    width: 1.4rem;
+    padding-left: 0.3rem;
+  }
+  .control-select-options {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    width: 100%;
+    padding: 0.5rem;
+    background: var(--color-primary-info);
+    &.control-select-options-hide {
+      display: none;
+    }
+    .control-select-option {
+      padding: 0.2rem;
+      background: none;
+      &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+  }
 }

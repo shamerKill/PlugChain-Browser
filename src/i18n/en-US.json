@@ -4,6 +4,8 @@
   "wallet": "Wallet",
   "signIn": "SignIn",
   "create": "Create",
+  "createAccount": "CreateAccount",
+  "language": "Language",
   "zhCN": "中文简体",
   "enUS": "English",
   "ONPBlockChainBrowser": "ONP BLOCKCHAIN BROWSER",

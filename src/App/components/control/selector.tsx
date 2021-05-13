@@ -1,35 +1,46 @@
-import { FC, HTMLAttributes, ReactElement } from 'react';
-import { formatClass } from '../../../tools';
+import { FC, HTMLAttributes, ReactElement, useState } from 'react';
+import { formatClass, getOnlyId } from '../../../tools';
 
 export type TypeComponentsControlSelector = {
   select: number;
   options: (string|ReactElement)[];
-  onChange?: (select: number) => unknown;
+  onSelfSelect?: (select: number) => unknown;
 };
 
 const ComConSelector: FC<TypeComponentsControlSelector & HTMLAttributes<HTMLDivElement>> = ({
   className,
   select,
   options,
-  onChange,
+  onSelfSelect,
 }) => {
+  const [showOptions, setShowOptions] = useState(false);
+
+  const changeSelect = (num: number) => {
+    if (num === select) return;
+    onSelfSelect?.(num);
+    setShowOptions(false);
+  };
+
   return (
     <div className={formatClass(['control-select', className])}>
-      <div className={formatClass(['control-select-select'])}>
+      <button
+        className={formatClass(['control-select-select'])}
+        onClick={() => setShowOptions(state => !state)}>
         { options[select] }
-      </div>
-      <select style={{ position: 'fixed', top: '-100%', left: '-100%'}}>
-        <option value="1">1</option>
-        <option selected value="2">你好</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-      </select>
-      <div className={formatClass(['control-select-options'])}>
+        <img
+          className={formatClass(['control-select-icon'])}
+          alt="more"
+          src={ require('../../../assets/svg/invert-triangle.svg') } />
+      </button>
+      <div className={formatClass(['control-select-options', !showOptions && 'control-select-options-hide'])}>
         {
-          options.map(item => (
-            <div className={formatClass(['control-select-option'])}>
+          options.map((item, index) => (
+            <button
+              key={getOnlyId()}
+              className={formatClass(['control-select-option'])}
+              onClick={() => changeSelect(index)}>
               { item }
-            </div>
+            </button>
           ))
         }
       </div>

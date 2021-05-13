@@ -6,7 +6,8 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "fix": "eslint --fix"
+    "lint": "eslint ./src",
+    "test:jest": "jest ./src"
   },
   "dependencies": {
     "@babel/core": "7.12.3",
@@ -89,6 +90,9 @@
     "webpack-manifest-plugin": "2.2.0",
     "workbox-webpack-plugin": "5.1.4"
   },
+  "pre-commit": {
+    "run": [ "lint", "test:jest" ]
+  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -162,6 +166,7 @@
     "@types/mockjs": "^1.0.3",
     "@types/node-fetch": "^2.5.10",
     "@types/react-router-dom": "^5.1.7",
+    "pre-commit": "^1.2.2",
     "sass": "^1.32.12"
   }
 }

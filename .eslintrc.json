@@ -56,7 +56,8 @@
         "implicit-arrow-linebreak": ["warn"],
         "indent": ["error", 2],
         "linebreak-style": ["warn"],
-        "no-unused-vars": ["warn"]
+        "no-unused-vars": ["warn"],
+        "@typescript-eslint/no-unused-vars": ["warn"]
       }
     }
   ]

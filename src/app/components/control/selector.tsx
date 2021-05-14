@@ -27,10 +27,9 @@ const ComConSelector: FC<TypeComponentsControlSelector & HTMLAttributes<HTMLDivE
         className={formatClass(['control-select-select'])}
         onClick={() => setShowOptions(state => !state)}>
         { options[select] }
-        <img
-          className={formatClass(['control-select-icon'])}
-          alt="more"
-          src={ require('../../../assets/svg/invert-triangle.svg') } />
+        <svg className="control-select-icon icon" aria-hidden="true">
+          <use xlinkHref="#icon-more"></use>
+        </svg>
       </button>
       <div className={formatClass(['control-select-options', !showOptions && 'control-select-options-hide'])}>
         {

@@ -10,7 +10,7 @@ import { throttleTime } from 'rxjs/operators';
 
 const ComLayHeader: FC = () => {
   const [language, setLanguage] = useLanguageHook();
-  const [menuObserver] = useState(new BehaviorSubject<boolean>(false));
+  const [menuObserver] = useState(new BehaviorSubject<boolean>(true));
   const [menuShow, setMenuShow] = useState(true);
 
   const changeLanguage = (type: number) => {
@@ -60,15 +60,13 @@ const ComLayHeader: FC = () => {
             className={formatClass(['layout-header-phone-change'])}>
             {
               menuShow ? (
-                <img
-                  className={formatClass(['layout-header-phone-icon layout-header-phone-menu'])}
-                  alt="menu"
-                  src={require('../../../assets/svg/menu.svg')} />
+                <svg className={formatClass(['icon', 'layout-header-phone-icon', 'layout-header-phone-menu'])} aria-hidden="true">
+                  <use xlinkHref="#icon-ego-menu"></use>
+                </svg>
               ) : (
-                <img
-                  className={formatClass(['layout-header-phone-icon layout-header-phone-close'])}
-                  alt="menu"
-                  src={require('../../../assets/svg/close.svg')} />
+                <svg className={formatClass(['icon', 'layout-header-phone-icon', 'layout-header-phone-close'])} aria-hidden="true">
+                  <use xlinkHref="#icon-close"></use>
+                </svg>
               )
             }
           </button>

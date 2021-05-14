@@ -17,5 +17,30 @@
   "footerList2-2": "以太坊浏览器",
   "footerList2-3": "泰达币浏览器",
   "footerListMore": "更多",
-  "footerFriendLinks": "友情链接"
+  "footerFriendLinks": "友情链接",
+
+
+
+
+  "searchPlaceholder": "搜索地址、交易、区块高度",
+  "newBlockHeight": "最新区块",
+  "transactionVolume": "交易数",
+  "pendingBlockVolume": "未确认区块",
+  "newBlockTransaction": "最新块内交易数量",
+  "price": "价格",
+  "markValue": "市值",
+  "allTokenVolume": "总供应量",
+  "allPledge": "全网抵押",
+  "24hTransactionVolume": "24h交易量",
+  "secondNumber": "每秒处理交易数据",
+  "nowVolume": "当前",
+  "historyMaxVolume": "历史最高",
+  "viewMoreValue": "查看更多数据",
+  "newTransaction": "最新交易",
+  "blockHeight": "区块高度",
+  "blockTimeStamp": "产块时间",
+  "producer": "生产者",
+  "blockId": "区块ID",
+  "freeNumber": "手续费",
+  "more": "更多"
 }

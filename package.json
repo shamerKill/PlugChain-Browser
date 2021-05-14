@@ -35,6 +35,7 @@
     "css-loader": "4.3.0",
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
+    "echarts": "^5.1.1",
     "eslint": "^7.11.0",
     "eslint-config-react-app": "^6.0.0",
     "eslint-plugin-flowtype": "^5.2.0",
@@ -91,7 +92,10 @@
     "workbox-webpack-plugin": "5.1.4"
   },
   "pre-commit": {
-    "run": [ "lint", "test:jest" ]
+    "run": [
+      "lint",
+      "test:jest"
+    ]
   },
   "browserslist": {
     "production": [

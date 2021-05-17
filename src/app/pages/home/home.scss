@@ -121,6 +121,7 @@
         padding: 0.5rem 0;
         font-size: (14/12)+rem;
         background: none;
+        cursor: pointer;
         color: var(--color-primary);
       }
       .chain_volume_icon {
@@ -156,6 +157,112 @@
         width: 100%;
         height: (125/12)+rem;
         margin-top: 1rem;
+      }
+    }
+  }
+  .home_news {
+    position: relative;
+    margin: 1rem 1rem 3rem;
+    box-shadow: var(--background-box-shadow);
+    .tab_header {
+      position: relative;
+      display: flex;
+      justify-content: flex-start;
+      z-index: 2;
+    }
+    .tab_header_item {
+      padding: 2rem 3rem;
+      font-size: 1.6rem;
+      letter-spacing: 0.1rem;
+      font-weight: 900;
+      opacity: var(--opacity-level-2);
+      cursor: pointer;
+      transition: opacity 0.2s;
+      background: none;
+      outline: none;
+      &.tab_header_selected {
+        opacity: 1;
+      }
+    }
+    .tab_header_icon {
+      padding-right: 0.5rem;
+      font-size: 2.4rem;
+      vertical-align: middle;
+    }
+    .tab_header_bg {
+      position: absolute;
+      background-color: var(--color-primary-background-contrast);
+      top: 0;
+      left: 0;
+      width: 0rem;
+      height: 0rem;
+      z-index: -1;
+      border-top-left-radius: 0.5rem;
+      border-top-right-radius: 0.5rem;
+      transition: width 0.2s, left 0.2s;
+      box-shadow: var(--background-box-shadow);
+    }
+    .tab_more {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      background-color: var(--color-primary-text);
+      color: var(--color-primary-background);
+      padding: 0.2rem 0.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      border-radius: 0.3rem;
+      width: 5rem;
+      justify-content: center;
+    }
+    .tab_more_icon {
+      padding-left: 0.3rem;
+      font-size: 0.8em;
+    }
+    .tab_content {
+      background: var(--color-primary-background-contrast);
+      position: relative;
+      overflow: hidden;
+      .tab_content_scroll {
+        width: 200%;
+        display: flex;
+        transition: margin-left 0.2s;
+        .tab_content_inner {
+          width: 100%;
+          padding: 1rem 0.5rem;
+        }
+      }
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 200%;
+        height: 1rem;
+        background-color: var(--color-primary-background-contrast);
+        z-index: 2;
+      }
+      .a_link {
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 15rem;
+      }
+    }
+    @media (max-width: 720px) {
+      .tab_more {
+        top: initial;
+        right: initial;
+        bottom: 1rem;
+        left: 50%;
+        margin-left: -2.5rem;
+      }
+      .tab_content {
+        padding-bottom: 4rem;
       }
     }
   }

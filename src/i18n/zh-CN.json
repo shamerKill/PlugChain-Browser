@@ -42,5 +42,9 @@
   "producer": "生产者",
   "blockId": "区块ID",
   "freeNumber": "手续费",
+  "ID": "ID",
+  "time": "时间",
+  "from": "从",
+  "to": "到",
   "more": "更多"
 }

@@ -18,7 +18,6 @@ body {
   height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
-  transform: rotate(0);
 }
 
 body, body button, input, textarea {
@@ -61,6 +60,6 @@ input:-webkit-autofill , textarea:-webkit-autofill, select:-webkit-autofill {
   transition: background-color 500s ease-in-out 0s;
 }
 
-a {
+a, button {
   -webkit-tap-highlight-color:rgba(255,255,255,0);
 }

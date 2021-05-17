@@ -88,7 +88,9 @@ export const TokenPledgeRate: FC<{ pledgeRate: number }> = ({ pledgeRate }) => {
 
   useEffect(() => {
     if (!box.current) return;
-    myChart.current = echarts.init(box.current);
+    if (!myChart.current) {
+      myChart.current = echarts.init(box.current);
+    }
     myChart.current.setOption({
       grid: {
         top: 0,

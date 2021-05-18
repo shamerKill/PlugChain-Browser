@@ -7,6 +7,7 @@ import ComConButton from '../control/button';
 import ComConSelector from '../control/selector';
 import { BehaviorSubject } from 'rxjs';
 import { throttleTime } from 'rxjs/operators';
+import { Link } from 'react-router-dom';
 
 const ComLayHeader: FC = () => {
   const [language, setLanguage] = useLanguageHook();
@@ -36,9 +37,9 @@ const ComLayHeader: FC = () => {
           src={require('../../../assets/logo/chain-full-dark.png')} />
         <div className={formatClass(['layout-header-menu', 'layout-header-pc'])}>
           <ul className={formatClass(['layout-header-menu-ul'])}>
-            <li className={formatClass(['layout-header-menu-list'])}><a href="/"><I18 text="home" /></a></li>
-            <li className={formatClass(['layout-header-menu-list'])}><a href="/"><I18 text="blockChain" /></a></li>
-            <li className={formatClass(['layout-header-menu-list'])}><a href="/"><I18 text="wallet" /></a></li>
+            <li className={formatClass(['layout-header-menu-list'])}><Link to="/"><I18 text="home" /></Link></li>
+            <li className={formatClass(['layout-header-menu-list'])}><Link to="/"><I18 text="blockChain" /></Link></li>
+            <li className={formatClass(['layout-header-menu-list'])}><Link to="/"><I18 text="wallet" /></Link></li>
           </ul>
           <ComConButton onClick={() => goLink('/wallet/create')}>
             <I18 text="signIn" />&nbsp;/&nbsp;<I18 text="create" />
@@ -81,9 +82,9 @@ const ComLayHeader: FC = () => {
               </ComConButton>
             </div>
             <ul className={formatClass(['layout-header-menu-ul'])}>
-              <li className={formatClass(['layout-header-menu-list'])}><a href="/"><I18 text="home" /></a></li>
-              <li className={formatClass(['layout-header-menu-list'])}><a href="/"><I18 text="blockChain" /></a></li>
-              <li className={formatClass(['layout-header-menu-list'])}><a href="/"><I18 text="wallet" /></a></li>
+              <li className={formatClass(['layout-header-menu-list'])}><Link to="/"><I18 text="home" /></Link></li>
+              <li className={formatClass(['layout-header-menu-list'])}><Link to="/"><I18 text="blockChain" /></Link></li>
+              <li className={formatClass(['layout-header-menu-list'])}><Link to="/"><I18 text="wallet" /></Link></li>
               <li className={formatClass(['layout-header-menu-list'])}>
                 <div className={formatClass(['layout-header-phone-language'])}>
                   <p className={formatClass(['layout-header-phone-language-title'])}>

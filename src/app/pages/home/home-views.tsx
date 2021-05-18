@@ -9,6 +9,7 @@ import './home.scss';
 import { debounceTime } from 'rxjs/operators';
 import { timer } from 'rxjs';
 import ComConTable from '../../components/control/table';
+import { Link } from 'react-router-dom';
 
 export const HomeChainInfo: FC = () => {
   const [newBlockHeight, setNewBlockHeight] = useState('');
@@ -149,7 +150,7 @@ export const HomeNewsInfo: FC = () => {
   }, []);
   // set tables content
   useEffect(() => {
-    const getLink = (text: string) => <a className="a_link" href="/">{text}</a>
+    const getLink = (text: string) => <Link className="a_link" to="/">{text}</Link>
     setBlockTableContent([
       [ getLink('13456233'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
       [ getLink('13456233'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],

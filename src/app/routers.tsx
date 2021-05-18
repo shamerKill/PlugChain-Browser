@@ -7,7 +7,7 @@ const Routers = () => {
       <Switch>
         {
           RoutersRoot.map(router => (
-            <Route {...router} />
+            <Route exact {...router} />
           ))
         }
       </Switch>

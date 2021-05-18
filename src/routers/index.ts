@@ -6,7 +6,7 @@ import { walletsRouter, walletsPath } from './wallets';
 
 const routeTools = (routeArr: RouteProps[], prev: string): InRouteConfig[] => routeArr.map(route => ({
   ...route,
-  path: `${prev}/${route.path}`,
+  path: `/${prev}/${route.path}`.replace(/\/+/, '/'),
   key: `${prev}-${route.path}-${getOnlyId()}`,
 }));
 

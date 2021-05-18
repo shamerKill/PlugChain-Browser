@@ -1,6 +1,6 @@
 {
   "blockChain": "区块链",
-  "home": "家",
+  "home": "首页",
   "wallet": "钱包",
   "signIn": "登录",
   "create": "创建",
@@ -46,5 +46,18 @@
   "time": "时间",
   "from": "从",
   "to": "到",
-  "more": "更多"
+  "more": "更多",
+
+
+  "createYourAccount": "创建您的账户",
+  "password": "密码",
+  "passwordTip": "确保至少8个字符，包括数字和大小写字母",
+  "createStart": "开始创建",
+  "existingONPAccount": "已有ONPChain账号?",
+  "signInNow": "立即登录",
+  "accountCreatedSuccessful": "账户创建成功",
+  "backupYourAccount": "备份您的账户",
+  "backupTipFirst": "助记词是数字资产的重要凭证",
+  "backupTipSecond": "请确保在安全无监控的环境下进行抄写备份",
+  "backupSucceeded": "已备份"
 }

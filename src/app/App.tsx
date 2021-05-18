@@ -13,10 +13,10 @@ const checkoutTheme = () => {
     if (!linkEle) linkEle = document.getElementById("HeadTheme") as HTMLLinkElement;
     switch (theme) {
       case 'light':
-        linkEle && (linkEle.href = './theme/theme-light.module.css');
+        linkEle && (linkEle.href = '/theme/theme-light.module.css');
         break;
       case 'dark':
-        linkEle && (linkEle.href = './theme/theme-dark.module.css');
+        linkEle && (linkEle.href = '/theme/theme-dark.module.css');
         break;
     }
   });

@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import I18 from '../../../i18n/component';
 import { useLanguageHook } from '../../../services/config.services';
 import { formatClass, getOnlyId } from '../../../tools';
@@ -51,7 +52,7 @@ const ComLayFooter: FC = () => {
               </dt>
               <dd>
                 <p className={formatClass(['layout-footer-list-item'])}>
-                  <a href="/"><I18 text="footerList1-1" /></a>
+                  <Link to="/"><I18 text="footerList1-1" /></Link>
                 </p>
               </dd>
             </dl>
@@ -61,16 +62,16 @@ const ComLayFooter: FC = () => {
               </dt>
               <dd>
                 <p className={formatClass(['layout-footer-list-item'])}>
-                  <a href="/"><I18 text="footerList2-1" /></a>
+                  <Link to="/"><I18 text="footerList2-1" /></Link>
                 </p>
                 <p className={formatClass(['layout-footer-list-item'])}>
-                  <a href="/"><I18 text="footerList2-2" /></a>
+                  <Link to="/"><I18 text="footerList2-2" /></Link>
                 </p>
                 <p className={formatClass(['layout-footer-list-item'])}>
-                  <a href="/"><I18 text="footerList2-3" /></a>
+                  <Link to="/"><I18 text="footerList2-3" /></Link>
                 </p>
                 <p className={formatClass(['layout-footer-list-item'])}>
-                  <a href="/"><I18 text="footerListMore" /></a>
+                  <Link to="/"><I18 text="footerListMore" /></Link>
                 </p>
               </dd>
             </dl>

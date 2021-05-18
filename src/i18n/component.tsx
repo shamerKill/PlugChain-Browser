@@ -6,20 +6,17 @@ import enUS from './en-US.json';
 
 const I18: FC<{ text: string }> = ({ text }) => {
   const [{ language }] = useGetDispatch<InRootState['config']>('config');
-  const [json, setJson] = useState<{[key: string]: string}>({});
+  // eslint-disable-next-line no-unused-vars
+  const [json, setJson] = useState<{[key in InRootState['config']['language']]: string;}>({'zh-CN': '', 'en-US': ''});
   useEffect(() => {
-    switch (language) {
-      case 'zh-CN':
-        setJson(zhCN);
-        break;
-      case 'en-US':
-        setJson(enUS);
-        break;
-    }
-  }, [language, setJson]);
+    setJson({
+      'zh-CN': (zhCN as {[key: string]: string})[text],
+      'en-US': (enUS as {[key: string]: string})[text],
+    });
+  }, [text]);
   return (
     <>
-      { json[text] }
+      { json[language] }
     </>
   );
 };

@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import I18 from '../../../i18n/component';
 import { useLanguageHook } from '../../../services/config.services';
-import { formatClass } from '../../../tools';
+import { formatClass, useSafeLink } from '../../../tools';
 import ComConLogo from '../control/logo';
 import ComConButton from '../control/button';
 import ComConSelector from '../control/selector';
@@ -12,6 +12,7 @@ const ComLayHeader: FC = () => {
   const [language, setLanguage] = useLanguageHook();
   const [menuObserver] = useState(new BehaviorSubject<boolean>(true));
   const [menuShow, setMenuShow] = useState(true);
+  const goLink = useSafeLink();
 
   const changeLanguage = (type: number) => {
     const languageType = ['en-US', 'zh-CN'][type] as typeof language;
@@ -39,7 +40,7 @@ const ComLayHeader: FC = () => {
             <li className={formatClass(['layout-header-menu-list'])}><a href="/"><I18 text="blockChain" /></a></li>
             <li className={formatClass(['layout-header-menu-list'])}><a href="/"><I18 text="wallet" /></a></li>
           </ul>
-          <ComConButton>
+          <ComConButton onClick={() => goLink('/wallet/create')}>
             <I18 text="signIn" />&nbsp;/&nbsp;<I18 text="create" />
           </ComConButton>
           <ComConSelector

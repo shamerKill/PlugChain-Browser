@@ -1,4 +1,4 @@
-import { FC, Fragment } from 'react';
+import { FC } from 'react';
 import { formatClass } from '../../../tools';
 import ComLayFooter from './footer';
 import ComLayHeader from './header';
@@ -19,14 +19,15 @@ const ComponentsLayoutBase: FC<TypeComponentsLayoutBase> = ({
   fixWidth = true,
 }) => {
   return (
-    <Fragment>
+    <>
       <ComLayHeader />
       <div
         className={formatClass(['layout-base', fixWidth && 'layout-base-fix', className])}>
         { children }
       </div>
+      { bg && <img className="layout-bg" alt="bg" src={require('../../../assets/images/page_bg.png')} /> }
       <ComLayFooter />
-    </Fragment>
+    </>
   );
 };
 

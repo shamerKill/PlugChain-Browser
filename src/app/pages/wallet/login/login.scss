@@ -1,0 +1,49 @@
+.wallet_login_page {
+  margin: 4rem auto;
+  max-width: (600/12)+rem;
+  .wallet_title {
+    font-size: (32/12)+rem;
+    font-weight: 900;
+    padding-bottom: 2rem;
+    text-align: center;
+  }
+  .wallet_login_area {
+    resize: none;
+    padding: 1rem;
+    font-size: (16/12)+rem;
+    height: 18rem;
+    width: 100%;
+    box-shadow: var(--background-box-shadow);
+    letter-spacing: 0.1rem;
+  }
+  .wallet_buttons {
+    padding-top: 3rem;
+  }
+  .wallet_button {
+    width: 100%;
+    margin-top: 1rem;
+    height: (50/12)+rem;
+    font-size: (14/12)+rem;
+    font-weight: 900;
+    &:nth-child(1) {
+      background: var(--background-image-contrast);
+      color: var(--color-primary-text-contrast);
+      &:active {
+        transform: translateY(1px);
+      }
+    }
+    &:nth-child(2) {
+      border: 1px solid var(--color-primary-text);
+    }
+    .wallet_button_primary {
+      color: var(--color-primary);
+      padding-left: 0.5rem;
+    }
+  }
+}
+
+@media (max-width: 720px) {
+  .wallet_login_page {
+    width: 90%;
+  }
+}

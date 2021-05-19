@@ -5,6 +5,14 @@ export const walletsPath = 'wallet';
 export const walletsRouter: RouteProps[] = [
   {
     path: 'create',
-    component: loadable(() => import('../app/pages/wallet/create')),
+    component: loadable(() => import('../app/pages/wallet/create/create')),
+  },
+  {
+    path: 'create-backup',
+    component: loadable(() => import('../app/pages/wallet/create/create-backup')),
+  },
+  {
+    path: 'login',
+    component: loadable(() => import('../app/pages/wallet/login/login')),
   },
 ];

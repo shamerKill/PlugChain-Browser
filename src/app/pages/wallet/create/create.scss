@@ -1,0 +1,170 @@
+.wallet_create_page {
+  margin: 4rem auto;
+  max-width: (600/12)+rem;
+  .wallet_title {
+    font-size: (32/12)+rem;
+    font-weight: 900;
+    padding-bottom: 2rem;
+    text-align: center;
+  }
+  .wallet_password_tip_top {
+    font-weight: 900;
+    font-size: (16/12)+rem;
+    padding-bottom: 1rem;
+  }
+  .wallet_password_important {
+    color: var(--color-primary-red);
+    padding-left: 0.2rem;
+  }
+  .wallet_password_box {
+    position: relative;
+    height: (48/12)+rem;
+    border: 1px solid var(--color-primary-gray);
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+  .wallet_password_input {
+    width: 100%;
+    display: block;
+    height: 100%;
+    padding: 0 2rem;
+    font-size: (20/12)+rem;
+    letter-spacing: 0.2rem;
+    background: var(--color-primary-background-contrast);
+    &::-webkit-input-placeholder {
+      font-size: (14/12)+rem;
+    }
+    &::-moz-placeholder {
+      font-size: (14/12)+rem;
+    }
+  }
+  .wallet_password_change {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    width: (48/12)+rem;
+    height: (48/12)+rem;
+    background: var(--color-primary-background-contrast);
+    font-size: (20/12)+rem;
+  }
+  .wallet_password_tip_bottom {
+    opacity: var(--opacity-level-2);
+    font-size: (14/12)+rem;
+    padding-top: 1rem;
+  }
+  .wallet_buttons {
+    padding-top: 5rem;
+  }
+  .wallet_button {
+    width: 100%;
+    margin-top: 1rem;
+    height: (50/12)+rem;
+    font-size: (14/12)+rem;
+    font-weight: 900;
+    &:nth-child(1) {
+      background: var(--background-image-contrast);
+      color: var(--color-primary-text-contrast);
+      &:active {
+        transform: translateY(1px);
+      }
+    }
+    &:nth-child(2) {
+      border: 1px solid var(--color-primary-text);
+    }
+    .wallet_button_primary {
+      color: var(--color-primary);
+      padding-left: 0.5rem;
+    }
+  }
+}
+.wallet_backup_page {
+  margin: 4rem auto;
+  max-width: (600/12)+rem;
+  .wallet_title {
+    font-size: (32/12)+rem;
+    font-weight: 900;
+    padding-bottom: 2rem;
+    text-align: center;
+  }
+  .wallet_backup_tip_one {
+    font-size: (16/12)+rem;
+    padding-bottom: 1rem;
+  }
+  .wallet_backup_tip_two {
+    opacity: var(--opacity-level-2);
+    font-size: (14/12)+rem;
+  }
+  .wallet_backup_tip_three {
+    color: var(--color-primary-red);
+    padding-top: 0.5rem;
+  }
+  .wallet_backup_box {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+    background-color: var(--color-primary-background-contrast);
+    box-shadow: var(--background-box-shadow);
+  }
+  .wallet_backup_item {
+    width: 25%;
+    text-align: center;
+    border: 1px solid var(--color-primary-gray);
+    height: 5rem;
+    line-height: 5rem;
+    font-size: (14/12)+rem;
+    position: relative;
+    .wallet_backup_index {
+      position: absolute;
+      top: 0;
+      left: 1rem;
+      font-size: (8/12)+rem;
+      line-height: 1.8rem;
+      opacity: var(--opacity-level-2);
+    }
+    @for $i from 1 to 12 {
+      @if ($i % 4 != 0) {
+        &:nth-child(#{$i}) {
+          border-right-width: 0px;
+        }
+      }
+      @if ($i <= 8) {
+        &:nth-child(#{$i}) {
+          border-bottom-width: 0px;
+        }
+      }
+    }
+  }
+  .wallet_backup_button {
+    height: 4rem;
+    background: var(--color-primary-gray);
+    color: var(--color-primary-text-contrast);
+    font-size: (16/12)+rem;
+    font-weight: bolder;
+    margin-top: 4rem;
+    border-radius: 0.3rem;
+    overflow: hidden;
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: linear-gradient(to bottom, rgba(255,255,255, 0.2), rgba(255,255,255, 0));
+    }
+    &.wallet_backup_button_success {
+      background: var(--color-primary);
+      &:active {
+        transform: translateY(1px);
+      }
+    }
+  }
+}
+
+@media (max-width: 720px) {
+  .wallet_create_page, .wallet_backup_page {
+    width: 90%;
+  }
+}

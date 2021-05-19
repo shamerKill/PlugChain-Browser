@@ -6,6 +6,7 @@ import { themeService } from '../services/config.services';
 
 import './scss/reset.scss';
 import './scss/App.scss';
+import { ComToolAlertBox } from './components/tools/alert';
 
 const checkoutTheme = () => {
   let linkEle: HTMLLinkElement | null;
@@ -29,6 +30,7 @@ const App = () => {
   return (
     <Provider store={dataStore}>
       <Routers />
+      <ComToolAlertBox />
     </Provider>
   );
 }

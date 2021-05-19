@@ -3,6 +3,7 @@ import ComponentsLayoutBase from '../../components/layout/base';
 import I18 from '../../../i18n/component';
 import useI18 from '../../../i18n/hooks';
 import { HomeChainInfo, HomeNewsInfo } from './home-views';
+import alertTools from '../../components/tools/alert';
 
 import './home.scss';
 
@@ -12,7 +13,7 @@ const PageHome: FC = () => {
   const [searchValue, setSearchValue] = useState('');
 
   const searchCallback = useCallback(() => {
-    if (searchValue === '') return alert('null');
+    if (searchValue === '') return alertTools.create({ message: 'null' });
   }, [searchValue]);
   
   return (

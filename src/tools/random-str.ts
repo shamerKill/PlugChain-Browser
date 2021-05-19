@@ -1,13 +1,13 @@
 // 生成随机字符串
 export class RandomString {
-  stringArr = [
+  private stringArr = [
     '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
     'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
     'u', 'v', 'w', 'x', 'y', 'z', '-', '~', '$', '&',
   ];
   // 默认字符串长度为16
-  strLength = 16;
+  private strLength = 16;
   constructor (strLength = 16) {
     this.strLength = strLength;
   }

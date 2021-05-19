@@ -6,5 +6,6 @@ export const chainInfoRouter: RouteProps[] = [
   {
     path: '',
     component: PageHome,
+    exact: true,
   },
 ];

@@ -51,7 +51,9 @@
 
   "createYourAccount": "创建您的账户",
   "password": "密码",
-  "passwordTip": "确保至少8个字符，包括数字和大小写字母",
+  "rePassword": "进行密码确认验证",
+  "passwordTip": "确保至少8个字符，必须包括数字和大小写字母",
+  "regularExpression": "验证规则",
   "createStart": "开始创建",
   "existingONPAccount": "已有ONPChain账号?",
   "signInNow": "立即登录",
@@ -59,5 +61,14 @@
   "backupYourAccount": "备份您的账户",
   "backupTipFirst": "助记词是数字资产的重要凭证",
   "backupTipSecond": "请确保在安全无监控的环境下进行抄写备份",
-  "backupSucceeded": "已备份"
+  "backupSucceeded": "已备份",
+  "passwordError": "密码输入有误",
+  "rePasswordError": "验证密码输入有误",
+
+  "signInToYourAccount": "登录您的账户",
+  "inputWordPlaceholder": "输入助记词，并使用分号\"，\"隔开每个单词",
+  "noExistingONPAccount": "还没有ONPChain账号?",
+
+  "close": "关闭",
+  "confirm": "确认"
 }

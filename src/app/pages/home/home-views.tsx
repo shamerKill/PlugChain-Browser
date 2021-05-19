@@ -1,7 +1,7 @@
 import { FC, ReactElement, useEffect, useMemo, useRef, useState } from 'react';
 import I18 from '../../../i18n/component';
 import { windowResizeObserver } from '../../../services/global.services';
-import { formatClass } from '../../../tools';
+import { formatClass, useSafeLink } from '../../../tools';
 import { DayTransactionVolume, TokenPledgeRate } from './home-components';
 import { useLanguageHook } from '../../../services/config.services';
 
@@ -12,6 +12,7 @@ import ComConTable from '../../components/control/table';
 import { Link } from 'react-router-dom';
 
 export const HomeChainInfo: FC = () => {
+  const goLink = useSafeLink();
   const [newBlockHeight, setNewBlockHeight] = useState('');
   const [transactionVolume, setTransactionVolume] = useState('');
   const [pendingBlockVolume, setPendingBlockVolume] = useState('');
@@ -62,7 +63,12 @@ export const HomeChainInfo: FC = () => {
         <dl className="chain_info_dl">
           <dt className="chain_info_dt">
             <I18 text="newBlockTransaction" />
-            <span className={formatClass(['chain_info_rate', transactionRate >= 0 ? 'chain_info_rate_green' : 'chain_info_rate_red'])}>{transactionRate}%</span>
+            <span className={formatClass(['chain_info_rate', transactionRate >= 0 ? 'chain_info_rate_green' : 'chain_info_rate_red'])}>
+              <svg className="icon" aria-hidden="true">
+                <use xlinkHref={transactionRate >= 0 ? '#icon-up' : '#icon-down'}></use>
+              </svg>
+              {transactionRate}%
+            </span>
           </dt>
           <dd className="chain_info_dd">{ newBlockTransaction }</dd>
         </dl>
@@ -74,7 +80,12 @@ export const HomeChainInfo: FC = () => {
         <dl className="chain_info_dl">
           <dt className="chain_info_dt">
             ONP&nbsp;<I18 text="price" />
-            <span className={formatClass(['chain_info_rate', priceRate >= 0 ? 'chain_info_rate_green' : 'chain_info_rate_red'])}>{priceRate}%</span>
+            <span className={formatClass(['chain_info_rate', priceRate >= 0 ? 'chain_info_rate_green' : 'chain_info_rate_red'])}>
+              <svg className="icon" aria-hidden="true">
+                <use xlinkHref={priceRate >= 0 ? '#icon-up' : '#icon-down'}></use>
+              </svg>
+              {priceRate}%
+            </span>
           </dt>
           <dd className="chain_info_dd">{ price }</dd>
         </dl>
@@ -98,7 +109,7 @@ export const HomeChainInfo: FC = () => {
           (<I18 text="nowVolume" />/<I18 text="historyMaxVolume" />):
           &nbsp;&nbsp;{nowVolume}/{historyMaxVolume}
         </span>
-        <button className="chain_volume_button">
+        <button className="chain_volume_button" onClick={() => goLink('./network')}>
           <I18 text="viewMoreValue" />
           <svg className="icon chain_volume_icon" aria-hidden="true">
             <use xlinkHref="#icon-more-copy"></use>

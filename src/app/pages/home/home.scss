@@ -84,6 +84,16 @@
         padding-top: 0.5rem;
         font-size: (20/12)+rem;
       }
+      .chain_info_rate {
+        padding-left: 0.5rem;
+        font-weight: 900;
+      }
+      .chain_info_rate_green {
+        color: var(--color-primary-green);
+      }
+      .chain_info_rate_red {
+        color: var(--color-primary-red);
+      }
     }
     .chain_first {
       .chain_info_dl {

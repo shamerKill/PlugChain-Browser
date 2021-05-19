@@ -1,0 +1,107 @@
+.network_content {
+  box-shadow: var(--background-box-shadow);
+  background: var(--color-primary-background-contrast);
+  border-radius: 0.3rem;
+  overflow: hidden;
+  margin: 1rem;
+  .network_title {
+    color: var(--color-primary-text-contrast);
+    background-image: var(--background-image-contrast);
+    padding: 0.5rem 1rem;
+    font-size: (18/12)+rem;
+    line-height: 4rem;
+    .icon {
+      padding-right: 0.5rem;
+      font-size: 1.2em;
+    }
+  }
+  .chain_info_view_rate {
+    position: absolute;
+    top: 50%;
+    right: 10%;
+    width: 5rem;
+    height: 5rem;
+    margin-top: -2.5rem;
+  }
+  .network_info {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1rem;
+    border-bottom: 1px solid var(--color-primary-gray);
+  }
+  .chain_info_dl {
+    width: 20%;
+    position: relative;
+    padding: 2rem 0;
+    .chain_info_dt {
+      opacity: var(--opacity-level-2);
+      font-size: (14/12)+rem;
+    }
+    .chain_info_dd {
+      padding-top: 0.5rem;
+      font-size: (20/12)+rem;
+    }
+    .chain_info_rate {
+      padding-left: 0.5rem;
+      font-size: 0.6em;
+    }
+    .chain_info_rate_green {
+      color: var(--color-primary-green);
+    }
+    .chain_info_rate_red {
+      color: var(--color-primary-red);
+    }
+  }
+  .network_inner_title {
+    padding: 0.5rem 1rem;
+    font-size: (16/12)+rem;
+    line-height: 3rem;
+    .icon {
+      padding-right: 0.5rem;
+      font-size: 1.2em;
+    }
+  }
+  .network_chart_list {
+    padding: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .network_chart_item {
+    width: 50%;
+    margin: 0 1rem 2rem;
+    background-color: var(--color-primary-background);
+  }
+  .network_chart_dd {
+    height: 10rem;
+    width: 100%;
+  }
+  .network_chart_dt {
+    padding: 1rem;
+  }
+  .chain_view_box {
+    width: 100%;
+    height: 100%;
+  }
+  @media (max-width: 1002px) {
+    .chain_info_dl {
+      width: 33.33%;
+    }
+    .network_chart_item {
+      width: 50%;
+      background-color: var(--color-primary-background);
+    }
+  }
+  @media (max-width: 720px) {
+    .network_chart_list {
+      padding: 1rem 0;
+    }
+    .chain_info_dl {
+      width: 50%;
+    }
+    .network_chart_item {
+      width: 100%;
+      background-color: var(--color-primary-background);
+    }
+  }
+}

@@ -65,7 +65,8 @@ export const DayTransactionVolume: FC = () => {
       grid: {
         top: 10,
         bottom: 20,
-        right: 0,
+        right: 20,
+        left: 40,
       }
     });
     setData([

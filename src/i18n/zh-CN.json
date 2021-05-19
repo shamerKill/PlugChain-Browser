@@ -69,6 +69,9 @@
   "inputWordPlaceholder": "输入助记词，并使用分号\"，\"隔开每个单词",
   "noExistingONPAccount": "还没有ONPChain账号?",
 
+  "networkOverview": "网络概览",
+  "statisticalChart": "统计图表",
+
   "close": "关闭",
   "confirm": "确认"
 }

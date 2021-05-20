@@ -1,0 +1,23 @@
+.transaction_list_page {
+  .transaction_list_content {
+    box-shadow: var(--background-box-shadow);
+    background: var(--color-primary-background-contrast);
+    margin: 2rem 1rem;
+    border-radius: 0.3rem;
+    overflow: hidden;
+  }
+  .transaction_title {
+    color: var(--color-primary-text-contrast);
+    background-image: var(--background-image-contrast);
+    padding: 0.5rem 1rem;
+    font-size: (18/12)+rem;
+    line-height: 4rem;
+  }
+  .a_link {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 15rem;
+  }
+}

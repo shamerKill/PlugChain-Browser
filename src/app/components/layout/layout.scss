@@ -1,4 +1,8 @@
 .layout-header {
+  &.layout-header-bg {
+    background-color: var(--color-primary-background-contrast);
+    box-shadow: var(--background-box-shadow);
+  }
   .layout-header-inner {
     display: flex;
     justify-content: space-between;

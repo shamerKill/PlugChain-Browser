@@ -9,6 +9,7 @@ export type TypeComponentsLayoutBase = {
   fixWidth?: boolean;
   bg?: boolean;
   className?: string;
+  headerBg?: boolean;
 };
 
 const ComponentsLayoutBase: FC<TypeComponentsLayoutBase> = ({
@@ -17,10 +18,11 @@ const ComponentsLayoutBase: FC<TypeComponentsLayoutBase> = ({
   // TODO: page background for canvas or images.
   bg = true,
   fixWidth = true,
+  headerBg = false,
 }) => {
   return (
     <>
-      <ComLayHeader />
+      <ComLayHeader headerBg={headerBg} />
       <div
         className={formatClass(['layout-base', fixWidth && 'layout-base-fix', className])}>
         { children }

@@ -9,7 +9,7 @@ import { BehaviorSubject } from 'rxjs';
 import { throttleTime } from 'rxjs/operators';
 import { Link } from 'react-router-dom';
 
-const ComLayHeader: FC = () => {
+const ComLayHeader: FC<{ headerBg: boolean }> = ({ headerBg }) => {
   const [language, setLanguage] = useLanguageHook();
   const [menuObserver] = useState(new BehaviorSubject<boolean>(true));
   const [menuShow, setMenuShow] = useState(true);
@@ -29,7 +29,7 @@ const ComLayHeader: FC = () => {
   }, [setMenuShow, menuObserver]);
 
   return (
-    <header className={formatClass(['layout-header'])}>
+    <header className={formatClass(['layout-header', headerBg && 'layout-header-bg'])}>
       <div className={formatClass(['layout-header-inner'])}>
         <ComConLogo
           className={formatClass(['layout-header-logo'])}

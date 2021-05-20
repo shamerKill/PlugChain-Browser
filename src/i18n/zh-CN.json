@@ -72,6 +72,9 @@
   "networkOverview": "网络概览",
   "statisticalChart": "统计图表",
 
+  "blocksList": "区块列表",
+  "goTo": "前往",
+
   "close": "关闭",
   "confirm": "确认"
 }

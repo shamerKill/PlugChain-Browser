@@ -123,11 +123,12 @@ export const HomeChainInfo: FC = () => {
 };
 
 export const HomeNewsInfo: FC = () => {
-  const [ tabSelect, setTabSelect ] = useState(0);
+  const goLink = useSafeLink();
   const tabsRef = useRef<(HTMLButtonElement|null)[]>([]);
   const tabBg = useRef<HTMLDivElement>(null);
   const tableBox = useRef<HTMLDivElement>(null);
   const [ language ] = useLanguageHook();
+  const [ tabSelect, setTabSelect ] = useState(0);
   const [ update, setUpdate ] = useState(0);
   const [ blockTableHeader, setBlockTableHeader ] = useState<string[]>([]);
   const [ blockTableContent, setBlockTableContent] = useState<(string|ReactElement)[][]>([]);
@@ -137,6 +138,11 @@ export const HomeNewsInfo: FC = () => {
   const changeTab = (tab: number) => {
     setTabSelect(tab);
   }
+
+  const goToMore = () => {
+    if (tabSelect === 0) goLink('./blocks-list');
+    else if (tabSelect === 1) goLink('./transaction-list');
+  };
   
   useEffect(() => {
     const btnRef = tabsRef.current[tabSelect];
@@ -161,7 +167,7 @@ export const HomeNewsInfo: FC = () => {
   }, []);
   // set tables content
   useEffect(() => {
-    const getLink = (text: string) => <Link className="a_link" to="/">{text}</Link>
+    const getLink = (text: string) => <Link className="a_link" to="/">{text}</Link>;
     setBlockTableContent([
       [ getLink('13456233'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
       [ getLink('13456233'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
@@ -199,7 +205,7 @@ export const HomeNewsInfo: FC = () => {
         </button>
         <div className="tab_header_bg" ref={tabBg}></div>
       </div>
-      <button className="tab_more">
+      <button className="tab_more" onClick={goToMore}>
         <span><I18 text="more" /></span>
         <svg className="tab_more_icon icon" aria-hidden="true">
             <use xlinkHref="#icon-more-copy"></use>

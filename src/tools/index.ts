@@ -6,6 +6,7 @@ import getEnvConfig from './env-config';
 import { getOnlyId, delOnlyId, verifyOnlyId } from './only-id';
 import { randomString } from './random-str';
 import { useSafeLink } from './route.hook';
+import { formatSearch } from './url';
 
 
 export {
@@ -20,4 +21,5 @@ export {
   formatClass,
   getEnvConfig,
   useSafeLink,
+  formatSearch,
 };

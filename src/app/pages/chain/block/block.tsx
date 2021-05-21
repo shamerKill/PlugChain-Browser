@@ -31,19 +31,23 @@ const PageBlockInfo: FC = () => {
   const onPageChange = useCallback((num: number) => {
     setPage(num);
     setAllCount(100);
-    setLoading(true);
-    setTimeout(() => setLoading(false), 1000);
   }, []);
 
   useEffect(() => {
+    setLoading(true);
     const getLink = (text: string): ReactElement => <Link className="a_link" to="/">{text}</Link>;
     if (page) {
-      setTableContent([
-        [ getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('12345'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-        [ getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('12345'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-        [ getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('12345'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-        [ getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('12345'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-      ]);
+      setLoading(true);
+      const doTimer = setTimeout(() => {
+        setLoading(false);
+        setTableContent([
+          [ getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('12345'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
+          [ getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('12345'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
+          [ getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('12345'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
+          [ getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('12345'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
+        ]);
+      }, 1000);
+      return () => clearTimeout(doTimer);
     }
   }, [page, limit]);
 
@@ -51,7 +55,7 @@ const PageBlockInfo: FC = () => {
     setTableHeader([ 'ID', 'blockHeight', 'time', 'from', 'to', 'transactionVolume', 'feeNumber' ]);
     onPageChange(1);
     setInfoLoading(true);
-    setTimeout(() => {
+    const doTimer = setTimeout(() => {
       setInfoLoading(false);
       setBlockInfo({
         id: '5a7bd162f4d23ab0804374d00b54babe0d517d3d6178d8cade5eb7d3757c1357',
@@ -64,6 +68,7 @@ const PageBlockInfo: FC = () => {
         time: '2021-04-29 09:22:09',
       });
     }, 1000);
+    return () => clearTimeout(doTimer);
   }, [onPageChange]);
   
   return (

@@ -154,7 +154,8 @@ export const HomeNewsInfo: FC = () => {
   }, [tabSelect, update])
 
   useEffect(() => {
-    windowResizeObserver.pipe(debounceTime(100)).subscribe(() => setUpdate(state => ++state));
+    const observer = windowResizeObserver.pipe(debounceTime(100)).subscribe(() => setUpdate(state => ++state));
+    return () => observer.unsubscribe();
   }, []);
   useEffect(() => {
     timer(100).subscribe(() => setUpdate(state => ++state));

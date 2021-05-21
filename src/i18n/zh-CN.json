@@ -79,6 +79,9 @@
   "size": "大小",
   "productionBlockNode": "出块节点",
   "rootHashTree": "哈希数根",
+  "transactionHash": "交易哈希",
+  "transactionId": "交易ID",
+  "remarks": "备注",
   "goTo": "前往",
 
   "close": "关闭",

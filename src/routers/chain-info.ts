@@ -25,4 +25,8 @@ export const chainInfoRouter: RouteProps[] = [
     path: 'transaction-list',
     component: loadable(() => import('../app/pages/chain/transaction/transaction-list')),
   },
+  {
+    path: 'transaction/:id',
+    component: loadable(() => import('../app/pages/chain/transaction/transaction')),
+  },
 ];

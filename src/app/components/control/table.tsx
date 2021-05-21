@@ -1,6 +1,7 @@
 import { FC, Fragment, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 import { formatClass, getOnlyId } from '../../../tools';
 import I18 from '../../../i18n/component';
+import ComConLoading from './loading';
 
 const ComConTable: FC<{
   header: (string|ReactElement)[];
@@ -138,7 +139,7 @@ const ComConTable: FC<{
         }
       </div>
       {/* loading */}
-      { loading && <div className={formatClass(['control-table-loading'])}></div> }
+      <ComConLoading visible={loading} />
     </div>
   );
 };

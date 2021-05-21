@@ -81,10 +81,16 @@
     height: (58/12)+rem;
     padding: 0 1rem;
     font-size: (14/12)+rem;
+    .a_link {
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 15rem;
+    }
     a {
       color: var(--color-primary);
       cursor: pointer;
-
     }
     &:nth-child(1) {
       text-align: left;
@@ -156,7 +162,7 @@
     opacity: var(--opacity-level-2);
   }
 }
-.control-table-loading {
+.com-con-loading {
   position: absolute;
   top: 0;
   left: 0;

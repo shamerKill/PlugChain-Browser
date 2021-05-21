@@ -19,7 +19,7 @@ const PageBlocksList: FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    setTableHeader([ 'blockHeight', 'blockTimeStamp', 'producer', 'blockId', 'transactionVolume', 'freeNumber' ]);
+    setTableHeader([ 'blockHeight', 'blockTimeStamp', 'producer', 'blockId', 'transactionVolume', 'feeNumber' ]);
   }, []);
 
   useEffect(() => {

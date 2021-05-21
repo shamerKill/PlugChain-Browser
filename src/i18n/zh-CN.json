@@ -41,7 +41,7 @@
   "blockTimeStamp": "产块时间",
   "producer": "生产者",
   "blockId": "区块ID",
-  "freeNumber": "手续费",
+  "feeNumber": "手续费",
   "ID": "ID",
   "time": "时间",
   "from": "从",
@@ -73,8 +73,15 @@
   "statisticalChart": "统计图表",
 
   "blocksList": "区块列表",
+  "block": "块",
+  "transactionList": "交易列表",
+  "blockInfo": "区块信息",
+  "size": "大小",
+  "productionBlockNode": "出块节点",
+  "rootHashTree": "哈希数根",
   "goTo": "前往",
 
   "close": "关闭",
-  "confirm": "确认"
+  "confirm": "确认",
+  "copySuccess": "复制成功"
 }

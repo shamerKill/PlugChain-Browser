@@ -18,6 +18,10 @@ export const chainInfoRouter: RouteProps[] = [
     component: loadable(() => import('../app/pages/chain/block/blocks-list')),
   },
   {
+    path: 'block/:id',
+    component: loadable(() => import('../app/pages/chain/block/block')),
+  },
+  {
     path: 'transaction-list',
     component: loadable(() => import('../app/pages/chain/transaction/transaction-list')),
   },

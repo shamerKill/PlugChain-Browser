@@ -1,0 +1,66 @@
+.page_chain_account {
+  .account_info {
+    background-color: var(--color-primary-background-contrast);
+    margin: 1rem;
+    box-shadow: var(--background-box-shadow);
+  }
+  .account_address {
+    padding: 1rem;
+    color: var(--color-primary-text-contrast);
+    background-image: var(--background-image-contrast);
+    font-size: (16/12)+rem;
+    white-space: nowrap;
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    .account_icon_card {
+      padding-right: 0.4rem;
+      font-size: (18/12)+rem;
+    }
+    .account_func {
+      background: none;
+      color: var(--color-primary-text-contrast);
+      font-size: (18/12)+rem;
+      margin-left: 1rem;
+      padding: 0.3rem;
+    }
+  }
+  .account_info_box {
+    padding: 1rem 2rem;
+    .account_info_dl {
+      display: flex;
+      padding: 1rem 0;
+      align-items: center;
+      &.account_info_important {
+        border-bottom: 1px solid var(--color-primary-gray);
+        .account_info_dd {
+          font-size: (20/12)+rem;
+        }
+        .account_info_small {
+          font-size: 0.6em;
+          padding-left: 1rem;
+          opacity: var(--opacity-level-1);
+        }
+      }
+    }
+    .account_info_dt {
+      width: 10%;
+      opacity: var(--opacity-level-2);
+      min-width: 8rem;
+    }
+    .account_info_dd {
+      font-size: (14/12)+rem;
+    }
+  }
+  .account_table {
+    background-color: var(--color-primary-background-contrast);
+    margin: 1rem;
+    padding: 0 1rem;
+    position: relative;
+    .account_title {
+      padding: 1rem;
+      font-size: (16/12)+rem;
+      border-bottom: 1px solid var(--color-primary-background);
+    }
+  }
+}

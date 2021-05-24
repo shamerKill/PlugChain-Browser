@@ -1,0 +1,119 @@
+.page_wallet_account {
+  .account_info {
+    background-color: var(--color-primary-background-contrast);
+    margin: 1rem;
+    box-shadow: var(--background-box-shadow);
+  }
+  .account_info_title {
+    padding: 1rem;
+    color: var(--color-primary-text-contrast);
+    background-image: var(--background-image-contrast);
+    font-size: (16/12)+rem;
+  }
+  .account_address {
+    padding: 1rem;
+    white-space: nowrap;
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--color-primary-border);
+    .account_icon_card {
+      padding-right: 0.4rem;
+      font-size: (18/12)+rem;
+    }
+    .account_func {
+      background: none;
+      font-size: (18/12)+rem;
+      margin-left: 1rem;
+      padding: 0.3rem;
+    }
+  }
+  .account_info_account {
+    padding: 1rem 2rem;
+    display: flex;
+    border-bottom: 1px solid var(--color-primary-gray);
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    .account_info_important {
+      padding: 1rem 0;
+      min-width: (720/12)+rem;
+      .account_info_dt {
+        padding-top: 1rem;
+        opacity: var(--opacity-level-2);
+      }
+      .account_info_dd {
+        font-size: (24/12)+rem;
+      }
+      .account_info_small {
+        font-size: 0.6em;
+        padding-left: 1rem;
+        opacity: var(--opacity-level-1);
+        color: var(--color-primary-green);
+      }
+    }
+    .account_info_transaction {
+      width: 7rem;
+      height: 3rem;
+    }
+  }
+  .account_info_box {
+    padding: 1rem 2rem;
+    .account_info_dl {
+      display: flex;
+      padding: 1rem 0;
+      align-items: center;
+    }
+    .account_info_dt {
+      width: 10%;
+      min-width: 8rem;
+      opacity: var(--opacity-level-2);
+    }
+    .account_info_dd {
+      font-size: (14/12)+rem;
+    }
+  }
+  .account_table {
+    background-color: var(--color-primary-background-contrast);
+    margin: 1rem;
+    padding: 0 1rem;
+    position: relative;
+    .account_title {
+      padding: 1rem;
+      font-size: (16/12)+rem;
+      border-bottom: 1px solid var(--color-primary-background);
+    }
+    .account_transaction_type {
+      border-width: 1px;
+      border-style: solid;
+      padding: 0.5em 1em;
+      font-size: 1rem;
+      border-radius: 1.4em;
+      overflow: hidden;
+      position: relative;
+      display: inline-block;
+      line-height: 1.4em;
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: var(--opacity-level-3);
+      }
+      &.transaction_input {
+        color: var(--color-primary-green);
+        &::after {
+          background: var(--color-primary-green);
+        }
+      }
+      &.transaction_output {
+        color: var(--color-primary-gray);
+        &::after {
+          background: var(--color-primary-gray);
+        }
+      }
+    }
+  }
+}

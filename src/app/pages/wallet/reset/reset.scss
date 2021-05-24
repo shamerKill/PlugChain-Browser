@@ -1,0 +1,61 @@
+.page_wallet_reset {
+  .reset_inner {
+    background-color: var(--color-primary-background-contrast);
+    box-shadow: var(--background-box-shadow);
+    margin: 1rem;
+  }
+  .page_wallet_title {
+    padding: 1rem;
+    color: var(--color-primary-text-contrast);
+    background-image: var(--background-image-contrast);
+    font-size: (16/12)+rem;
+  }
+  .reset_box {
+    padding: 1rem;
+  }
+  .reset_box_title {
+    padding: 1rem 0 0.5rem;
+  }
+  .reset_box_label {
+    display: flex;
+    width: 50rem;
+    max-width: 100%;
+    position: relative;
+    align-items: center;
+  }
+  .reset_box_area {
+    border: 1px solid var(--color-primary-border);
+    background: var(--color-primary-background);
+    line-height: 2em;
+    padding: 0.3em 0.5em;
+    flex: 1.5rem;
+    resize: none;
+    height: 10rem;
+    width: 100%;
+    letter-spacing: 0.1rem;
+  }
+  .reset_box_input {
+    border: 1px solid var(--color-primary-border);
+    background: var(--color-primary-background);
+    line-height: 2em;
+    padding: 0.3em 0.5em;
+    flex: 1.5rem;
+  }
+  .reset_box_info {
+    position: absolute;
+    top: 50%;
+    right: 0.5em;
+    opacity: var(--opacity-level-2);
+    font-size: 1.2rem;
+    line-height: 2rem;
+    margin-top: -1rem;
+  }
+  .reset_box_forget {
+    color: var(--color-primary-gray);
+    padding: 0 0 0 1rem;
+  }
+  .reset_confirm_button {
+    margin-top: 2rem;
+    width: 10rem;
+  }
+}

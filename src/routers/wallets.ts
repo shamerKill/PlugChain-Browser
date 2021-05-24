@@ -15,4 +15,20 @@ export const walletsRouter: RouteProps[] = [
     path: 'login',
     component: loadable(() => import('../app/pages/wallet/login/login')),
   },
+  {
+    path: 'account',
+    component: loadable(() => import('../app/pages/wallet/account/account')),
+  },
+  {
+    path: 'transaction',
+    component: loadable(() => import('../app/pages/wallet/transaction/transaction')),
+  },
+  {
+    path: 'reset',
+    component: loadable(() => import('../app/pages/wallet/reset/reset')),
+  },
+  {
+    path: 'receive',
+    component: loadable(() => import('../app/pages/wallet/receive/receive')),
+  },
 ];

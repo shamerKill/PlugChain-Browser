@@ -22,6 +22,16 @@
   padding: (6/12)+rem (10/12)+rem;
   border: 1px solid var(--color-primary-info);
   cursor: pointer;
+  position: relative;
+  &:active {
+    transform: translateY(1px);
+  }
+  &.control-button-disabled {
+    cursor: wait;
+  }
+  &.control-button-disabled:active {
+    transform: none;
+  }
 }
 .control-select {
   position: relative;

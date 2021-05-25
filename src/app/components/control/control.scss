@@ -23,6 +23,11 @@
   border: 1px solid var(--color-primary-info);
   cursor: pointer;
   position: relative;
+  &.control-button-contrast {
+    background: var(--color-primary-background);
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
   &:active {
     transform: translateY(1px);
   }

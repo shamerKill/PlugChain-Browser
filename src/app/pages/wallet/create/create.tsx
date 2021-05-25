@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import I18 from '../../../../i18n/component';
 import useI18 from '../../../../i18n/hooks';
 import { useSafeLink } from '../../../../tools';
+import ComConSvg from '../../../components/control/icon';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import alertTools from '../../../components/tools/alert';
 
@@ -43,9 +44,7 @@ const PageWalletCreate: FC = () => {
           value={password}
           onChange={e => setPassword(e.target.value)} />
         <button className="wallet_password_change" onClick={changeInputType}>
-          <svg className="icon wallet_password_icon" aria-hidden="true">
-            <use xlinkHref={inputType === 'text' ? '#icon-show' : '#icon-hide'}></use>
-          </svg>
+          <ComConSvg className="wallet_password_icon" xlinkHref={inputType === 'text' ? '#icon-show' : '#icon-hide'} />
         </button>
       </div>
       <div className="wallet_password_box">

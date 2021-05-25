@@ -6,6 +6,7 @@ import { HomeChainInfo, HomeNewsInfo } from './home-views';
 import alertTools from '../../components/tools/alert';
 
 import './home.scss';
+import ComConSvg from '../../components/control/icon';
 
 
 const PageHome: FC = () => {
@@ -30,9 +31,7 @@ const PageHome: FC = () => {
             value={searchValue}
             onChange={event => setSearchValue(event.target.value)} />
           <button className="header_search_btn" onClick={searchCallback}>
-            <svg className="icon" aria-hidden="true">
-              <use xlinkHref="#icon-search"></use>
-            </svg>
+            <ComConSvg xlinkHref="#icon-search" />
           </button>
         </div>
       </div>

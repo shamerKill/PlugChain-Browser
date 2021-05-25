@@ -4,6 +4,7 @@ import { timer } from 'rxjs';
 import I18 from '../../../../i18n/component';
 import useI18 from '../../../../i18n/hooks';
 import { useFormatPath } from '../../../../tools';
+import ComConSvg from '../../../components/control/icon';
 import ComConLoading from '../../../components/control/loading';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import alertTools from '../../../components/tools/alert';
@@ -48,7 +49,7 @@ const PageTransaction: FC = () => {
         <span className="transaction_page_title_link">
           {transactionId}
           <button className="transaction_page_copy" onClick={() => copy(transactionInfo.id)}>
-            <svg className="icon" aria-hidden="true"><use xlinkHref="#icon-copy"></use></svg>
+            <ComConSvg xlinkHref="#icon-copy" />
           </button>
         </span>
       </h1>

@@ -1,5 +1,6 @@
 import { FC, HTMLAttributes, ReactElement, useState } from 'react';
 import { formatClass, getOnlyId } from '../../../tools';
+import ComConSvg from './icon';
 
 export type TypeComponentsControlSelector = {
   select: number;
@@ -27,9 +28,7 @@ const ComConSelector: FC<TypeComponentsControlSelector & HTMLAttributes<HTMLDivE
         className={formatClass(['control-select-select'])}
         onClick={() => setShowOptions(state => !state)}>
         { options[select] }
-        <svg className="control-select-icon icon" aria-hidden="true">
-          <use xlinkHref="#icon-more"></use>
-        </svg>
+        <ComConSvg className="control-select-icon" xlinkHref="#icon-more" />
       </button>
       <div className={formatClass(['control-select-options', !showOptions && 'control-select-options-hide'])}>
         {

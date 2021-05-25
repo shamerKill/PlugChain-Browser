@@ -5,6 +5,7 @@ import { TokenPledgeRate, DayTransactionVolume } from '../../home/home-component
 import { formatClass } from '../../../../tools';
 
 import './network.scss';
+import ComConSvg from '../../../components/control/icon';
 
 const PageChainNetwork: FC = () => {
   const [newBlockHeight, setNewBlockHeight] = useState('');
@@ -43,9 +44,7 @@ const PageChainNetwork: FC = () => {
     <ComponentsLayoutBase className="chain_network_page">
       <div className="network_content">
         <h2 className="network_title">
-          <svg className="icon" aria-hidden="true">
-            <use xlinkHref="#icon-network"></use>
-          </svg>
+          <ComConSvg xlinkHref="#icon-network" />
           <I18 text="networkOverview" />
         </h2>
         {/* info */}
@@ -69,9 +68,7 @@ const PageChainNetwork: FC = () => {
             <dd className="chain_info_dd">
               { newBlockTransaction }
               <span className={formatClass(['chain_info_rate', transactionRate >= 0 ? 'chain_info_rate_green' : 'chain_info_rate_red'])}>
-                <svg className="icon" aria-hidden="true">
-                  <use xlinkHref={transactionRate >= 0 ? '#icon-up' : '#icon-down'}></use>
-                </svg>
+                <ComConSvg xlinkHref={transactionRate >= 0 ? '#icon-up' : '#icon-down'} />
                 {transactionRate}%
               </span>
             </dd>
@@ -87,9 +84,7 @@ const PageChainNetwork: FC = () => {
             <dd className="chain_info_dd">
               { price }
               <span className={formatClass(['chain_info_rate', priceRate >= 0 ? 'chain_info_rate_green' : 'chain_info_rate_red'])}>
-                <svg className="icon" aria-hidden="true">
-                  <use xlinkHref={priceRate >= 0 ? '#icon-up' : '#icon-down'}></use>
-                </svg>
+                <ComConSvg xlinkHref={priceRate >= 0 ? '#icon-up' : '#icon-down'} />
                 {priceRate}%
               </span>
             </dd>
@@ -111,9 +106,7 @@ const PageChainNetwork: FC = () => {
         {/* chart */}
         <div className="network_chart">
           <h3 className="network_inner_title">
-            <svg className="icon" aria-hidden="true">
-              <use xlinkHref="#icon-chart"></use>
-            </svg>
+            <ComConSvg xlinkHref="#icon-chart" />
             <I18 text="statisticalChart" />
           </h3>
           <div className="network_chart_list">

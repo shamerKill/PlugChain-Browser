@@ -6,6 +6,7 @@ import ComConLoading from './loading';
 
 export type TypeComponentsControlButton = {
   loading?: boolean;
+  contrast?: boolean;
 };
 
 const ComConButton: FC<TypeComponentsControlButton & ButtonHTMLAttributes<HTMLButtonElement>> = ({
@@ -13,10 +14,11 @@ const ComConButton: FC<TypeComponentsControlButton & ButtonHTMLAttributes<HTMLBu
   onClick,
   className,
   loading,
+  contrast,
 }) => {
   return (
     <button
-      className={formatClass(['control-button', loading && 'control-button-disabled', className])}
+      className={formatClass(['control-button', contrast && 'control-button-contrast', loading && 'control-button-disabled', className])}
       onClick={onClick}
       disabled={loading}>
       { children }

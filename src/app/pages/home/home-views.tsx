@@ -10,6 +10,7 @@ import { debounceTime } from 'rxjs/operators';
 import { timer } from 'rxjs';
 import ComConTable from '../../components/control/table';
 import { Link } from 'react-router-dom';
+import ComConSvg from '../../components/control/icon';
 
 export const HomeChainInfo: FC = () => {
   const goLink = useSafeLink();
@@ -64,9 +65,7 @@ export const HomeChainInfo: FC = () => {
           <dt className="chain_info_dt">
             <I18 text="newBlockTransaction" />
             <span className={formatClass(['chain_info_rate', transactionRate >= 0 ? 'chain_info_rate_green' : 'chain_info_rate_red'])}>
-              <svg className="icon" aria-hidden="true">
-                <use xlinkHref={transactionRate >= 0 ? '#icon-up' : '#icon-down'}></use>
-              </svg>
+              <ComConSvg xlinkHref={transactionRate >= 0 ? '#icon-up' : '#icon-down'} />
               {transactionRate}%
             </span>
           </dt>
@@ -81,9 +80,7 @@ export const HomeChainInfo: FC = () => {
           <dt className="chain_info_dt">
             ONP&nbsp;<I18 text="price" />
             <span className={formatClass(['chain_info_rate', priceRate >= 0 ? 'chain_info_rate_green' : 'chain_info_rate_red'])}>
-              <svg className="icon" aria-hidden="true">
-                <use xlinkHref={priceRate >= 0 ? '#icon-up' : '#icon-down'}></use>
-              </svg>
+              <ComConSvg xlinkHref={priceRate >= 0 ? '#icon-up' : '#icon-down'} />
               {priceRate}%
             </span>
           </dt>
@@ -111,9 +108,7 @@ export const HomeChainInfo: FC = () => {
         </span>
         <button className="chain_volume_button" onClick={() => goLink('./network')}>
           <I18 text="viewMoreValue" />
-          <svg className="icon chain_volume_icon" aria-hidden="true">
-            <use xlinkHref="#icon-more-copy"></use>
-          </svg>
+          <ComConSvg xlinkHref="#icon-more-copy" />
         </button>
       </div>
       {/* line_mark */}
@@ -193,27 +188,21 @@ export const HomeNewsInfo: FC = () => {
           ref={ref => (tabsRef.current[0] = ref)}
           onClick={() => changeTab(0)}
           className={formatClass(['tab_header_item', tabSelect === 0 && 'tab_header_selected'])}>
-          <svg className="tab_header_icon icon" aria-hidden="true">
-            <use xlinkHref="#icon-block"></use>
-          </svg>
+          <ComConSvg className="tab_header_icon" xlinkHref="#icon-block" />
           <span><I18 text="newBlockHeight" /></span>
         </button>
         <button
           ref={ref => (tabsRef.current[1] = ref)}
           onClick={() => changeTab(1)}
           className={formatClass(['tab_header_item', tabSelect === 1 && 'tab_header_selected'])}>
-          <svg className="tab_header_icon icon" aria-hidden="true">
-            <use xlinkHref="#icon-transition"></use>
-          </svg>
+          <ComConSvg className="tab_header_icon" xlinkHref="#icon-transition" />
           <span><I18 text="newTransaction" /></span>
         </button>
         <div className="tab_header_bg" ref={tabBg}></div>
       </div>
       <button className="tab_more" onClick={goToMore}>
         <span><I18 text="more" /></span>
-        <svg className="tab_more_icon icon" aria-hidden="true">
-            <use xlinkHref="#icon-more-copy"></use>
-          </svg>
+        <ComConSvg className="tab_more_icon" xlinkHref="#icon-more-copy" />
       </button>
       <div className="tab_content">
         <div className="tab_content_scroll" ref={tableBox}>

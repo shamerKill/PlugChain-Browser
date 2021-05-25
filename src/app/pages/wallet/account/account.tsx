@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 import './account.scss';
 import ComConButton from '../../../components/control/button';
+import ComConSvg from '../../../components/control/icon';
 
 const PageWalletAccount: FC = () => {
   const [address, setAddress] = useState('');
@@ -15,6 +16,11 @@ const PageWalletAccount: FC = () => {
   const [transactionVolume, setTransactionVolume] = useState('');
   const [inputVolume, setInputVolume] = useState('');
   const [outputVolume, setOutputVolume] = useState('');
+
+  const [pledgingVol, setPledgingVol] = useState('0.00');
+  const [redeemVol, setRedeemVol] = useState('0.00');
+  const [rewardVol, setRewardVol] = useState('0.00');
+
 
   const [tableHeader, setTableHeader] = useState<string[]>([]);
   const [tableContent, setTableContent] = useState<(string|ReactElement)[][]>([]);
@@ -60,19 +66,24 @@ const PageWalletAccount: FC = () => {
     setOutputVolume('100.1');
     onPageChange(1);
   }, [onPageChange]);
+  useEffect(() => {
+    setPledgingVol('0.00');
+    setRedeemVol('0.00');
+    setRewardVol('0.00');
+  }, []);
   return (
     <ComponentsLayoutBase className="page_wallet_account">
       <div className="account_info">
         {/* title */}
         <h2 className="account_info_title"><I18 text="myAssets" /></h2>
         <h2 className="account_address">
-          <svg className="account_icon_card icon" aria-hidden="true"><use xlinkHref="#icon-card"></use></svg>
+          <ComConSvg className="account_icon_card" xlinkHref="#icon-card" />
           &nbsp;&nbsp;{address}
           <button className="account_func">
-            <svg className="icon" aria-hidden="true"><use xlinkHref="#icon-copy"></use></svg>
+            <ComConSvg xlinkHref="#icon-copy" />
           </button>
           <button className="account_func">
-            <svg className="icon" aria-hidden="true"><use xlinkHref="#icon-qr-code"></use></svg>
+            <ComConSvg xlinkHref="#icon-qr-code" />
           </button>
         </h2>
         {/* info */}
@@ -84,7 +95,9 @@ const PageWalletAccount: FC = () => {
             </dd>
             <dt className="account_info_dt"><I18 text="extra" /></dt>
           </dl>
-          <ComConButton className="account_info_transaction"><I18 text="transaction" /></ComConButton>
+          <ComConButton className="account_info_transaction">
+            <I18 text="transaction" />
+          </ComConButton>
         </div>
         {/* more */}
         <div className="account_info_box">
@@ -100,6 +113,28 @@ const PageWalletAccount: FC = () => {
             <dt className="account_info_dt"><I18 text="inputVolume" /></dt>
             <dd className="account_info_dd">{ inputVolume }</dd>
           </dl>
+        </div>
+      </div>
+      <div className="account_pledge">
+        <h2 className="account_title"><I18 text="pledgeMining" /></h2>
+        <div className="account_pledge_box">
+          <dl className="account_pledge_dl">
+            <dt className="account_pledge_dt">{ pledgingVol }<small>ONP</small></dt>
+            <dd className="account_pledge_dd"><I18 text="pledging" /></dd>
+          </dl>
+          <dl className="account_pledge_dl">
+            <dt className="account_pledge_dt">{ redeemVol }<small>ONP</small></dt>
+            <dd className="account_pledge_dd"><I18 text="redeeming" /></dd>
+          </dl>
+          <dl className="account_pledge_dl">
+            <dt className="account_pledge_dt">{ rewardVol }<small>ONP</small></dt>
+            <dd className="account_pledge_dd"><I18 text="pledgeReward" /></dd>
+          </dl>
+          <div className="account_pledge_buttons">
+            <button className="account_pledge_button">
+              <I18 text="pledgeMining" /><ComConSvg className="" xlinkHref="#icon-pledge" />
+            </button>
+          </div>
         </div>
       </div>
       <div className="account_table">

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import I18 from '../../../../i18n/component';
 import useI18 from '../../../../i18n/hooks';
 import { useFormatPath } from '../../../../tools';
+import ComConSvg from '../../../components/control/icon';
 import ComConLoading from '../../../components/control/loading';
 import ComConTable from '../../../components/control/table';
 import ComponentsLayoutBase from '../../../components/layout/base';
@@ -86,7 +87,7 @@ const PageBlockInfo: FC = () => {
               {blockInfo.id}
               {blockInfo.id && (
                 <button className="block_info_copy" onClick={() => copy(blockInfo.id)}>
-                  <svg className="icon" aria-hidden="true"><use xlinkHref="#icon-copy"></use></svg>
+                  <ComConSvg xlinkHref="#icon-copy" />
                 </button>
               )}
             </dd>

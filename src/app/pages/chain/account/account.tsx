@@ -6,6 +6,7 @@ import I18 from '../../../../i18n/component';
 
 import './account.scss';
 import { useFormatPath } from '../../../../tools';
+import ComConSvg from '../../../components/control/icon';
 
 const PageChainAccount: FC = () => {
   const [, pathAddress] = useFormatPath();
@@ -72,13 +73,13 @@ const PageChainAccount: FC = () => {
       <div className="account_info">
         {/* title */}
         <h2 className="account_address">
-          <svg className="account_icon_card icon" aria-hidden="true"><use xlinkHref="#icon-card"></use></svg>
+          <ComConSvg className="account_icon_card" xlinkHref="#icon-card" />
           <I18 text="address" />&nbsp;:&nbsp;&nbsp;{address}
           <button className="account_func">
-            <svg className="icon" aria-hidden="true"><use xlinkHref="#icon-copy"></use></svg>
+            <ComConSvg xlinkHref="#icon-copy" />
           </button>
           <button className="account_func">
-            <svg className="icon" aria-hidden="true"><use xlinkHref="#icon-qr-code"></use></svg>
+            <ComConSvg xlinkHref="#icon-qr-code" />
           </button>
         </h2>
         {/* info */}

@@ -8,6 +8,7 @@ import ComConSelector from '../control/selector';
 import { BehaviorSubject } from 'rxjs';
 import { throttleTime } from 'rxjs/operators';
 import { Link } from 'react-router-dom';
+import ComConSvg from '../control/icon';
 
 const ComLayHeader: FC<{ headerBg: boolean }> = ({ headerBg }) => {
   const [language, setLanguage] = useLanguageHook();
@@ -62,13 +63,9 @@ const ComLayHeader: FC<{ headerBg: boolean }> = ({ headerBg }) => {
             className={formatClass(['layout-header-phone-change'])}>
             {
               menuShow ? (
-                <svg className={formatClass(['icon', 'layout-header-phone-icon', 'layout-header-phone-menu'])} aria-hidden="true">
-                  <use xlinkHref="#icon-ego-menu"></use>
-                </svg>
+                <ComConSvg className={formatClass(['layout-header-phone-icon', 'layout-header-phone-menu'])} xlinkHref="#icon-ego-menu" />
               ) : (
-                <svg className={formatClass(['icon', 'layout-header-phone-icon', 'layout-header-phone-close'])} aria-hidden="true">
-                  <use xlinkHref="#icon-close"></use>
-                </svg>
+                <ComConSvg className={formatClass(['layout-header-phone-icon', 'layout-header-phone-close'])} xlinkHref="#icon-close" />
               )
             }
           </button>

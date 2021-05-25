@@ -1,0 +1,111 @@
+.page_wallet_pledge {
+  padding: 0 1rem;
+  .pledge_bg {
+    position: fixed;
+    width: 100%;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    opacity: var(--opacity-level-2);
+  }
+  .pledge_title {
+    font-size: 3rem;
+    letter-spacing: 0.2em;
+    padding: 5rem 0 2rem;
+  }
+  .pledge_tip_list {
+    padding-left: 1rem;
+    line-height: 3em;
+    font-size: 1.2rem;
+    padding: 1rem 0;
+  }
+  .pledge_tip_item {
+    position: relative;
+    padding-left: 1rem;
+    width: 50rem;
+    max-width: 100%;
+    &::before {
+      content: '';
+      position: absolute;
+      width: 0.5rem;
+      height: 0.5rem;
+      background-color: var(--color-primary);
+      border-radius: 100%;
+      top: 1.2em;
+      left: 0.2em;
+    }
+  }
+  .pledge_nodes {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .pledge_node {
+    width: (100%/3);
+    padding: 1rem;
+  }
+  .pledge_node_inner {
+    background-color: var(--color-primary-background-contrast);
+    padding: 1rem;
+    border-radius: 0.5rem;
+  }
+  .pledge_node_header {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--color-primary-border);
+    padding: 0.5rem 0;
+  }
+  .node_avatar {
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--color-primary-border);
+    border-radius: 50%;
+    padding: 0.3rem;
+  }
+  .node_name {
+    padding-left: 1rem;
+    font-size: (14/12)+rem;
+    color: var(--color-primary-text);
+    text-decoration: underline;
+  }
+  .pledge_node_info {
+    display: flex;
+    justify-content: space-between;
+  }
+  .pledge_node_dl {
+    padding-top: 1rem;
+    &:nth-child(1) {
+      .pledge_node_dt {
+        color: var(--color-primary-green);
+      }
+    }
+    &:nth-child(2) {
+      text-align: center;
+    }
+    &:nth-child(3) {
+      text-align: right;
+    }
+  }
+  .pledge_node_dt {
+    font-size: (16/12)+rem;
+  }
+  .pledge_node_dd {
+    opacity: var(--opacity-level-1);
+  }
+  .pledge_node_button {
+    width: 100%;
+    margin: 1rem auto;
+    display: block;
+    padding: 1rem 0;
+    background-image: var(--background-image-contrast);
+  }
+  @media (max-width: 1020px) {
+    .pledge_node {
+      width: 50%;
+    }
+  }
+  @media (max-width: 720px) {
+    .pledge_node {
+      width: 100%;
+    }
+  }
+}

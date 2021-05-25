@@ -119,21 +119,24 @@ const PageWalletAccount: FC = () => {
         <h2 className="account_title"><I18 text="pledgeMining" /></h2>
         <div className="account_pledge_box">
           <dl className="account_pledge_dl">
-            <dt className="account_pledge_dt">{ pledgingVol }<small>ONP</small></dt>
+            <dt className="account_pledge_dt">{ pledgingVol }<small className="pledge_unit">ONP</small></dt>
             <dd className="account_pledge_dd"><I18 text="pledging" /></dd>
           </dl>
           <dl className="account_pledge_dl">
-            <dt className="account_pledge_dt">{ redeemVol }<small>ONP</small></dt>
+            <dt className="account_pledge_dt">{ redeemVol }<small className="pledge_unit">ONP</small></dt>
             <dd className="account_pledge_dd"><I18 text="redeeming" /></dd>
           </dl>
           <dl className="account_pledge_dl">
-            <dt className="account_pledge_dt">{ rewardVol }<small>ONP</small></dt>
+            <dt className="account_pledge_dt">{ rewardVol }<small className="pledge_unit">ONP</small></dt>
             <dd className="account_pledge_dd"><I18 text="pledgeReward" /></dd>
           </dl>
           <div className="account_pledge_buttons">
-            <button className="account_pledge_button">
-              <I18 text="pledgeMining" /><ComConSvg className="" xlinkHref="#icon-pledge" />
-            </button>
+            <ComConButton className="account_pledge_button">
+              <ComConSvg className="account_pledge_icon" xlinkHref="#icon-pledge" /><I18 text="pledgeMining" />
+            </ComConButton>
+            <ComConButton contrast className="account_pledge_button">
+              <ComConSvg className="account_pledge_icon" xlinkHref="#icon-looking" /><I18 text="myPledge" />
+            </ComConButton>
           </div>
         </div>
       </div>

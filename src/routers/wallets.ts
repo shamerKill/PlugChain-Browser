@@ -31,4 +31,8 @@ export const walletsRouter: RouteProps[] = [
     path: 'receive',
     component: loadable(() => import('../app/pages/wallet/receive/receive')),
   },
+  {
+    path: 'pledge',
+    component: loadable(() => import('../app/pages/wallet/pledge/pledge')),
+  },
 ];

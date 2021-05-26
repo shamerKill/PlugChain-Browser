@@ -47,4 +47,17 @@
     margin-top: 2rem;
     width: 10rem;
   }
+  .transaction_box_tip {
+    padding: 0.5rem 0;
+    color: var(--color-primary-gray);
+  }
+  .transaction_tip_primary {
+    padding: 0 1rem;
+    color: var(--color-primary);
+  }
+  .transaction_tip_button {
+    background: none;
+    color: var(--color-primary);
+    cursor: pointer;
+  }
 }

@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
 import ComConButton from '../../../components/control/button';
@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 
 const PageWalletTransaction: FC = () => {
   const [toAddress, setToAddress] = useState('');
+  const [balance, setBalance] = useState('');
   const [volume, setVolume] = useState('0');
   const [fee, setFee] = useState('0');
   const [password, setPassword] = useState('');
@@ -16,6 +17,14 @@ const PageWalletTransaction: FC = () => {
   const verifyTransaction = () => {
     setTransactionLoading(true);
   };
+
+  const transactionAllBalance = () => {
+    setVolume(balance);
+  };
+
+  useEffect(() => {
+    setBalance('100');
+  }, []);
 
   
   return (
@@ -42,6 +51,11 @@ const PageWalletTransaction: FC = () => {
               onChange={e => setVolume(e.target.value)} />
             <p className="transaction_box_info">ONP</p>
           </div>
+          <p className="transaction_box_tip">
+            <I18 text="canTransactionNumber" />
+            <span className="transaction_tip_primary">{balance}ONP</span>
+            <button className="transaction_tip_button" onClick={transactionAllBalance}><I18 text="allTransaction" /></button>
+          </p>
           <p className="transaction_box_title"><I18 text="feeNumber" /></p>
           <div className="transaction_box_label">
             <input

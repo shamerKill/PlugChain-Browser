@@ -1,0 +1,171 @@
+.page_transaction_pledge {
+  background-color: var(--color-primary-background-contrast);
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  .pledge_header {
+    padding: 1rem;
+    background-image: var(--background-image-contrast);
+    color: var(--color-primary-text-contrast);
+  }
+  .header_account {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    .account_user {
+      display: flex;
+      align-items: center;
+      padding: 1rem 0;
+      min-width: 20rem;
+    }
+    .account_avatar {
+      width: 2rem;
+      height: 2rem;
+      border: 1px solid var(--color-primary-border);
+      border-radius: 50%;
+      padding: 0.3rem;
+    }
+    .account_name {
+      padding-left: 1rem;
+      font-size: (14/12)+rem;
+      text-decoration: underline;
+    }
+    .account_address {
+      opacity: var(--opacity-level-2);
+      font-size: (14/12)+rem;
+      white-space: nowrap;
+      padding-bottom: 1rem;
+      .account_address_icon {
+        padding-right: 0.5em;
+        font-size: (16/12)+rem;
+      }
+    }
+  }
+  .account_info {
+    margin: 1rem;
+    position: relative;
+    z-index: 1;
+    border: 1px solid var(--color-primary-gray);
+    border-radius: 0.3rem;
+    padding: 0.5rem 2%;
+    display: flex;
+    flex-wrap: wrap;
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--color-primary-background);
+      z-index: -1;
+      opacity: var(--opacity-level-3);
+    }
+  }
+  .account_info_dl {
+    width: 50%;
+    display: flex;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--color-primary-gray);
+    &:nth-last-child(1) {
+      border-bottom: none;
+    }
+    &:nth-last-child(2) {
+      border-bottom: none;
+    }
+  }
+  .account_info_dt {
+    width: 30%;
+    opacity: var(--opacity-level-1);
+  }
+  .account_info_dd {
+    font-size: 1.2rem;
+    letter-spacing: 0.1rem;
+    &.account_info_green {
+      color: var(--color-primary-green);
+    }
+  }
+  .pledge_footer {
+    background: var(--color-primary-background);
+    padding: 1rem 2rem;
+    .pledge_footer_item {
+      padding-left: 2rem;
+      padding-bottom: 1rem;
+      position: relative;
+      .pledge_footer_span {
+        opacity: var(--opacity-level-1);
+      }
+      &::before {
+        content: '';
+        width: 1.4rem;
+        height: 0.5rem;
+        background-image: url('../../../../assets/images/pledge_item.png');
+        background-size: 100% 100%;
+        position: absolute;
+        top: 0.4rem;
+        left: 0;
+      }
+    }
+  }
+  .pledge_content {
+    padding: 3rem 1rem;
+  }
+  .pledge_box_title {
+    padding: 1rem 0 0.5rem;
+  }
+  .pledge_box_label {
+    display: flex;
+    width: 50rem;
+    max-width: 100%;
+    position: relative;
+    align-items: center;
+  }
+  .pledge_box_input {
+    border: 1px solid var(--color-primary-border);
+    background: var(--color-primary-background);
+    line-height: 2em;
+    padding: 0.3em 0.5em;
+    flex: 1.5rem;
+  }
+  .pledge_box_info {
+    position: absolute;
+    top: 50%;
+    right: 0.5em;
+    opacity: var(--opacity-level-2);
+    font-size: 1.2rem;
+    line-height: 2rem;
+    margin-top: -1rem;
+  }
+  .pledge_box_forget {
+    color: var(--color-primary-gray);
+    padding: 0 0 0 1rem;
+  }
+  .pledge_confirm_button {
+    margin-top: 2rem;
+    width: 10rem;
+  }
+  .pledge_box_tip {
+    padding: 0.5rem 0;
+    color: var(--color-primary-gray);
+  }
+  .pledge_tip_primary {
+    padding: 0 1rem;
+    color: var(--color-primary);
+  }
+  .pledge_tip_button {
+    background: none;
+    color: var(--color-primary);
+    cursor: pointer;
+  }
+  @media (max-width: 720px) {
+    .account_info_dl {
+      width: 100%;
+      &:nth-last-child(2) {
+        border-bottom: 1px solid var(--color-primary-gray);
+      }
+      &:nth-last-child(1) {
+        border-bottom: none;
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useFormatSearch } from '../../../../tools';
 import ComConSvg from '../../../components/control/icon';
 import ComponentsLayoutBase from '../../../components/layout/base';

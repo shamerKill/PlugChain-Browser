@@ -17,4 +17,5 @@ html {
   --opacity-level-3: 0.1;
   --background-image-contrast: linear-gradient(#082e42, #081326);
   --background-box-shadow: 0 0 1rem 0.1rem rgba(244, 245, 248, 0.6);
+  --primary-box-shadow: 0 0 1rem 0.1rem rgba(29, 163, 144, 0.3);
 }

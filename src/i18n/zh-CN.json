@@ -134,6 +134,9 @@
   "redeem": "赎回",
   "changePledge": "转账质押",
   "earned": "已收益",
+  "changePledgeNode": "选择质押节点",
+  "confirmTransfer": "确认转让",
+  "pledgeTransferTip1": "今日还能转让 1 次，本月还能转让质押 6 次。",
 
   "close": "关闭",
   "confirm": "确认",

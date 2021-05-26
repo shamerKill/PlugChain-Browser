@@ -47,4 +47,8 @@ export const walletsRouter: RouteProps[] = [
     path: 'info-pledge',
     component: loadable(() => import('../app/pages/wallet/info-pledge/info-pledge')),
   },
+  {
+    path: 'transfer-pledge',
+    component: loadable(() => import('../app/pages/wallet/transfer-pledge/transfer-pledge')),
+  },
 ];

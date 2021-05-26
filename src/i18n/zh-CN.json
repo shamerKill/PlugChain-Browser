@@ -131,6 +131,9 @@
   "detail": "详情",
   "myPledged": "我的质押",
   "pledgeNumber": "质押数量",
+  "redeem": "赎回",
+  "changePledge": "转账质押",
+  "earned": "已收益",
 
   "close": "关闭",
   "confirm": "确认",

@@ -1,0 +1,117 @@
+.page_info_pledge {
+  .info_pledge_inner {
+    background-color: var(--color-primary-background-contrast);
+    box-shadow: var(--background-box-shadow);
+    margin: 1rem;
+  }
+  .header_account {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 1rem;
+    background-image: var(--background-image-contrast);
+    color: var(--color-primary-text-contrast);
+    .account_user {
+      display: flex;
+      align-items: center;
+      padding: 1rem 0;
+      min-width: 20rem;
+    }
+    .account_avatar {
+      width: 2rem;
+      height: 2rem;
+      border: 1px solid var(--color-primary-border);
+      border-radius: 50%;
+      padding: 0.3rem;
+    }
+    .account_name {
+      padding-left: 1rem;
+      font-size: (14/12)+rem;
+      text-decoration: underline;
+    }
+    .account_address {
+      opacity: var(--opacity-level-2);
+      font-size: (14/12)+rem;
+      white-space: nowrap;
+      .account_address_icon {
+        padding-right: 0.5em;
+        font-size: (16/12)+rem;
+      }
+    }
+  }
+  .account_info {
+    margin: 1rem;
+    position: relative;
+    z-index: 1;
+    border: 1px solid var(--color-primary-gray);
+    border-radius: 0.3rem;
+    padding: 0.5rem 2%;
+    display: flex;
+    flex-wrap: wrap;
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--color-primary-background);
+      z-index: -1;
+      opacity: var(--opacity-level-3);
+    }
+  }
+  .info_list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .info_item_box {
+    padding: 1rem;
+    width: (100% / 3);
+  }
+  .info_item_dl {
+    background: var(--color-primary-background);
+    border: 1px solid var(--color-primary-border);
+    padding: 0.5rem 2rem;
+  }
+  .info_item_dt {
+    font-size: (18/12)+rem;
+    padding-bottom: 1rem;
+    .info_item_small {
+      font-size: 1rem;
+    }
+  }
+  .info_item_dd {
+    opacity: var(--opacity-level-1);
+    padding-bottom: 0.5rem;
+  }
+  .info_buttons {
+    width: 30rem;
+    max-width: 100%;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  .info_button {
+    width: 10rem;
+    border-radius: 3.4rem;
+    height: 3.4rem;
+  }
+  .info_button_icon {
+    padding-right: 0.3rem;
+    font-weight: 900;
+    font-size: (18/12)+rem;
+  }
+  @media (max-width: 1020px) {
+    .info_item_box {
+      width: 50%;
+    }
+  }
+  @media (max-width: 720px) {
+    .info_item_box {
+      width: 100%;
+    }
+  }
+}

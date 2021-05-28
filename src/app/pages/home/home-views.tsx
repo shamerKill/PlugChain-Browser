@@ -11,9 +11,11 @@ import { timer } from 'rxjs';
 import ComConTable from '../../components/control/table';
 import { Link } from 'react-router-dom';
 import ComConSvg from '../../components/control/icon';
+import { formatNumberStr } from '../../../tools/string';
 
 export const HomeChainInfo: FC = () => {
   const goLink = useSafeLink();
+  // const newBlockHeightAjax = useAjaxGet('test/block');
   const [newBlockHeight, setNewBlockHeight] = useState('');
   const [transactionVolume, setTransactionVolume] = useState('');
   const [pendingBlockVolume, setPendingBlockVolume] = useState('');
@@ -32,16 +34,16 @@ export const HomeChainInfo: FC = () => {
   const TokenPledgeRateView = useMemo(() => <TokenPledgeRate pledgeRate={pledgeRate} />, [pledgeRate]);
 
   useEffect(() => {
-    setNewBlockHeight('308,221,035');
+    setNewBlockHeight(formatNumberStr('990091'));
     setTransactionVolume('221,035');
-    setPendingBlockVolume('21,035');
-    setNewBlockTransaction('305');
+    setPendingBlockVolume('5');
+    setNewBlockTransaction('829');
     setTransactionRate(0.96);
     setPrice('50.01');
     setPriceRate(-5);
-    setMarketValue('$5999999.99');
-    setAllTokenVolume('1,233,456.198');
-    setAllPledge('3,456.198');
+    setMarketValue(`$${formatNumberStr('50100000')}`);
+    setAllTokenVolume(formatNumberStr('1000000'));
+    setAllPledge(formatNumberStr('34562.198'));
     setPledgeRate(30);
     setNowVolume('18');
     setHistoryMaxVolume('302');
@@ -78,7 +80,7 @@ export const HomeChainInfo: FC = () => {
       <div className="home_chain_box chain_market">
         <dl className="chain_info_dl">
           <dt className="chain_info_dt">
-            ONP&nbsp;<I18 text="price" />
+            PLUG&nbsp;<I18 text="price" />
             <span className={formatClass(['chain_info_rate', priceRate >= 0 ? 'chain_info_rate_green' : 'chain_info_rate_red'])}>
               <ComConSvg xlinkHref={priceRate >= 0 ? '#icon-up' : '#icon-down'} />
               {priceRate}%
@@ -163,21 +165,20 @@ export const HomeNewsInfo: FC = () => {
   }, []);
   // set tables content
   useEffect(() => {
-    const getLink = (text: string) => <Link className="a_link" to="/">{text}</Link>;
     const getBlockLink = (text: string) => <Link className="a_link" to={`./block/${text}`}>{text}</Link>;
     const getAccountLink = (text: string) => <Link className="a_link" to={`./account/${text}`}>{text}</Link>;
     const getTransactionLink = (text: string) => <Link className="a_link" to={`./transaction/${text}`}>{text}</Link>;
     setBlockTableContent([
-      [ getBlockLink('13456233'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-      [ getBlockLink('13456233'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-      [ getBlockLink('13456233'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-      [ getBlockLink('13456233'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
+      [ getBlockLink('13456233'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getBlockLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
+      [ getBlockLink('13456233'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getBlockLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
+      [ getBlockLink('13456233'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getBlockLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
+      [ getBlockLink('13456233'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getBlockLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
     ]);
     setTransTableContent([
-      [ getTransactionLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-      [ getTransactionLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-      [ getTransactionLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-      [ getTransactionLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
+      [ getTransactionLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getBlockLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getAccountLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
+      [ getTransactionLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getBlockLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getAccountLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
+      [ getTransactionLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getBlockLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getAccountLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
+      [ getTransactionLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getBlockLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getAccountLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
     ]);
   }, []);
 

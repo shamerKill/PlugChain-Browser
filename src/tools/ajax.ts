@@ -1,5 +1,6 @@
 import getEnvConfig from './env-config';
 import { BehaviorSubject } from 'rxjs';
+import { useRef } from 'react';
 
 export type TypeAjaxResult<T = any> = {
   loading: boolean;
@@ -12,7 +13,7 @@ export type TypeAjaxResult<T = any> = {
 type TypeQuery = { [key: string]: any };
 
 const formatUrl = (url: string, query?: TypeQuery): string => {
-  let pathName = `${getEnvConfig.BASE_URL}/${url}`;
+  let pathName = `${getEnvConfig.BASE_URL}/${url}`.replace(/(?<!:)\/{2,}/g, '/');
   if (query !== undefined) {
     const queryStr = Object.keys(query).map(key => `${key}=${JSON.stringify(query[key])}`);
     pathName += `?${queryStr.join('&')}`;
@@ -57,9 +58,9 @@ export const fetchData = <T = any>(type: 'GET'|'POST', url: string, query?: Type
       getObservable.next({
         loading: false,
         success: true,
-        status: result.status,
-        data: result.data,
-        message: result.message,
+        status: result.status || 200,
+        data: result.data || result.result,
+        message: result.message || 'success',
       });
     })
     .catch(err => {
@@ -72,9 +73,15 @@ export const fetchData = <T = any>(type: 'GET'|'POST', url: string, query?: Type
   return getObservable;
 };
 
-export const useAjaxGet = <T = any>(url: string, query?: TypeQuery) => fetchData<T>(
-  'GET', url, query,
-);
-export const useAjaxPost = <T = any>(url: string, query?: TypeQuery) => fetchData<T>(
-  'POST', url, query,
-);
+export const useAjaxGet = <T = any>(url: string, query?: TypeQuery) => {
+  const memResult = useRef(fetchData<T>(
+    'GET', url, query,
+  ));
+  return memResult.current;
+};
+export const useAjaxPost = <T = any>(url: string, query?: TypeQuery) => {
+  const memResult = useRef(fetchData<T>(
+    'POST', url, query,
+  ));
+  return memResult.current;
+};

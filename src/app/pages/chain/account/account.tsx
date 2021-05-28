@@ -87,7 +87,7 @@ const PageChainAccount: FC = () => {
           <dl className="account_info_dl account_info_important">
             <dt className="account_info_dt"><I18 text="extra" /></dt>
             <dd className="account_info_dd">
-              { coinVolume }&nbsp;ONP
+              { coinVolume }&nbsp;PLUG
               <span className="account_info_small">≈&nbsp;${marketValue}</span>
             </dd>
           </dl>

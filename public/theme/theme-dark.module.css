@@ -18,4 +18,12 @@ html {
   --background-image-contrast: linear-gradient(#082e42, #081326);
   --background-box-shadow: 0 0 1rem 0.1rem rgba(244, 245, 248, 0.6);
   --primary-box-shadow: 0 0 1rem 0.1rem var(--color-primary);
+  --color-alert-background-error: #fff2f0;
+  --color-alert-border-error: #ffccc7;
+  --color-alert-background-warning: #fffbe6;
+  --color-alert-border-warning: #ffe58f;
+  --color-alert-background-info: #e6f7ff;
+  --color-alert-border-info: #91d5ff;
+  --color-alert-background-success: #f6ffed;
+  --color-alert-border-success: #b7eb8f;
 }

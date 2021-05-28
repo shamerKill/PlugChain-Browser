@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { formatClass, getOnlyId, useFormatSearch } from '../../../../tools';
+import { formatClass, getOnlyId, useFormatSearch, useSafeLink } from '../../../../tools';
 import ComConSvg from '../../../components/control/icon';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
@@ -7,6 +7,7 @@ import I18 from '../../../../i18n/component';
 import './transfer-pledge.scss';
 import { Link } from 'react-router-dom';
 import ComConButton from '../../../components/control/button';
+import alertTools from '../../../components/tools/alert';
 
 type TypePledgeNodeInfo = {
   avatar: string;
@@ -28,6 +29,7 @@ type TypeNodesInfo = {
 };
 
 const PageTransferPledge: FC = () => {
+  const goLink = useSafeLink();
   const search = useFormatSearch<{id: string}>();
   const [pledgeNodeInfo, setPledgeNodeInfo] = useState<TypePledgeNodeInfo>({
     avatar: '', name: '', address: '', pledged: '', rewardRate: '', fee: '', earned: '',
@@ -39,6 +41,10 @@ const PageTransferPledge: FC = () => {
     setNodeSelected(index);
   }
 
+  const submitTransfer = () => {
+    alertTools.create({ message: <I18 text="success" />, type: 'info' });
+    goLink('/wallet/my-pledge');
+  }
 
   useEffect(() => {
     if (!search) return;
@@ -73,7 +79,7 @@ const PageTransferPledge: FC = () => {
         <div className="info_list">
           <div className="info_item_box">
             <dl className="info_item_dl">
-              <dt className="info_item_dt">{ pledgeNodeInfo.pledged }&nbsp;<small className="info_item_small">ONP</small></dt>
+              <dt className="info_item_dt">{ pledgeNodeInfo.pledged }&nbsp;<small className="info_item_small">PLUG</small></dt>
               <dd className="info_item_dd"><I18 text="pledged" /></dd>
             </dl>
           </div>
@@ -85,13 +91,13 @@ const PageTransferPledge: FC = () => {
           </div>
           <div className="info_item_box">
           <dl className="info_item_dl">
-            <dt className="info_item_dt">{ pledgeNodeInfo.fee }&nbsp;<small className="info_item_small">ONP</small></dt>
+            <dt className="info_item_dt">{ pledgeNodeInfo.fee }&nbsp;<small className="info_item_small">PLUG</small></dt>
             <dd className="info_item_dd"><I18 text="feeNumber" /></dd>
           </dl>
           </div>
           <div className="info_item_box">
             <dl className="info_item_dl">
-              <dt className="info_item_dt">{ pledgeNodeInfo.earned }&nbsp;<small className="info_item_small">ONP</small></dt>
+              <dt className="info_item_dt">{ pledgeNodeInfo.earned }&nbsp;<small className="info_item_small">PLUG</small></dt>
               <dd className="info_item_dd"><I18 text="earned" /></dd>
             </dl>
           </div>
@@ -107,7 +113,7 @@ const PageTransferPledge: FC = () => {
                 <div className="pledge_node_inner">
                   <div className="pledge_node_header">
                     <img src={node.avatar} alt={node.name} className="node_avatar" />
-                    <Link className="node_name" to="">{node.name}</Link>
+                    <Link className="node_name" to={`/wallet/transaction-pledge?id=${node.name}`}>{node.name}</Link>
                   </div>
                   <div className="pledge_node_content">
                     <div className="pledge_node_info">
@@ -117,11 +123,11 @@ const PageTransferPledge: FC = () => {
                       </dl>
                       <dl className="pledge_node_dl">
                         <dt className="pledge_node_dt">{node.pledgedVolume}</dt>
-                        <dt className="pledge_node_dd"><I18 text="pledgeVolume" />(ONP)</dt>
+                        <dt className="pledge_node_dd"><I18 text="pledgeVolume" />(PLUG)</dt>
                       </dl>
                       <dl className="pledge_node_dl">
                         <dt className="pledge_node_dt">{node.fee}</dt>
-                        <dt className="pledge_node_dd"><I18 text="feeNumber" />(ONP)</dt>
+                        <dt className="pledge_node_dd"><I18 text="feeNumber" />(PLUG)</dt>
                       </dl>
                     </div>
                   </div>
@@ -130,7 +136,7 @@ const PageTransferPledge: FC = () => {
             ))
           }
         </div>
-        <ComConButton className="transfer_confirm_button"><I18 text="confirmTransfer" /></ComConButton>
+        <ComConButton onClick={submitTransfer} className="transfer_confirm_button"><I18 text="confirmTransfer" /></ComConButton>
         <div className="pledge_footer">
           <div className="pledge_footer_item"><span className="pledge_footer_span"><I18 text="pledgeTransferTip1" /></span></div>
         </div>

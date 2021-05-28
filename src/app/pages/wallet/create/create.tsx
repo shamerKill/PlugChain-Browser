@@ -1,8 +1,11 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { timer } from 'rxjs';
+import { InRootState } from '../../../../@types/redux';
+import useGetDispatch from '../../../../databases/hook';
 import I18 from '../../../../i18n/component';
 import useI18 from '../../../../i18n/hooks';
-import { useSafeLink } from '../../../../tools';
+import { saveSession, useSafeLink } from '../../../../tools';
 import ComConSvg from '../../../components/control/icon';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import alertTools from '../../../components/tools/alert';
@@ -10,7 +13,8 @@ import alertTools from '../../../components/tools/alert';
 import './create.scss';
 
 const PageWalletCreate: FC = () => {
-  const safeLink = useSafeLink();
+  const goTo = useSafeLink();
+  const [wallet] = useGetDispatch<InRootState['wallet']>('wallet');
   const [inputType, setInputType] = useState<'password'|'text'>('password');
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
@@ -24,13 +28,20 @@ const PageWalletCreate: FC = () => {
   const createAccount = () => {
     const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
     if (!reg.test(password)) {
-      alertTools.create({ message: <I18 text="passwordError" /> });
+      alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
       return;
     }
+    saveSession('createPass', password);
     setCreating(true);
-    console.log(password);
-    safeLink('./create-backup');
+    timer(1000).subscribe(() => goTo('./create-backup'));
   }
+
+  useEffect(() => {
+    if (wallet.hasWallet) {
+      goTo('/');
+      alertTools.create({ message: <I18 text="onlyWallet" /> });
+    }
+  }, [wallet, goTo]);
 
   return (
     <ComponentsLayoutBase className="wallet_create_page">

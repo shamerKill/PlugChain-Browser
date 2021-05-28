@@ -106,7 +106,7 @@ const PageBlockInfo: FC = () => {
           </dl>
           <dl className="block_info_dl">
             <dt className="block_info_dt"><I18 text="feeNumber" /></dt>
-            <dd className="block_info_dd">{blockInfo.fee ? `${blockInfo.fee} ONP` : ''}</dd>
+            <dd className="block_info_dd">{blockInfo.fee ? `${blockInfo.fee} PLUG` : ''}</dd>
           </dl>
           <dl className="block_info_dl">
             <dt className="block_info_dt"><I18 text="producer" /></dt>

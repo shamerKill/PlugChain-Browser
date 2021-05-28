@@ -1,9 +1,10 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, MouseEvent, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import I18 from '../../../i18n/component';
 import { useLanguageHook } from '../../../services/config.services';
 import { formatClass, getOnlyId } from '../../../tools';
 import ComConLogo, { TypeComponentsControlLogo } from '../control/logo';
+import alertTools from '../tools/alert';
 
 const links = [
   { link: '/', src: require('../../../assets/logo/protocol-full-light.png') },
@@ -18,6 +19,12 @@ const links = [
 const ComLayFooter: FC = () => {
   const [friendsLink, setFriendsLink] = useState<TypeComponentsControlLogo[]>([]);
   const [, changeLanguage] = useLanguageHook();
+
+  const noOpenData = (e: MouseEvent<HTMLAnchorElement>) => {
+    alertTools.create({ message: <I18 text="noOpen" />, type: 'warning' });
+    e.preventDefault();
+    return false;
+  };
   
   useEffect(() => {
     setFriendsLink(links);
@@ -52,7 +59,7 @@ const ComLayFooter: FC = () => {
               </dt>
               <dd>
                 <p className={formatClass(['layout-footer-list-item'])}>
-                  <Link to="/"><I18 text="footerList1-1" /></Link>
+                  <Link to="/" onClick={noOpenData}><I18 text="footerList1-1" /></Link>
                 </p>
               </dd>
             </dl>
@@ -62,16 +69,16 @@ const ComLayFooter: FC = () => {
               </dt>
               <dd>
                 <p className={formatClass(['layout-footer-list-item'])}>
-                  <Link to="/"><I18 text="footerList2-1" /></Link>
+                  <Link to="/" onClick={noOpenData}><I18 text="footerList2-1" /></Link>
                 </p>
                 <p className={formatClass(['layout-footer-list-item'])}>
-                  <Link to="/"><I18 text="footerList2-2" /></Link>
+                  <Link to="/" onClick={noOpenData}><I18 text="footerList2-2" /></Link>
                 </p>
                 <p className={formatClass(['layout-footer-list-item'])}>
-                  <Link to="/"><I18 text="footerList2-3" /></Link>
+                  <Link to="/" onClick={noOpenData}><I18 text="footerList2-3" /></Link>
                 </p>
                 <p className={formatClass(['layout-footer-list-item'])}>
-                  <Link to="/"><I18 text="footerListMore" /></Link>
+                  <Link to="/" onClick={noOpenData}><I18 text="footerListMore" /></Link>
                 </p>
               </dd>
             </dl>

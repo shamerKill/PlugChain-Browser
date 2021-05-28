@@ -3,10 +3,10 @@ import { useEffect } from 'react';
 import Routers from './routers';
 import dataStore from '../databases';
 import { themeService } from '../services/config.services';
+import { ComToolAlertBox } from './components/tools/alert';
 
 import './scss/reset.scss';
 import './scss/App.scss';
-import { ComToolAlertBox } from './components/tools/alert';
 
 const checkoutTheme = () => {
   let linkEle: HTMLLinkElement | null;

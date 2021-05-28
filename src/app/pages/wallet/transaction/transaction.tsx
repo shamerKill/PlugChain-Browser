@@ -49,11 +49,11 @@ const PageWalletTransaction: FC = () => {
               disabled={transactionLoading}
               value={volume}
               onChange={e => setVolume(e.target.value)} />
-            <p className="transaction_box_info">ONP</p>
+            <p className="transaction_box_info">PLUG</p>
           </div>
           <p className="transaction_box_tip">
             <I18 text="canTransactionNumber" />
-            <span className="transaction_tip_primary">{balance}ONP</span>
+            <span className="transaction_tip_primary">{balance}PLUG</span>
             <button className="transaction_tip_button" onClick={transactionAllBalance}><I18 text="allTransaction" /></button>
           </p>
           <p className="transaction_box_title"><I18 text="feeNumber" /></p>
@@ -64,7 +64,7 @@ const PageWalletTransaction: FC = () => {
               disabled={transactionLoading}
               value={fee}
               onChange={e => setFee(e.target.value)} />
-            <p className="transaction_box_info">ONP</p>
+            <p className="transaction_box_info">PLUG</p>
           </div>
           <p className="transaction_box_title"><I18 text="password" /></p>
           <div className="transaction_box_label">

@@ -1,18 +1,20 @@
 import { InRootState, ActionType } from '../@types/redux';
 import { createStore, combineReducers } from 'redux';
-import { getEnvConfig } from '../tools';
 import { configReducer } from './reducers/config';
-import { TypeDataBaseConfig } from '../@types/database';
+import { TypeDataBaseConfig, TypeDataBaseWallet } from '../@types/database';
+import { walletReducer } from './reducers/wallet';
+import { saveLocalData } from './localStorage';
 
 
-const rootReducers = combineReducers<InRootState, ActionType<TypeDataBaseConfig>>({
+const rootReducers = combineReducers<InRootState, ActionType<TypeDataBaseConfig&TypeDataBaseWallet>>({
   config: configReducer,
+  wallet: walletReducer,
 });
 
 const dataStore = createStore(rootReducers);
 
 dataStore.subscribe(() => {
-  localStorage.setItem(getEnvConfig.SAVE_DATABASE_NAME, JSON.stringify(dataStore.getState()));
+  saveLocalData(JSON.stringify(dataStore.getState()));
 });
 
 export default dataStore;

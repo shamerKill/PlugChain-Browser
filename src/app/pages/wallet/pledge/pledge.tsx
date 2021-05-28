@@ -3,7 +3,7 @@ import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
 
 import './pledge.scss';
-import { getOnlyId } from '../../../../tools';
+import { getOnlyId, useSafeLink } from '../../../../tools';
 import ComConButton from '../../../components/control/button';
 import { Link } from 'react-router-dom';
 
@@ -16,7 +16,12 @@ type TypeNodesInfo = {
 };
 
 const PageWalletPledge: FC = () => {
+  const goLink = useSafeLink();
   const [nodes, setNodes] = useState<TypeNodesInfo[]>([]);
+
+  const goToChange = (id: string) => {
+    goLink(`/wallet/transaction-pledge?id=${id}`);
+  };
 
   useEffect(() => {
     setNodes([
@@ -47,7 +52,7 @@ const PageWalletPledge: FC = () => {
               <div className="pledge_node_inner">
                 <div className="pledge_node_header">
                   <img src={node.avatar} alt={node.name} className="node_avatar" />
-                  <Link className="node_name" to="">{node.name}</Link>
+                  <Link className="node_name" to={`/wallet/transaction-pledge?id=${node.name}`}>{node.name}</Link>
                 </div>
                 <div className="pledge_node_content">
                   <div className="pledge_node_info">
@@ -57,14 +62,14 @@ const PageWalletPledge: FC = () => {
                     </dl>
                     <dl className="pledge_node_dl">
                       <dt className="pledge_node_dt">{node.pledgedVolume}</dt>
-                      <dt className="pledge_node_dd"><I18 text="pledgeVolume" />(ONP)</dt>
+                      <dt className="pledge_node_dd"><I18 text="pledgeVolume" />(PLUG)</dt>
                     </dl>
                     <dl className="pledge_node_dl">
                       <dt className="pledge_node_dt">{node.minVolume}</dt>
-                      <dt className="pledge_node_dd"><I18 text="minPledgeVolume" />(ONP)</dt>
+                      <dt className="pledge_node_dd"><I18 text="minPledgeVolume" />(PLUG)</dt>
                     </dl>
                   </div>
-                  <ComConButton className="pledge_node_button">选择</ComConButton>
+                  <ComConButton className="pledge_node_button" onClick={() => goToChange(node.name)}>选择</ComConButton>
                 </div>
               </div>
             </div>

@@ -14,7 +14,7 @@ const PageHome: FC = () => {
   const [searchValue, setSearchValue] = useState('');
 
   const searchCallback = useCallback(() => {
-    if (searchValue === '') return alertTools.create({ message: 'null' });
+    if (searchValue === '') return alertTools.create({ message: '没有内容', time: 5000, type: 'error' });
   }, [searchValue]);
   
   return (

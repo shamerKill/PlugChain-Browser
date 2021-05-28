@@ -1,6 +1,6 @@
 import { Action, Reducer } from 'redux';
 import { Dispatch } from 'react';
-import { TypeDataBaseConfig } from './database';
+import { TypeDataBaseConfig, TypeDataBaseWallet } from './database';
 
 // reducer类型
 export type ActionType<T> = Action<string> & { data: Partial<T> };
@@ -12,4 +12,5 @@ export type DispatchActionType<T> = Dispatch<ActionType<{[key in keyof T]?: T[ke
 // 根配置
 export interface InRootState {
   config: TypeDataBaseConfig,
+  wallet: TypeDataBaseWallet,
 }

@@ -35,11 +35,11 @@ const PageWalletReceive: FC = () => {
           <div className="receive_tips">
             <dl className="receive_tip_dl">
               <dt className="receive_tip_dt"><I18 text="receiveWeek" /></dt>
-              <dd className="receive_tip_dd">70&nbsp;ONP</dd>
+              <dd className="receive_tip_dd">70&nbsp;PLUG</dd>
             </dl>
             <dl className="receive_tip_dl">
               <dt className="receive_tip_dt"><I18 text="receiveOnce" /></dt>
-              <dd className="receive_tip_dd">10&nbsp;ONP</dd>
+              <dd className="receive_tip_dd">10&nbsp;PLUG</dd>
             </dl>
           </div>
           <p className="receive_box_title"><I18 text="address" /></p>
@@ -59,7 +59,7 @@ const PageWalletReceive: FC = () => {
               disabled={receiveLoading}
               value={volume}
               onChange={e => setVolume(e.target.value)} />
-            <p className="receive_box_info">ONP</p>
+            <p className="receive_box_info">PLUG</p>
           </div>
           <ComConButton
             loading={receiveLoading}

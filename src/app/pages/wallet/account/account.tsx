@@ -7,8 +7,10 @@ import { Link } from 'react-router-dom';
 import './account.scss';
 import ComConButton from '../../../components/control/button';
 import ComConSvg from '../../../components/control/icon';
+import { useSafeLink } from '../../../../tools';
 
 const PageWalletAccount: FC = () => {
+  const goLink = useSafeLink();
   const [address, setAddress] = useState('');
   const [coinVolume, setCoinVolume] = useState('');
   const [coinPrice, setCoinPrice] = useState('');
@@ -90,12 +92,12 @@ const PageWalletAccount: FC = () => {
         <div className="account_info_account">
           <dl className="account_info_dl account_info_important">
             <dd className="account_info_dd">
-              { coinVolume }&nbsp;ONP
+              { coinVolume }&nbsp;PLUG
               <span className="account_info_small">≈&nbsp;${marketValue}</span>
             </dd>
             <dt className="account_info_dt"><I18 text="extra" /></dt>
           </dl>
-          <ComConButton className="account_info_transaction">
+          <ComConButton className="account_info_transaction" onClick={() => goLink('/wallet/transaction')}>
             <I18 text="transaction" />
           </ComConButton>
         </div>
@@ -119,22 +121,22 @@ const PageWalletAccount: FC = () => {
         <h2 className="account_title"><I18 text="pledgeMining" /></h2>
         <div className="account_pledge_box">
           <dl className="account_pledge_dl">
-            <dt className="account_pledge_dt">{ pledgingVol }<small className="pledge_unit">ONP</small></dt>
+            <dt className="account_pledge_dt">{ pledgingVol }<small className="pledge_unit">PLUG</small></dt>
             <dd className="account_pledge_dd"><I18 text="pledging" /></dd>
           </dl>
           <dl className="account_pledge_dl">
-            <dt className="account_pledge_dt">{ redeemVol }<small className="pledge_unit">ONP</small></dt>
+            <dt className="account_pledge_dt">{ redeemVol }<small className="pledge_unit">PLUG</small></dt>
             <dd className="account_pledge_dd"><I18 text="redeeming" /></dd>
           </dl>
           <dl className="account_pledge_dl">
-            <dt className="account_pledge_dt">{ rewardVol }<small className="pledge_unit">ONP</small></dt>
+            <dt className="account_pledge_dt">{ rewardVol }<small className="pledge_unit">PLUG</small></dt>
             <dd className="account_pledge_dd"><I18 text="pledgeReward" /></dd>
           </dl>
           <div className="account_pledge_buttons">
-            <ComConButton className="account_pledge_button">
+            <ComConButton className="account_pledge_button" onClick={() => goLink('/wallet/pledge')}>
               <ComConSvg className="account_pledge_icon" xlinkHref="#icon-pledge" /><I18 text="pledgeMining" />
             </ComConButton>
-            <ComConButton contrast className="account_pledge_button">
+            <ComConButton contrast className="account_pledge_button" onClick={() => goLink('/wallet/my-pledge')}>
               <ComConSvg className="account_pledge_icon" xlinkHref="#icon-looking" /><I18 text="myPledge" />
             </ComConButton>
           </div>

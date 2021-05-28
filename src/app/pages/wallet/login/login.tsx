@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
 import useI18 from '../../../../i18n/hooks';
@@ -6,8 +6,16 @@ import useI18 from '../../../../i18n/hooks';
 import './login.scss';
 import { Link } from 'react-router-dom';
 import ComConSvg from '../../../components/control/icon';
+import ComConButton from '../../../components/control/button';
+import { useSafeLink } from '../../../../tools';
+import useGetDispatch from '../../../../databases/hook';
+import { InRootState } from '../../../../@types/redux';
+import { timer } from 'rxjs';
+import { changeWallet } from '../../../../databases/store/wallet';
 
 const PageWalletLogin: FC = () => {
+  const goLink = useSafeLink();
+  const [wallet, setWallet] = useGetDispatch<InRootState['wallet']>('wallet');
   const textAreaPlaceholder = useI18('inputWordPlaceholder');
   const passwordText = useI18('passwordTip');
   const [signInIng, setSignInIng] = useState(false);
@@ -24,7 +32,21 @@ const PageWalletLogin: FC = () => {
     const words = wordText.split(/[^a-zA-Z]+/g).filter(item => Boolean(item));
     console.log(words);
     setSignInIng(true);
+    timer(1000).subscribe(() => {
+      setWallet({
+        type: changeWallet,
+        data: {
+          hasWallet: true,
+          address: '0x1f8dec5061b0d9bf17e5828f249142b39dab84b4'
+        }
+      });
+    });
   };
+
+  useEffect(() => {
+    if (wallet.hasWallet) goLink('/wallet/account');
+  }, [goLink, wallet]);
+  
 
   return (
     <ComponentsLayoutBase className="wallet_login_page">
@@ -51,12 +73,13 @@ const PageWalletLogin: FC = () => {
         </button>
       </div>
       <div className="wallet_buttons">
-        <button
+        <ComConButton
+          loading={signInIng}
           className="wallet_button"
           disabled={signInIng}
           onClick={login}>
           <I18 text="signIn" />
-        </button>
+        </ComConButton>
         <button className="wallet_button">
           <I18 text="noExistingONPAccount" />
           <Link className="wallet_button_primary" to="./create"><I18 text="createAccount" /></Link>

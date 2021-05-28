@@ -1,11 +1,12 @@
 import { FC, useEffect, useState } from 'react';
-import { useFormatSearch } from '../../../../tools';
+import { useFormatSearch, useSafeLink } from '../../../../tools';
 import ComConSvg from '../../../components/control/icon';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
 
 import './info-pledge.scss';
 import ComConButton from '../../../components/control/button';
+import alertTools from '../../../components/tools/alert';
 
 type TypePledgeNodeInfo = {
   avatar: string;
@@ -19,9 +20,14 @@ type TypePledgeNodeInfo = {
 
 const PageInfoPledge: FC = () => {
   const search = useFormatSearch<{id: string}>();
+  const goLink = useSafeLink();
   const [pledgeNodeInfo, setPledgeNodeInfo] = useState<TypePledgeNodeInfo>({
     avatar: '', name: '', address: '', pledged: '', rewardRate: '', fee: '', earned: '',
   });
+
+  const backupToken = () => {
+    alertTools.create({ message: <I18 text="success" />, type: 'info'});
+  };
 
   useEffect(() => {
     if (!search) return;
@@ -49,7 +55,7 @@ const PageInfoPledge: FC = () => {
         <div className="info_list">
           <div className="info_item_box">
             <dl className="info_item_dl">
-              <dt className="info_item_dt">{ pledgeNodeInfo.pledged }&nbsp;<small className="info_item_small">ONP</small></dt>
+              <dt className="info_item_dt">{ pledgeNodeInfo.pledged }&nbsp;<small className="info_item_small">PLUG</small></dt>
               <dd className="info_item_dd"><I18 text="pledged" /></dd>
             </dl>
           </div>
@@ -61,25 +67,27 @@ const PageInfoPledge: FC = () => {
           </div>
           <div className="info_item_box">
           <dl className="info_item_dl">
-            <dt className="info_item_dt">{ pledgeNodeInfo.fee }&nbsp;<small className="info_item_small">ONP</small></dt>
+            <dt className="info_item_dt">{ pledgeNodeInfo.fee }&nbsp;<small className="info_item_small">PLUG</small></dt>
             <dd className="info_item_dd"><I18 text="feeNumber" /></dd>
           </dl>
           </div>
           <div className="info_item_box">
             <dl className="info_item_dl">
-              <dt className="info_item_dt">{ pledgeNodeInfo.earned }&nbsp;<small className="info_item_small">ONP</small></dt>
+              <dt className="info_item_dt">{ pledgeNodeInfo.earned }&nbsp;<small className="info_item_small">PLUG</small></dt>
               <dd className="info_item_dd"><I18 text="earned" /></dd>
             </dl>
           </div>
         </div>
         <div className="info_buttons">
           <ComConButton
-            className="info_button">
+            className="info_button"
+            onClick={backupToken}>
             <ComConSvg className="info_button_icon" xlinkHref="#icon-redeem" />
             <I18 text="redeem" />
           </ComConButton>
           <ComConButton
             className="info_button"
+            onClick={() => goLink(`/wallet/transfer-pledge?id=${pledgeNodeInfo.name}`)}
             contrast>
             <ComConSvg className="info_button_icon" xlinkHref="#icon-transfer" />
             <I18 text="changePledge" />

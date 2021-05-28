@@ -2,16 +2,23 @@ import { FC, useEffect, useState } from 'react';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
 import { RandomString } from '../../../../tools/random-str';
-import { formatClass, getOnlyId, useSafeLink } from '../../../../tools';
+import { delSession, formatClass, getOnlyId, getSession, useSafeLink } from '../../../../tools';
+import alertTools from '../../../components/tools/alert';
+import ComConButton from '../../../components/control/button';
 
 import './create.scss';
+import { timer } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 const PageWalletBackup: FC = () => {
-  const [ words, setWords ] = useState<string[]>([]);
-  const [timer, setTimer] = useState(10);
   const goLink = useSafeLink();
+  const [words,setWords] = useState<string[]>([]);
+  const [password, setPassWord] = useState('');
+  const [countTime, setCountTime] = useState(10);
 
   const goRoute = () => {
+    console.log(password);
+    delSession('createPass');
     goLink('./login');
   };
 
@@ -22,16 +29,17 @@ const PageWalletBackup: FC = () => {
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTimer(state => {
-        if (state > 0) return (state - 1);
-        else {
-          clearInterval(interval);
-          return state;
-        }
-      });
-    }, 1000);
-    return () => clearInterval(interval);
+    const memPass = getSession<string>('createPass');
+    if (memPass === undefined) {
+      alertTools.create({ message: <I18 text="passwordError" />, type: 'warning'});
+      goLink('/wallet/create');
+    }
+    setPassWord(memPass);
+  }, [goLink]);
+
+  useEffect(() => {
+    const interval = timer(1000, 1000).pipe(take(10)).subscribe(data => setCountTime(9 - data));
+    return () => interval.unsubscribe();
   }, []);
 
   return (
@@ -50,13 +58,13 @@ const PageWalletBackup: FC = () => {
           ))
         }
       </div>
-      <button
-        disabled={timer !== 0}
-        className={formatClass(['wallet_backup_button', timer === 0 && 'wallet_backup_button_success'])}
+      <ComConButton
+        disabled={countTime !== 0}
+        className={formatClass(['wallet_backup_button', countTime === 0 && 'wallet_backup_button_success'])}
         onClick={goRoute}>
         <I18 text="backupSucceeded" />
-        { timer !== 0 && `(${timer}s)` }
-      </button>
+        { countTime !== 0 && `(${countTime}s)` }
+      </ComConButton>
     </ComponentsLayoutBase>
   );
 };

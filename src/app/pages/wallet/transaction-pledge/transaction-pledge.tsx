@@ -6,6 +6,9 @@ import I18 from '../../../../i18n/component';
 import './transaction-pledge.scss';
 import { Link } from 'react-router-dom';
 import ComConButton from '../../../components/control/button';
+import { timer } from 'rxjs';
+import alertTools from '../../../components/tools/alert';
+import { useSafeLink } from '../../../../tools';
 
 type TypeNodeInfo = {
   avatar: string;
@@ -18,6 +21,7 @@ type TypeNodeInfo = {
 };
 
 const PageWalletTransactionPledge: FC = () => {
+  const goLink = useSafeLink();
   const [nodeInfo, setNodeInfo] = useState<TypeNodeInfo>({
     avatar: '', name: '', address: '', rate: '', minVolume: '', pledgedVolume: '', fee: '',
   });
@@ -28,6 +32,10 @@ const PageWalletTransactionPledge: FC = () => {
 
   const verifyPledge = () => {
     setPledgeLoading(true);
+    timer(2000).subscribe(() => {
+      alertTools.create({ message: <I18 text="pledgeSuccess" />, type: 'info'});
+      goLink('/wallet/my-pledge');
+    });
   };
 
   const pledgeAllBalance = () => {
@@ -84,14 +92,14 @@ const PageWalletTransactionPledge: FC = () => {
             disabled={pledgeLoading}
             value={volume}
             onChange={e => setVolume(e.target.value)} />
-          <p className="pledge_box_info">ONP</p>
+          <p className="pledge_box_info">PLUG</p>
         </div>
         <p className="pledge_box_tip">
           <I18 text="canTransactionNumber" />
-          <span className="pledge_tip_primary">{balance}ONP</span>
+          <span className="pledge_tip_primary">{balance}PLUG</span>
           <button className="pledge_tip_button" onClick={pledgeAllBalance}><I18 text="allTransaction" /></button>
         </p>
-        <p className="pledge_box_title"><I18 text="feeNumber" />&nbsp;&nbsp;&nbsp;{nodeInfo.fee}&nbsp;ONP</p>
+        <p className="pledge_box_title"><I18 text="feeNumber" />&nbsp;&nbsp;&nbsp;{nodeInfo.fee}&nbsp;PLUG</p>
         <p className="pledge_box_title"><I18 text="password" /></p>
         <div className="pledge_box_label">
           <input

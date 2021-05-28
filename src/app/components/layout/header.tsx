@@ -9,12 +9,15 @@ import { BehaviorSubject } from 'rxjs';
 import { throttleTime } from 'rxjs/operators';
 import { Link } from 'react-router-dom';
 import ComConSvg from '../control/icon';
+import useGetDispatch from '../../../databases/hook';
+import { InRootState } from '../../../@types/redux';
 
 const ComLayHeader: FC<{ headerBg: boolean }> = ({ headerBg }) => {
+  const goLink = useSafeLink();
   const [language, setLanguage] = useLanguageHook();
+  const [wallet] = useGetDispatch<InRootState['wallet']>('wallet');
   const [menuObserver] = useState(new BehaviorSubject<boolean>(true));
   const [menuShow, setMenuShow] = useState(true);
-  const goLink = useSafeLink();
 
   const changeLanguage = (type: number) => {
     const languageType = ['en-US', 'zh-CN'][type] as typeof language;
@@ -25,9 +28,18 @@ const ComLayHeader: FC<{ headerBg: boolean }> = ({ headerBg }) => {
     menuObserver.next(!menuShow);
   }
 
+  const buttonWalletSignIn = () => {
+    if (wallet.hasWallet) goLink('/wallet/account');
+    else goLink('/wallet/login');
+  };
+
   useEffect(() => {
     menuObserver.pipe(throttleTime(1000)).subscribe(setMenuShow);
   }, [setMenuShow, menuObserver]);
+
+  useEffect(() => {
+    console.log(wallet);
+  }, [wallet]);
 
   return (
     <header className={formatClass(['layout-header', headerBg && 'layout-header-bg'])}>
@@ -40,10 +52,12 @@ const ComLayHeader: FC<{ headerBg: boolean }> = ({ headerBg }) => {
           <ul className={formatClass(['layout-header-menu-ul'])}>
             <li className={formatClass(['layout-header-menu-list'])}><Link to="/"><I18 text="home" /></Link></li>
             <li className={formatClass(['layout-header-menu-list'])}><Link to="/"><I18 text="blockChain" /></Link></li>
-            <li className={formatClass(['layout-header-menu-list'])}><Link to="/"><I18 text="wallet" /></Link></li>
+            {
+              wallet.hasWallet && <li className={formatClass(['layout-header-menu-list'])}><Link to="/wallet/receive"><ComConSvg xlinkHref="#icon-water" /></Link></li>
+            }
           </ul>
-          <ComConButton onClick={() => goLink('/wallet/create')}>
-            <I18 text="signIn" />&nbsp;/&nbsp;<I18 text="create" />
+          <ComConButton onClick={buttonWalletSignIn}>
+            <I18 text={wallet.hasWallet ? 'wallet' : 'signIn'} />
           </ComConButton>
           <ComConSelector
             className="layout-header-menu-language"
@@ -55,8 +69,8 @@ const ComLayHeader: FC<{ headerBg: boolean }> = ({ headerBg }) => {
             onSelfSelect={changeLanguage} />
         </div>
         <div className={formatClass(['layout-header-menu', 'layout-header-phone'])}>
-          <ComConButton className={formatClass(['layout-header-phone-create'])}>
-            <I18 text="create" />
+          <ComConButton onClick={buttonWalletSignIn} className={formatClass(['layout-header-phone-create'])}>
+            <I18 text={wallet.hasWallet ? 'wallet' : 'signIn'} />
           </ComConButton>
           <button
             onClick={changeMenuShow}
@@ -70,18 +84,18 @@ const ComLayHeader: FC<{ headerBg: boolean }> = ({ headerBg }) => {
             }
           </button>
           <div className={formatClass(['layout-header-phone-fix', !menuShow && 'layout-header-phone-fix-show'])}>
-            <div className={formatClass(['layout-header-phone-accounts'])}>
+            {/* <div className={formatClass(['layout-header-phone-accounts'])}>
               <ComConButton className={formatClass(['layout-header-phone-create'])}>
                 <I18 text="createAccount" />
               </ComConButton>
               <ComConButton className={formatClass(['layout-header-phone-sign'])}>
                 <I18 text="signIn" />
               </ComConButton>
-            </div>
+            </div> */}
             <ul className={formatClass(['layout-header-menu-ul'])}>
               <li className={formatClass(['layout-header-menu-list'])}><Link to="/"><I18 text="home" /></Link></li>
               <li className={formatClass(['layout-header-menu-list'])}><Link to="/"><I18 text="blockChain" /></Link></li>
-              <li className={formatClass(['layout-header-menu-list'])}><Link to="/"><I18 text="wallet" /></Link></li>
+              {/* <li className={formatClass(['layout-header-menu-list'])}><Link to="/"><I18 text="wallet" /></Link></li> */}
               <li className={formatClass(['layout-header-menu-list'])}>
                 <div className={formatClass(['layout-header-phone-language'])}>
                   <p className={formatClass(['layout-header-phone-language-title'])}>

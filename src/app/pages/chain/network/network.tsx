@@ -79,7 +79,7 @@ const PageChainNetwork: FC = () => {
           </dl>
           <dl className="chain_info_dl">
             <dt className="chain_info_dt">
-              ONP&nbsp;<I18 text="price" />
+              PLUG&nbsp;<I18 text="price" />
             </dt>
             <dd className="chain_info_dd">
               { price }

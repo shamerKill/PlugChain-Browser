@@ -3,7 +3,7 @@ import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
 
 import './my-pledge.scss';
-import { getOnlyId } from '../../../../tools';
+import { getOnlyId, useSafeLink } from '../../../../tools';
 import { Link } from 'react-router-dom';
 import ComConButton from '../../../components/control/button';
 
@@ -15,7 +15,12 @@ type TypeNodesInfo = {
 };
 
 const PageMyPledge: FC = () => {
+  const goLink = useSafeLink();
   const [nodes, setNodes] = useState<TypeNodesInfo[]>([]);
+
+  const goToDetail = (id: string) => {
+    goLink(`/wallet/info-pledge?id=${id}`);
+  }
 
   useEffect(() => {
     setNodes([
@@ -38,8 +43,8 @@ const PageMyPledge: FC = () => {
               <div className="pledge_node_inner">
                 <div className="pledge_node_header">
                   <img src={node.avatar} alt={node.name} className="node_avatar" />
-                  <Link className="node_name" to="">{node.name}</Link>
-                  <ComConButton contrast className="node_detail"><I18 text="detail" /></ComConButton>
+                  <Link className="node_name" to={`/wallet/transaction-pledge?id=${node.name}`}>{node.name}</Link>
+                  <ComConButton contrast className="node_detail" onClick={() => goToDetail(node.name)}><I18 text="detail" /></ComConButton>
                 </div>
                 <div className="pledge_node_content">
                   <div className="pledge_node_info">
@@ -49,7 +54,7 @@ const PageMyPledge: FC = () => {
                     </dl>
                     <dl className="pledge_node_dl">
                       <dt className="pledge_node_dt">{node.pledgedVolume}</dt>
-                      <dt className="pledge_node_dd"><I18 text="pledgeVolume" />(ONP)</dt>
+                      <dt className="pledge_node_dd"><I18 text="pledgeVolume" />(PLUG)</dt>
                     </dl>
                   </div>
                 </div>

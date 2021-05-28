@@ -8,6 +8,7 @@ import { randomString } from './random-str';
 import { useSafeLink } from './route.hook';
 import { formatSearch, formatPath } from './url';
 import { useFormatSearch, useFormatPath } from './url.hook';
+import { saveSession, getSession, delSession } from './sessionStorage';
 
 
 export {
@@ -26,4 +27,7 @@ export {
   useFormatSearch,
   formatPath,
   useFormatPath,
+  saveSession,
+  getSession,
+  delSession,
 };

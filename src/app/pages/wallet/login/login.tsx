@@ -81,7 +81,7 @@ const PageWalletLogin: FC = () => {
           <I18 text="signIn" />
         </ComConButton>
         <button className="wallet_button">
-          <I18 text="noExistingONPAccount" />
+          <I18 text="noExistingPLUGAccount" />
           <Link className="wallet_button_primary" to="./create"><I18 text="createAccount" /></Link>
         </button>
       </div>

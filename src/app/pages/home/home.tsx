@@ -22,7 +22,7 @@ const PageHome: FC = () => {
       {/* search */}
       <div className="home_header">
         <h1 className="header_title">
-          <I18 text="ONPBlockChainBrowser" />
+          <I18 text="PLUGBlockChainBrowser" />
         </h1>
         <div className="header_search">
           <input

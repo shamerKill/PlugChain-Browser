@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@babel/core": "7.12.3",
+    "@cosmjs/proto-signing": "^0.25.4",
+    "@cosmjs/stargate": "^0.25.4",
     "@loadable/component": "^5.14.1",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
     "@svgr/webpack": "5.5.0",

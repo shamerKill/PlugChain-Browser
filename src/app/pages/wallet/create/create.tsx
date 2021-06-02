@@ -43,6 +43,7 @@ const PageWalletCreate: FC = () => {
     }
   }, [wallet, goTo]);
 
+
   return (
     <ComponentsLayoutBase className="wallet_create_page">
       <h2 className="wallet_title"><I18 text="createYourAccount" /></h2>

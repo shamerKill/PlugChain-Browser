@@ -1,21 +1,21 @@
-import { FC, ReactElement, useEffect, useMemo, useRef, useState } from 'react';
+import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import I18 from '../../../i18n/component';
 import { windowResizeObserver } from '../../../services/global.services';
-import { formatClass, useSafeLink } from '../../../tools';
+import { formatClass, getOnlyId, useSafeLink } from '../../../tools';
 import { DayTransactionVolume, TokenPledgeRate } from './home-components';
 import { useLanguageHook } from '../../../services/config.services';
-
-import './home.scss';
-import { debounceTime } from 'rxjs/operators';
-import { timer } from 'rxjs';
-import ComConTable from '../../components/control/table';
+import { debounceTime, distinctUntilKeyChanged } from 'rxjs/operators';
+import { BehaviorSubject, timer } from 'rxjs';
+import ComConTable, { TypeComConTableHeader, TypeComConTableContent } from '../../components/control/table.copy';
 import { Link } from 'react-router-dom';
 import ComConSvg from '../../components/control/icon';
 import { formatNumberStr } from '../../../tools/string';
+import { TypePageHomeData } from './home';
 
-export const HomeChainInfo: FC = () => {
+import './home.scss';
+
+export const HomeChainInfo: FC<{observerData: BehaviorSubject<TypePageHomeData>}> = ({ observerData }) => {
   const goLink = useSafeLink();
-  // const newBlockHeightAjax = useAjaxGet('test/block');
   const [newBlockHeight, setNewBlockHeight] = useState('');
   const [transactionVolume, setTransactionVolume] = useState('');
   const [pendingBlockVolume, setPendingBlockVolume] = useState('');
@@ -34,16 +34,22 @@ export const HomeChainInfo: FC = () => {
   const TokenPledgeRateView = useMemo(() => <TokenPledgeRate pledgeRate={pledgeRate} />, [pledgeRate]);
 
   useEffect(() => {
-    setNewBlockHeight(formatNumberStr('990091'));
+    const unObserve = observerData.pipe(distinctUntilKeyChanged('blockHeight')).subscribe(data => {
+      setNewBlockHeight(data.blockHeight);
+    });
+    return () => unObserve.unsubscribe();
+  }, [observerData]);
+
+  useEffect(() => {
     setTransactionVolume('221,035');
     setPendingBlockVolume('5');
     setNewBlockTransaction('829');
     setTransactionRate(0.96);
-    setPrice('50.01');
-    setPriceRate(-5);
-    setMarketValue(`$${formatNumberStr('50100000')}`);
-    setAllTokenVolume(formatNumberStr('1000000'));
-    setAllPledge(formatNumberStr('34562.198'));
+    setPrice('78992.11');
+    setPriceRate(541.02);
+    setMarketValue(`$${formatNumberStr('67781892927562')}`);
+    setAllTokenVolume(formatNumberStr('1000000000'));
+    setAllPledge(formatNumberStr('345362.198'));
     setPledgeRate(30);
     setNowVolume('18');
     setHistoryMaxVolume('302');
@@ -119,7 +125,7 @@ export const HomeChainInfo: FC = () => {
   );
 };
 
-export const HomeNewsInfo: FC = () => {
+export const HomeNewsInfo: FC<{observerData: BehaviorSubject<TypePageHomeData>}> = ({observerData}) => {
   const goLink = useSafeLink();
   const tabsRef = useRef<(HTMLButtonElement|null)[]>([]);
   const tabBg = useRef<HTMLDivElement>(null);
@@ -127,10 +133,11 @@ export const HomeNewsInfo: FC = () => {
   const [ language ] = useLanguageHook();
   const [ tabSelect, setTabSelect ] = useState(0);
   const [ update, setUpdate ] = useState(0);
-  const [ blockTableHeader, setBlockTableHeader ] = useState<string[]>([]);
-  const [ blockTableContent, setBlockTableContent] = useState<(string|ReactElement)[][]>([]);
-  const [ transTableHeader, setTransTableHeader ] = useState<string[]>([]);
-  const [ transTableContent, setTransTableContent] = useState<(string|ReactElement)[][]>([]);
+  const [ blockTableHeader, setBlockTableHeader ] = useState<TypeComConTableHeader>([]);
+  const [ blockTableContent, setBlockTableContent] = useState<TypeComConTableContent>([]);
+  const [ blockTableLoading, setBlockTableLoading ] = useState(false);
+  const [ transTableHeader, setTransTableHeader ] = useState<TypeComConTableHeader>([]);
+  const [ transTableContent, setTransTableContent] = useState<TypeComConTableContent>([]);
 
   const changeTab = (tab: number) => {
     setTabSelect(tab);
@@ -148,39 +155,54 @@ export const HomeNewsInfo: FC = () => {
     tabBg.current.style.left = `${btnRef.offsetLeft}px`;
     tabBg.current.style.height = `${btnRef.offsetHeight}px`;
     tableBox.current.style.marginLeft = `-${100 * tabSelect}%`;
-  }, [tabSelect, update])
+  }, [tabSelect, update]);
 
   useEffect(() => {
     const observer = windowResizeObserver.pipe(debounceTime(100)).subscribe(() => setUpdate(state => ++state));
     return () => observer.unsubscribe();
   }, []);
   useEffect(() => {
-    timer(100).subscribe(() => setUpdate(state => ++state));
+    const observer = timer(100).subscribe(() => setUpdate(state => ++state));
+    return () => observer.unsubscribe();
   }, [language]);
 
   // get tables header
   useEffect(() => {
-    setBlockTableHeader([ 'blockHeight', 'blockTimeStamp', 'producer', 'blockId', 'transactionVolume', 'feeNumber' ]);
-    setTransTableHeader([ 'ID', 'blockHeight', 'time', 'from', 'to', 'transactionVolume', 'feeNumber' ]);
+    setBlockTableHeader([ 'blockHeight', 'blockTimeStamp', 'producer', 'blockId', 'transactionVolume', 'feeNumber' ].map(text => ({
+      key: getOnlyId(),
+      value: <I18 text={text} />
+    })));
+    setTransTableHeader([ 'ID', 'blockHeight', 'time', 'from', 'to', 'transactionVolume', 'feeNumber' ].map(text => ({
+      key: getOnlyId(),
+      value: <I18 text={text} />
+    })));
   }, []);
   // set tables content
   useEffect(() => {
     const getBlockLink = (text: string) => <Link className="a_link" to={`./block/${text}`}>{text}</Link>;
     const getAccountLink = (text: string) => <Link className="a_link" to={`./account/${text}`}>{text}</Link>;
     const getTransactionLink = (text: string) => <Link className="a_link" to={`./transaction/${text}`}>{text}</Link>;
-    setBlockTableContent([
-      [ getBlockLink('13456233'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getBlockLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-      [ getBlockLink('13456233'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getBlockLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-      [ getBlockLink('13456233'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getBlockLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-      [ getBlockLink('13456233'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getBlockLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-    ]);
     setTransTableContent([
       [ getTransactionLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getBlockLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getAccountLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
       [ getTransactionLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getBlockLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getAccountLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
       [ getTransactionLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getBlockLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getAccountLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
       [ getTransactionLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getBlockLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getAccountLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-    ]);
+    ].map(item => ({
+      key: getOnlyId(),
+      value: item.map(col => ({ value: col, key: getOnlyId() })),
+    })));
   }, []);
+
+  useEffect(() => {
+    setBlockTableLoading(true);
+    const observe = observerData.pipe(distinctUntilKeyChanged('blockListTable')).subscribe(({ blockListTable }) => {
+      if (blockListTable.length) {
+        setBlockTableLoading(false);
+        setBlockTableContent(blockListTable);
+      }
+    });
+    return () => observe.unsubscribe();
+  }, [observerData]);
 
   return (
     <div className="home_news">
@@ -210,13 +232,14 @@ export const HomeNewsInfo: FC = () => {
         {useMemo(() => (
           <ComConTable
             boxClass="tab_content_inner"
-            header={blockTableHeader.map(text => <I18 text={text} />)}
-            content={blockTableContent} />
-        ), [blockTableHeader, blockTableContent])}
+            header={blockTableHeader}
+            content={blockTableContent}
+            loading={blockTableLoading} />
+        ), [blockTableHeader, blockTableContent, blockTableLoading])}
         {useMemo(() => (
           <ComConTable
             boxClass="tab_content_inner"
-            header={transTableHeader.map(text => <I18 text={text} />)}
+            header={transTableHeader}
             content={transTableContent} />
         ), [transTableHeader, transTableContent])}
         </div>

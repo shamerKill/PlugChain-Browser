@@ -3,9 +3,12 @@ import { formatClass, getOnlyId } from '../../../tools';
 import I18 from '../../../i18n/component';
 import ComConLoading from './loading';
 
+export type TypeComConTableHeader = {key: string, value: (string|ReactElement)}[];
+export type TypeComConTableContent = { key: string, value: {key: string, value: (string|ReactElement)}[] }[];
+
 const ComConTable: FC<{
-  header: (string|ReactElement)[];
-  content: (string|ReactElement)[][];
+  header: TypeComConTableHeader;
+  content: TypeComConTableContent;
   tableClass?: string;
   showTools?: boolean;
   boxClass?: string;
@@ -86,7 +89,7 @@ const ComConTable: FC<{
               <tr className={formatClass(['control-tr'])}>
                 {
                   header.map(item => (
-                    <td className={formatClass(['control-td'])} key={getOnlyId()}>{ item }</td>
+                    <td className={formatClass(['control-td'])} key={item.key}>{ item.value }</td>
                   ))
                 }
               </tr>
@@ -96,10 +99,10 @@ const ComConTable: FC<{
             <tbody className={formatClass(['control-tbody'])}>
               {
                 content.map((row) => (
-                  <tr className={formatClass(['control-tr'])} key={getOnlyId()}>
+                  <tr className={formatClass(['control-tr'])} key={row.key}>
                     {
-                      row.map(col => (
-                        <td className={formatClass(['control-td'])} key={getOnlyId()}>{ col }</td>
+                      row.value.map(col => (
+                        <td className={formatClass(['control-td'])} key={col.key}>{ col.value }</td>
                       ))
                     }
                   </tr>

@@ -37,10 +37,6 @@ const ComLayHeader: FC<{ headerBg: boolean }> = ({ headerBg }) => {
     menuObserver.pipe(throttleTime(1000)).subscribe(setMenuShow);
   }, [setMenuShow, menuObserver]);
 
-  useEffect(() => {
-    console.log(wallet);
-  }, [wallet]);
-
   return (
     <header className={formatClass(['layout-header', headerBg && 'layout-header-bg'])}>
       <div className={formatClass(['layout-header-inner'])}>

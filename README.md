@@ -8,6 +8,7 @@ you need create the `.env` directory to src directory, and some files to `.env`
 - `base.env.json`
   - ```json
     SAVE_DATABASE_NAME: " *** " // localStorage's name
+    WALLET_RPC_BASE: " https://*** " // rpc with wallet
     ```
   
 - `development.env.json`

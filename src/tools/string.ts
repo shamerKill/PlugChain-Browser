@@ -12,3 +12,11 @@ export const formatNumberStr = (input: string|number): string => {
   result = intResult + result;
   return result;
 };
+
+export const toHex = (data: Uint8Array) => {
+  let out = '';
+  for (const byte of data.toString().split(','))
+    out += ('0' + parseInt(byte).toString(16)).slice(-2);
+
+  return out;
+};

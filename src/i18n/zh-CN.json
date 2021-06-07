@@ -67,6 +67,7 @@
   "signInToYourAccount": "登录您的账户",
   "inputWordPlaceholder": "输入助记词，并使用分号\"，\"隔开每个单词",
   "noExistingPLUGAccount": "还没有PLUGChain账号?",
+  "mnemonicError": "助记词输入有误",
 
   "networkOverview": "网络概览",
   "statisticalChart": "统计图表",

@@ -18,8 +18,18 @@ const chainId = getEnvConfig.APP_CHAIN_ID;
 
 const defaultTransGasLimit = '100000';
 
+export const walletVerifyMnemonic = async (mnemonics: string[]) => {
+  if (![ 12, 15, 18, 21, 24 ].includes(mnemonics.length)) return false;
+  try {
+    await walletFormMnemonic(mnemonics.join(' '));
+    return true;
+  } catch (err) {
+    return false;
+  }
+};
+
 export const walletCreate = async () => {
-  const newWallet = await DirectSecp256k1HdWallet.generate(24, { prefix: addressPrefix });
+  const newWallet = await DirectSecp256k1HdWallet.generate(12, { prefix: addressPrefix });
   return newWallet;
 };
 

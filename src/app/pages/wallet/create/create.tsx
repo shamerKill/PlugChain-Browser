@@ -5,8 +5,9 @@ import { InRootState } from '../../../../@types/redux';
 import useGetDispatch from '../../../../databases/hook';
 import I18 from '../../../../i18n/component';
 import useI18 from '../../../../i18n/hooks';
-import { saveSession, useSafeLink } from '../../../../tools';
+import { saveSession, useSafeLink, verifyPassword } from '../../../../tools';
 import ComConSvg from '../../../components/control/icon';
+import ComConLoading from '../../../components/control/loading';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import alertTools from '../../../components/tools/alert';
 
@@ -14,23 +15,20 @@ import './create.scss';
 
 const PageWalletCreate: FC = () => {
   const goTo = useSafeLink();
+  const rePasswordText = useI18('rePassword');
+  const passwordText = useI18('passwordTip');
   const [wallet] = useGetDispatch<InRootState['wallet']>('wallet');
   const [inputType, setInputType] = useState<'password'|'text'>('password');
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
   const [creating, setCreating] = useState(false);
-  const rePasswordText = useI18('rePassword');
-  const passwordText = useI18('passwordTip');
 
   const changeInputType = () => {
     setInputType(status => status === 'text' ? 'password' : 'text');
   };
   const createAccount = () => {
-    const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-    if (!reg.test(password)) {
-      alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
-      return;
-    }
+    if (!verifyPassword(password)) return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
+    if (password !== rePassword) return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
     saveSession('createPass', password);
     setCreating(true);
     timer(1000).subscribe(() => goTo('./create-backup'));
@@ -73,6 +71,7 @@ const PageWalletCreate: FC = () => {
           className="wallet_button"
           disabled={creating}
           onClick={createAccount}>
+          <ComConLoading visible={creating} />
           <I18 text="createStart" />
         </button>
         <button className="wallet_button">

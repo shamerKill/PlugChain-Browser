@@ -2,43 +2,62 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
 import { TokenPledgeRate, DayTransactionVolume } from '../../home/home-components';
-import { formatClass } from '../../../../tools';
+import { changeSeconds, formatClass } from '../../../../tools';
 
 import './network.scss';
 import ComConSvg from '../../../components/control/icon';
+import { timer, zip } from 'rxjs';
+import { fetchData, zipAllSuccess } from '../../../../tools/ajax';
 
 const PageChainNetwork: FC = () => {
-  const [newBlockHeight, setNewBlockHeight] = useState('');
-  const [transactionVolume, setTransactionVolume] = useState('');
-  const [pendingBlockVolume, setPendingBlockVolume] = useState('');
-  const [newBlockTransaction, setNewBlockTransaction] = useState('');
-  const [transactionRate, setTransactionRate] = useState(0);
-  const [price, setPrice] = useState('');
-  const [priceRate, setPriceRate] = useState(0);
-  const [markValue, setMarketValue] = useState('');
-  const [allTokenVolume, setAllTokenVolume] = useState('');
-  const [allPledge, setAllPledge] = useState('');
-  const [pledgeRate, setPledgeRate] = useState(0);
-  const [nowVolume, setNowVolume] = useState('');
-  const [historyMaxVolume, setHistoryMaxVolume] = useState('');
+  const [infoData, setInfoData] = useState<{
+    blockHeight: string;
+    transactionVolume: string;
+    pendingBlockVolume: string;
+    newBlockTransaction: string;
+    transactionRate: number;
+    price: string;
+    priceRate: number;
+    markValue: string;
+    allTokenVolume: string;
+    allPledge: string;
+    pledgeRate: number;
+    nowVolume: string; 
+    historyMaxVolume: string;
+  }>({
+    blockHeight: '', transactionVolume: '', pendingBlockVolume: '', newBlockTransaction: '',
+    transactionRate: 0, price: '', priceRate: 0, markValue: '', allTokenVolume: '',
+    allPledge: '', pledgeRate: 0, nowVolume: '', historyMaxVolume: '',
+  });
 
   const DayTransactionVolumeView = useMemo(() => <DayTransactionVolume />, []);
-  const TokenPledgeRateView = useMemo(() => <TokenPledgeRate pledgeRate={pledgeRate} />, [pledgeRate]);
+  const TokenPledgeRateView = useMemo(() => <TokenPledgeRate pledgeRate={infoData.pledgeRate} />, [infoData.pledgeRate]);
 
   useEffect(() => {
-    setNewBlockHeight('308,221,035');
-    setTransactionVolume('221,035');
-    setPendingBlockVolume('21,035');
-    setNewBlockTransaction('305');
-    setTransactionRate(0.96);
-    setPrice('50.01');
-    setPriceRate(-5);
-    setMarketValue('$5999999.99');
-    setAllTokenVolume('1,233,456.198');
-    setAllPledge('3,456.198');
-    setPledgeRate(30);
-    setNowVolume('18');
-    setHistoryMaxVolume('302');
+    const getInfo = timer(0, changeSeconds(5)).subscribe(() => zip([
+      fetchData('GET', 'info'), fetchData('GET', 'num_unconfirmed_txs'), fetchData('GET', 'coin_info'),
+    ]).pipe(zipAllSuccess()).subscribe(([info, unNum, coin]) => {
+      if (unNum.success) setInfoData(state => ({ ...state, pendingBlockVolume: `${unNum.data}` }));
+      if (coin.success) setInfoData(state => ({
+        ...state,
+        price: `${coin.data.price}`,
+        priceRate: parseFloat(`${coin.data.price_drift_ratio}`),
+        markValue: `${coin.data.total_price}`,
+        allTokenVolume: `${coin.data.supply}`,
+        allPledge: `${coin.data.staking}`,
+        pledgeRate: parseFloat(`${coin.data.staking_ratio}`),
+      }));
+      if (info.success) setInfoData(state => ({
+        ...state,
+        blockHeight: `${info.data.block_num}`,
+        nowVolume: `${info.data.avg_tx}`,
+        historyMaxVolume: `${info.data.max_avg_tx}`,
+        newBlockTransaction: `${info.data.tx_nums}`,
+        transactionRate: info.data.ratio,
+        transactionVolume: `${info.data.total_tx_num}`,
+      }));
+    }));
+    return () => getInfo.unsubscribe();
   }, []);
   return (
     <ComponentsLayoutBase className="chain_network_page">
@@ -51,55 +70,55 @@ const PageChainNetwork: FC = () => {
         <div className="network_info">
           <dl className="chain_info_dl">
             <dt className="chain_info_dt"><I18 text="newBlockHeight" /></dt>
-            <dd className="chain_info_dd">{ newBlockHeight }</dd>
+            <dd className="chain_info_dd">{ infoData.blockHeight }</dd>
           </dl>
           <dl className="chain_info_dl">
             <dt className="chain_info_dt"><I18 text="transactionVolume" /></dt>
-            <dd className="chain_info_dd">{ transactionVolume }</dd>
+            <dd className="chain_info_dd">{ infoData.transactionVolume }</dd>
           </dl>
           <dl className="chain_info_dl">
             <dt className="chain_info_dt"><I18 text="pendingBlockVolume" /></dt>
-            <dd className="chain_info_dd">{ pendingBlockVolume }</dd>
+            <dd className="chain_info_dd">{ infoData.pendingBlockVolume }</dd>
           </dl>
           <dl className="chain_info_dl">
             <dt className="chain_info_dt">
               <I18 text="newBlockTransaction" />
             </dt>
             <dd className="chain_info_dd">
-              { newBlockTransaction }
-              <span className={formatClass(['chain_info_rate', transactionRate >= 0 ? 'chain_info_rate_green' : 'chain_info_rate_red'])}>
-                <ComConSvg xlinkHref={transactionRate >= 0 ? '#icon-up' : '#icon-down'} />
-                {transactionRate}%
+              { infoData.newBlockTransaction }
+              <span className={formatClass(['chain_info_rate', infoData.transactionRate >= 0 ? 'chain_info_rate_green' : 'chain_info_rate_red'])}>
+                <ComConSvg xlinkHref={infoData.transactionRate >= 0 ? '#icon-up' : '#icon-down'} />
+                {infoData.transactionRate}%
               </span>
             </dd>
           </dl>
           <dl className="chain_info_dl">
             <dt className="chain_info_dt"><I18 text="secondNumber" /><br /><small>(<I18 text="nowVolume" />/<I18 text="historyMaxVolume" />)</small></dt>
-            <dd className="chain_info_dd">{nowVolume}/{historyMaxVolume}</dd>
+            <dd className="chain_info_dd">{infoData.nowVolume}/{infoData.historyMaxVolume}</dd>
           </dl>
           <dl className="chain_info_dl">
             <dt className="chain_info_dt">
               PLUG&nbsp;<I18 text="price" />
             </dt>
             <dd className="chain_info_dd">
-              { price }
-              <span className={formatClass(['chain_info_rate', priceRate >= 0 ? 'chain_info_rate_green' : 'chain_info_rate_red'])}>
-                <ComConSvg xlinkHref={priceRate >= 0 ? '#icon-up' : '#icon-down'} />
-                {priceRate}%
+              { infoData.price }
+              <span className={formatClass(['chain_info_rate', infoData.priceRate >= 0 ? 'chain_info_rate_green' : 'chain_info_rate_red'])}>
+                <ComConSvg xlinkHref={infoData.priceRate >= 0 ? '#icon-up' : '#icon-down'} />
+                {infoData.priceRate}%
               </span>
             </dd>
           </dl>
           <dl className="chain_info_dl">
             <dt className="chain_info_dt"><I18 text="markValue" /></dt>
-            <dd className="chain_info_dd">{ markValue }</dd>
+            <dd className="chain_info_dd">{ infoData.markValue }</dd>
           </dl>
           <dl className="chain_info_dl">
             <dt className="chain_info_dt"><I18 text="allTokenVolume" /></dt>
-            <dd className="chain_info_dd">{ allTokenVolume }</dd>
+            <dd className="chain_info_dd">{ infoData.allTokenVolume }</dd>
           </dl>
           <dl className="chain_info_dl">
             <dt className="chain_info_dt"><I18 text="allPledge" /></dt>
-            <dd className="chain_info_dd">{ allPledge }</dd>
+            <dd className="chain_info_dd">{ infoData.allPledge }</dd>
             { TokenPledgeRateView }
           </dl>
         </div>

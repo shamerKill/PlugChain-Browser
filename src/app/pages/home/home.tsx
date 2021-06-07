@@ -17,6 +17,18 @@ import { getOnlyId } from '../../../tools';
 
 export type TypePageHomeData = {
   blockHeight: string;
+  transactionVolume: string;
+  pendingBlockVolume: string;
+  newBlockTransaction: string;
+  transactionRate: number;
+  price: string;
+  priceRate: number;
+  markValue: string;
+  allTokenVolume: string;
+  allPledge: string;
+  pledgeRate: number;
+  nowVolume: string; 
+  historyMaxVolume: string;
   blockListTable: TypeComConTableContent,
 };
 
@@ -24,7 +36,9 @@ const PageHome: FC = () => {
   const searchPlaceholder = useI18('searchPlaceholder');
   const [searchValue, setSearchValue] = useState('');
   const [homeDataObserve] = useState(new BehaviorSubject<TypePageHomeData>({
-    blockHeight: '',
+    blockHeight: '', transactionVolume: '', pendingBlockVolume: '', newBlockTransaction: '',
+    transactionRate: 0, price: '', priceRate: 0, markValue: '', allTokenVolume: '',
+    allPledge: '', pledgeRate: 0, nowVolume: '', historyMaxVolume: '',
     blockListTable: [],
   }));
 
@@ -33,33 +47,56 @@ const PageHome: FC = () => {
     if (searchValue === '') return alertTools.create({ message: '没有内容', time: 5000, type: 'error' });
   }, [searchValue]);
 
+  const updateData = useCallback((obj: Partial<TypePageHomeData>) => homeDataObserve.next({ ...homeDataObserve.getValue(), ...obj }), [homeDataObserve]);
+
   useEffect(() => {
-    let maxHeight = Math.pow(10, 9);
-    let minHeight = 0;
-    const zipObserve = zip([
-      timer(0, changeSeconds(5)).pipe(switchMap(() => fetchData('GET', '/blockchain', { minHeight: minHeight, maxHeight: maxHeight }))) // block chain info
-    ]).pipe(zipAllSuccess()).subscribe(([blockChain]) => {
-      const updateData = (obj: Partial<TypePageHomeData>) => homeDataObserve.next({ ...homeDataObserve.getValue(), ...obj });
-      if (blockChain.status === 200) {
-        console.log(blockChain.data);
-        maxHeight = Number(blockChain.data.last_height) + 1;
-        minHeight = maxHeight - 11;
-        updateData({ blockHeight:  blockChain.data.last_height});
-        updateData({ blockListTable: blockChain.data.block_metas.slice(0, 10).map((block: any) => ({
-          key: getOnlyId(),
-          value: [
-            { key: getOnlyId(), value: <ComConLink link={`./block/${block.block_id.hash}`}>{ block.header.height }</ComConLink> },
-            { key: getOnlyId(), value: formatTime(block.header.time) },
-            { key: getOnlyId(), value: <ComConLink link={`./account/${block.header.proposer_address}`}>{ block.header.proposer_address }</ComConLink> },
-            { key: getOnlyId(), value: <ComConLink link={`./block/${block.block_id.hash}`}>{ block.block_id.hash }</ComConLink> },
-            { key: getOnlyId(), value: block.num_txs },
-            { key: getOnlyId(), value: block.block_size, /** // TODO: don't have fee */},
-          ]
-        })) })
-      }
+    // block List
+    const getBlockList = timer(changeSeconds(0.1), changeSeconds(5)).pipe(switchMap(() => fetchData('GET', '/blockchain'))).subscribe(blockList => {
+      if (blockList.status === 200) updateData({ blockListTable: blockList.data.slice(0, 10).map((block: any) => ({
+        key: getOnlyId(),
+        value: [
+          { key: getOnlyId(), value: <ComConLink link={`./block/${block.hash}`}>{ block.block_id }</ComConLink> },
+          { key: getOnlyId(), value: formatTime(block.time) },
+          { key: getOnlyId(), value: <ComConLink link={`./account/${block.address}`}>{ block.address }</ComConLink> },
+          { key: getOnlyId(), value: <ComConLink link={`./block/${block.hash}`}>{ block.hash }</ComConLink> },
+          { key: getOnlyId(), value: block.tx_num },
+          { key: getOnlyId(), value: block.tx_fee },
+        ]
+      })), blockHeight: blockList.data[0].block_id });
     });
-    return () => zipObserve.unsubscribe();
-  }, [homeDataObserve]);
+    return () => getBlockList.unsubscribe();
+  }, [updateData]);
+  // TODO: kline
+  // useEffect(() => {
+  //   const getKline = timer(0, changeSeconds(5)).pipe(switchMap(() => fetchData('GET', '/kline'))).subscribe(kline => {
+  //     console.log(kline);
+  //   });
+  //   return () => getKline.unsubscribe();
+  // }, [updateData]);
+  useEffect(() => {
+    const getInfo = timer(changeSeconds(0.1), changeSeconds(5)).subscribe(() => zip([
+      fetchData('GET', 'info'), fetchData('GET', 'num_unconfirmed_txs'), fetchData('GET', 'coin_info'),
+    ]).pipe(zipAllSuccess()).subscribe(([info, unNum, coin]) => {
+      if (unNum.success) updateData({ pendingBlockVolume: `${unNum.data}` });
+      if (coin.success) updateData({
+        price: `${coin.data.price}`,
+        priceRate: parseFloat(`${coin.data.price_drift_ratio}`),
+        markValue: `${coin.data.total_price}`,
+        allTokenVolume: `${coin.data.supply}`,
+        allPledge: `${coin.data.staking}`,
+        pledgeRate: parseFloat(`${coin.data.staking_ratio}`),
+      });
+      if (info.success) updateData({
+        blockHeight: `${info.data.block_num}`,
+        nowVolume: `${info.data.avg_tx}`,
+        historyMaxVolume: `${info.data.max_avg_tx}`,
+        newBlockTransaction: `${info.data.tx_nums}`,
+        transactionRate: info.data.ratio,
+        transactionVolume: `${info.data.total_tx_num}`,
+      });
+    }));
+    return () => getInfo.unsubscribe();
+  }, [updateData]);
   
   return (
     <ComponentsLayoutBase className="home_page">

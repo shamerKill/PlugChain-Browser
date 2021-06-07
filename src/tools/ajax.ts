@@ -62,15 +62,15 @@ export const fetchData = <T = any>(type: 'GET'|'POST', url: string, query?: Type
     }
   })
     .then(result => {
-      if (result.error) getObservable.next({
+      if (result.error || (result.status !== 200 && result.message)) getObservable.next({
         loading: false,
         success: false,
         error: true,
-        status: result.error.code || 500,
-        data: result.error.data || '',
-        message: result.error.message || 'error',
+        status: result.error.code || result.status || 500,
+        data: result.error.data || result.data || '',
+        message: result.error.message || result.message || 'error',
       });
-      if (result.result) getObservable.next({
+      if (result.result || result.status === 200 || result.data) getObservable.next({
         loading: false,
         success: true,
         error: false,
@@ -103,11 +103,11 @@ export const useAjaxPost = <T = any>(url: string, query?: TypeQuery) => {
   return memResult.current;
 };
 
-export const zipAllSuccess = () => (source: Observable<[TypeAjaxResult<any>]>) => new Observable<[TypeAjaxResult<any>]>(subscriber => {
+export const zipAllSuccess = () => (source: Observable<TypeAjaxResult<any>[]>) => new Observable<TypeAjaxResult<any>[]>(subscriber => {
   const subscription = source.subscribe(data => {
     let allSuccess = true;
     data.forEach(value => {
-      if (!value.success) allSuccess = false;
+      if (!value.success && !value.error) allSuccess = false;
     });
     if (allSuccess) subscriber.next(data);
   });

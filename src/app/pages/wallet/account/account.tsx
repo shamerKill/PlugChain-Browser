@@ -8,9 +8,12 @@ import './account.scss';
 import ComConButton from '../../../components/control/button';
 import ComConSvg from '../../../components/control/icon';
 import { useSafeLink } from '../../../../tools';
+import useGetDispatch from '../../../../databases/hook';
+import { InRootState } from '../../../../@types/redux';
 
 const PageWalletAccount: FC = () => {
   const goLink = useSafeLink();
+  const [wallet] = useGetDispatch<InRootState['wallet']>('wallet');
   const [address, setAddress] = useState('');
   const [coinVolume, setCoinVolume] = useState('');
   const [coinPrice, setCoinPrice] = useState('');
@@ -22,7 +25,6 @@ const PageWalletAccount: FC = () => {
   const [pledgingVol, setPledgingVol] = useState('0.00');
   const [redeemVol, setRedeemVol] = useState('0.00');
   const [rewardVol, setRewardVol] = useState('0.00');
-
 
   const [tableHeader, setTableHeader] = useState<string[]>([]);
   const [tableContent, setTableContent] = useState<(string|ReactElement)[][]>([]);
@@ -59,8 +61,13 @@ const PageWalletAccount: FC = () => {
   }, [coinPrice, coinVolume]);
 
   useEffect(() => {
+    if (!wallet.hasWallet) return goLink('./login');
+    setAddress(wallet.address);
+    console.log(wallet);
+  }, [wallet, goLink]);
+
+  useEffect(() => {
     setTableHeader([ '', 'ID', 'blockHeight', 'time', 'from', 'to', 'transactionVolume', 'feeNumber' ]);
-    setAddress('0x1f8dec5061b0d9bf17e5828f249142b39dab84b4');
     setCoinVolume('29,291.291');
     setCoinPrice('6.5');
     setTransactionVolume('2');

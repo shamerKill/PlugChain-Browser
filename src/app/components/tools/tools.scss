@@ -4,7 +4,7 @@
   left: 0;
   width: 100%;
   text-align: center;
-  z-index: 10;
+  z-index: 100;
   display: flex;
   flex-direction: column-reverse;
   @keyframes inputAlert {
@@ -55,6 +55,10 @@
     &.com-con-tool-alert-warning {
       background: var(--color-alert-background-warning);
       border: 1px solid var(--color-alert-border-warning);
+    }
+    &.com-con-tool-alert-success {
+      background: var(--color-alert-background-info);
+      border: 1px solid var(--color-alert-border-info);
     }
     .com-tool-alert-message {
       font-size: 1rem;

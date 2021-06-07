@@ -11,3 +11,5 @@ export { useFormatSearch, useFormatPath } from './url.hook';
 export { saveSession, getSession, delSession } from './sessionStorage';
 export { randomNumber } from './random-num';
 export * from './wallet';
+export * from './verify';
+export * from './time';

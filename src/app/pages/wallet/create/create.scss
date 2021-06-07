@@ -61,6 +61,7 @@
     height: (50/12)+rem;
     font-size: (14/12)+rem;
     font-weight: 900;
+    position: relative;
     &:nth-child(1) {
       background: var(--background-image-contrast);
       color: var(--color-primary-text-contrast);
@@ -120,6 +121,7 @@
       font-size: (8/12)+rem;
       line-height: 1.8rem;
       opacity: var(--opacity-level-2);
+      user-select: none;
     }
     @for $i from 1 to 12 {
       @if ($i % 4 != 0) {

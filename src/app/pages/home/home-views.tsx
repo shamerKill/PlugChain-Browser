@@ -16,68 +16,65 @@ import './home.scss';
 
 export const HomeChainInfo: FC<{observerData: BehaviorSubject<TypePageHomeData>}> = ({ observerData }) => {
   const goLink = useSafeLink();
-  const [newBlockHeight, setNewBlockHeight] = useState('');
-  const [transactionVolume, setTransactionVolume] = useState('');
-  const [pendingBlockVolume, setPendingBlockVolume] = useState('');
-  const [newBlockTransaction, setNewBlockTransaction] = useState('');
-  const [transactionRate, setTransactionRate] = useState(0);
-  const [price, setPrice] = useState('');
-  const [priceRate, setPriceRate] = useState(0);
-  const [markValue, setMarketValue] = useState('');
-  const [allTokenVolume, setAllTokenVolume] = useState('');
-  const [allPledge, setAllPledge] = useState('');
-  const [pledgeRate, setPledgeRate] = useState(0);
-  const [nowVolume, setNowVolume] = useState('');
-  const [historyMaxVolume, setHistoryMaxVolume] = useState('');
+  const [infoData, setInfoData] = useState<{
+    blockHeight: string;
+    transactionVolume: string;
+    pendingBlockVolume: string;
+    newBlockTransaction: string;
+    transactionRate: number;
+    price: string;
+    priceRate: number;
+    markValue: string;
+    allTokenVolume: string;
+    allPledge: string;
+    pledgeRate: number;
+    nowVolume: string; 
+    historyMaxVolume: string;
+  }>({
+    blockHeight: '', transactionVolume: '', pendingBlockVolume: '', newBlockTransaction: '',
+    transactionRate: 0, price: '', priceRate: 0, markValue: '', allTokenVolume: '',
+    allPledge: '', pledgeRate: 0, nowVolume: '', historyMaxVolume: '',
+  });
 
   const DayTransactionVolumeView = useMemo(() => <DayTransactionVolume />, []);
-  const TokenPledgeRateView = useMemo(() => <TokenPledgeRate pledgeRate={pledgeRate} />, [pledgeRate]);
+  const TokenPledgeRateView = useMemo(() => <TokenPledgeRate pledgeRate={infoData.pledgeRate} />, [infoData.pledgeRate]);
 
   useEffect(() => {
     const unObserve = observerData.pipe(distinctUntilKeyChanged('blockHeight')).subscribe(data => {
-      setNewBlockHeight(data.blockHeight);
+      let resultData: typeof infoData = data;
+      const keysArr = Object.keys(data) as (keyof typeof infoData)[];
+      keysArr.forEach(key => {
+        if (typeof data[key] === 'string') resultData = { ...resultData, [key]: formatNumberStr(data[key]) };
+      });
+      setInfoData(resultData);
     });
     return () => unObserve.unsubscribe();
   }, [observerData]);
 
-  useEffect(() => {
-    setTransactionVolume('221,035');
-    setPendingBlockVolume('5');
-    setNewBlockTransaction('829');
-    setTransactionRate(0.96);
-    setPrice('78992.11');
-    setPriceRate(541.02);
-    setMarketValue(`$${formatNumberStr('67781892927562')}`);
-    setAllTokenVolume(formatNumberStr('1000000000'));
-    setAllPledge(formatNumberStr('345362.198'));
-    setPledgeRate(30);
-    setNowVolume('18');
-    setHistoryMaxVolume('302');
-  }, []);
   return (
     <div className="home_chain">
       <div className="home_chain_box chain_first">
         <dl className="chain_info_dl">
           <dt className="chain_info_dt"><I18 text="newBlockHeight" /></dt>
-          <dd className="chain_info_dd">{ newBlockHeight }</dd>
+          <dd className="chain_info_dd">{ infoData.blockHeight }</dd>
         </dl>
         <dl className="chain_info_dl">
           <dt className="chain_info_dt"><I18 text="transactionVolume" /></dt>
-          <dd className="chain_info_dd">{ transactionVolume }</dd>
+          <dd className="chain_info_dd">{ infoData.transactionVolume }</dd>
         </dl>
         <dl className="chain_info_dl">
           <dt className="chain_info_dt"><I18 text="pendingBlockVolume" /></dt>
-          <dd className="chain_info_dd">{ pendingBlockVolume }</dd>
+          <dd className="chain_info_dd">{ infoData.pendingBlockVolume }</dd>
         </dl>
         <dl className="chain_info_dl">
           <dt className="chain_info_dt">
             <I18 text="newBlockTransaction" />
-            <span className={formatClass(['chain_info_rate', transactionRate >= 0 ? 'chain_info_rate_green' : 'chain_info_rate_red'])}>
-              <ComConSvg xlinkHref={transactionRate >= 0 ? '#icon-up' : '#icon-down'} />
-              {transactionRate}%
+            <span className={formatClass(['chain_info_rate', infoData.transactionRate >= 0 ? 'chain_info_rate_green' : 'chain_info_rate_red'])}>
+              <ComConSvg xlinkHref={infoData.transactionRate >= 0 ? '#icon-up' : '#icon-down'} />
+              {infoData.transactionRate}%
             </span>
           </dt>
-          <dd className="chain_info_dd">{ newBlockTransaction }</dd>
+          <dd className="chain_info_dd">{ infoData.newBlockTransaction }</dd>
         </dl>
       </div>
       <div className="home_chain_box chain_view">
@@ -87,24 +84,24 @@ export const HomeChainInfo: FC<{observerData: BehaviorSubject<TypePageHomeData>}
         <dl className="chain_info_dl">
           <dt className="chain_info_dt">
             PLUG&nbsp;<I18 text="price" />
-            <span className={formatClass(['chain_info_rate', priceRate >= 0 ? 'chain_info_rate_green' : 'chain_info_rate_red'])}>
-              <ComConSvg xlinkHref={priceRate >= 0 ? '#icon-up' : '#icon-down'} />
-              {priceRate}%
+            <span className={formatClass(['chain_info_rate', infoData.priceRate >= 0 ? 'chain_info_rate_green' : 'chain_info_rate_red'])}>
+              <ComConSvg xlinkHref={infoData.priceRate >= 0 ? '#icon-up' : '#icon-down'} />
+              {infoData.priceRate}%
             </span>
           </dt>
-          <dd className="chain_info_dd">{ price }</dd>
+          <dd className="chain_info_dd">{ infoData.price }</dd>
         </dl>
         <dl className="chain_info_dl">
           <dt className="chain_info_dt"><I18 text="markValue" /></dt>
-          <dd className="chain_info_dd">{ markValue }</dd>
+          <dd className="chain_info_dd">{ infoData.markValue }</dd>
         </dl>
         <dl className="chain_info_dl">
           <dt className="chain_info_dt"><I18 text="allTokenVolume" /></dt>
-          <dd className="chain_info_dd">{ allTokenVolume }</dd>
+          <dd className="chain_info_dd">{ infoData.allTokenVolume }</dd>
         </dl>
         <dl className="chain_info_dl">
           <dt className="chain_info_dt"><I18 text="allPledge" /></dt>
-          <dd className="chain_info_dd">{ allPledge }</dd>
+          <dd className="chain_info_dd">{ infoData.allPledge }</dd>
           { TokenPledgeRateView }
         </dl>
       </div>
@@ -112,7 +109,7 @@ export const HomeChainInfo: FC<{observerData: BehaviorSubject<TypePageHomeData>}
         <span>
           <I18 text="secondNumber" />
           (<I18 text="nowVolume" />/<I18 text="historyMaxVolume" />):
-          &nbsp;&nbsp;{nowVolume}/{historyMaxVolume}
+          &nbsp;&nbsp;{infoData.nowVolume}/{infoData.historyMaxVolume}
         </span>
         <button className="chain_volume_button" onClick={() => goLink('./network')}>
           <I18 text="viewMoreValue" />

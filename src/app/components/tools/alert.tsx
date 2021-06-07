@@ -15,7 +15,7 @@ export default alertTools;
 // type TypeAlertButton = {text: string; onClick?: () => void;};
 type TypeAlertArg = {
   message: ReactElement | string;
-  type?: 'info'|'warning'|'error';
+  type?: 'info'|'warning'|'error'|'success';
   time?: number;
   close?: () => void;
 };
@@ -41,7 +41,8 @@ const ComToolAlert: FC<TypeAlertArg> = ({message, close, time = 5000, type = 'in
       closeIng && 'com-con-tool-alert-close',
       type === 'info' && 'com-con-tool-alert-info',
       type === 'error' && 'com-con-tool-alert-error',
-      type === 'warning' && 'com-con-tool-alert-warning'
+      type === 'warning' && 'com-con-tool-alert-warning',
+      type === 'success' && 'com-con-tool-alert-success'
     ])}>
       <p className="com-tool-alert-message">{message}</p>
       <button className="com-tool-alert-close" onClick={() => setCloseIng(true)}><ComConSvg xlinkHref="#icon-close" /></button>

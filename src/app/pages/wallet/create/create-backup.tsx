@@ -1,45 +1,54 @@
 import { FC, useEffect, useState } from 'react';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
-import { RandomString } from '../../../../tools/random-str';
-import { delSession, formatClass, getOnlyId, getSession, useSafeLink } from '../../../../tools';
+import { delSession, formatClass, getOnlyId, getSession, useSafeLink, walletCreate, walletToMnemonic } from '../../../../tools';
 import alertTools from '../../../components/tools/alert';
 import ComConButton from '../../../components/control/button';
 
 import './create.scss';
 import { timer } from 'rxjs';
 import { take } from 'rxjs/operators';
+import useGetDispatch from '../../../../databases/hook';
+import { InRootState } from '../../../../@types/redux';
 
 const PageWalletBackup: FC = () => {
   const goLink = useSafeLink();
+  const [wallet] = useGetDispatch<InRootState['wallet']>('wallet');
   const [words,setWords] = useState<string[]>([]);
   const [password, setPassWord] = useState('');
   const [countTime, setCountTime] = useState(10);
 
   const goRoute = () => {
-    console.log(password);
-    delSession('createPass');
     goLink('./login');
   };
 
   useEffect(() => {
-    const mockValue = new RandomString(6);
-    let i = 0;
-    while (++i <= 12) { setWords(state => [...state, mockValue.random()]) }
-  }, []);
+    if (!password) return;
+    console.log(password);
+    walletCreate()
+      .then(wallet => walletToMnemonic(wallet))
+      .then(mnemonic => mnemonic.split(' '))
+      .then(words => setWords(words));
+  }, [password]);
 
   useEffect(() => {
     const memPass = getSession<string>('createPass');
-    if (memPass === undefined) {
+    if (wallet.hasWallet) {
+      goLink('/');
+      alertTools.create({ message: <I18 text="onlyWallet" /> });
+    } else if (memPass === undefined) {
       alertTools.create({ message: <I18 text="passwordError" />, type: 'warning'});
       goLink('/wallet/create');
     }
     setPassWord(memPass);
-  }, [goLink]);
+  }, [goLink, wallet]);
 
   useEffect(() => {
     const interval = timer(1000, 1000).pipe(take(10)).subscribe(data => setCountTime(9 - data));
-    return () => interval.unsubscribe();
+    return () => {
+      interval.unsubscribe();
+      delSession('createPass');
+    }
   }, []);
 
   return (
@@ -59,6 +68,7 @@ const PageWalletBackup: FC = () => {
         }
       </div>
       <ComConButton
+        doubles
         disabled={countTime !== 0}
         className={formatClass(['wallet_backup_button', countTime === 0 && 'wallet_backup_button_success'])}
         onClick={goRoute}>

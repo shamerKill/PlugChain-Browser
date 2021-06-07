@@ -66,6 +66,7 @@
   "signInToYourAccount": "SIGN IN",
   "inputWordPlaceholder": "Enter the mnemonic words and use semicolons to separate each word",
   "noExistingPLUGAccount": "Don't Have PLUG Account?",
+  "mnemonicError": "Wrong input of mnemonic words",
 
   "networkOverview": "NetworkOverview",
   "statisticalChart": "Chart",

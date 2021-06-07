@@ -1,23 +1,23 @@
 import { FC, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import ComConSvg from '../../../components/control/icon';
+import ComConButton from '../../../components/control/button';
+import { sleep, useSafeLink, verifyPassword, walletEncode, walletFormMnemonic, walletToAddress, walletVerifyMnemonic } from '../../../../tools';
+import useGetDispatch from '../../../../databases/hook';
+import { InRootState } from '../../../../@types/redux';
+import { changeWallet } from '../../../../databases/store/wallet';
+import alertTools from '../../../components/tools/alert';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
 import useI18 from '../../../../i18n/hooks';
 
 import './login.scss';
-import { Link } from 'react-router-dom';
-import ComConSvg from '../../../components/control/icon';
-import ComConButton from '../../../components/control/button';
-import { useSafeLink } from '../../../../tools';
-import useGetDispatch from '../../../../databases/hook';
-import { InRootState } from '../../../../@types/redux';
-import { timer } from 'rxjs';
-import { changeWallet } from '../../../../databases/store/wallet';
 
 const PageWalletLogin: FC = () => {
   const goLink = useSafeLink();
-  const [wallet, setWallet] = useGetDispatch<InRootState['wallet']>('wallet');
   const textAreaPlaceholder = useI18('inputWordPlaceholder');
   const passwordText = useI18('passwordTip');
+  const [wallet, setWallet] = useGetDispatch<InRootState['wallet']>('wallet');
   const [signInIng, setSignInIng] = useState(false);
   const [wordText, setWordText] = useState('');
   const [areaFocus, setAreaFocus] = useState(false);
@@ -28,19 +28,30 @@ const PageWalletLogin: FC = () => {
     setInputType(status => status === 'text' ? 'password' : 'text');
   };
 
-  const login = () => {
-    const words = wordText.split(/[^a-zA-Z]+/g).filter(item => Boolean(item));
-    console.log(words);
+  const login = async () => {
     setSignInIng(true);
-    timer(1000).subscribe(() => {
-      setWallet({
-        type: changeWallet,
-        data: {
-          hasWallet: true,
-          address: '0x1f8dec5061b0d9bf17e5828f249142b39dab84b4'
-        }
-      });
+    await sleep(0.5);
+    const words = wordText.split(/[^a-zA-Z]+/g).filter(item => Boolean(item));
+    if (!(await walletVerifyMnemonic(words))) {
+      setSignInIng(false);
+      return alertTools.create({ message: <I18 text="mnemonicError" />, type: 'warning' });
+    }
+    if (!verifyPassword(password)) {
+      setSignInIng(false);
+      return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
+    }
+    const wallet = await walletFormMnemonic(words.join(' '));
+    const saveWalletKey = await walletEncode(wallet, password);
+    const address = await walletToAddress(wallet);
+    setWallet({
+      type: changeWallet,
+      data: {
+        hasWallet: true,
+        address: address,
+        encryptionKey: saveWalletKey
+      }
     });
+    alertTools.create({ message: <I18 text="success" />, type: 'success' });
   };
 
   useEffect(() => {

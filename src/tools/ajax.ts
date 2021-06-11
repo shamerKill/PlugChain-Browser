@@ -18,7 +18,7 @@ const formatUrl = (url: string, query?: TypeQuery): string => {
   if (/^http(s?):\/\//.test(url)) pathName = url;
   else pathName = `${getEnvConfig.BASE_URL}/${url}`.replace(/(?<!:)\/{2,}/g, '/');
   if (query !== undefined) {
-    const queryStr = Object.keys(query).map(key => `${key}=${JSON.stringify(query[key])}`);
+    const queryStr = Object.keys(query).map(key => `${key}=${typeof query[key] === 'object' ? JSON.stringify(query[key]) : query[key]}`);
     pathName += `?${queryStr.join('&')}`;
   }
   return pathName;
@@ -30,7 +30,7 @@ const fetchOptions: { [key: string]: string } = {
 
 export const fetchData = <T = any>(type: 'GET'|'POST', url: string, query?: TypeQuery, rpc = false) => {
   const status: TypeAjaxResult<T> = {
-    loading: false,
+    loading: true,
     success: false,
     error: false,
   };
@@ -66,9 +66,9 @@ export const fetchData = <T = any>(type: 'GET'|'POST', url: string, query?: Type
         loading: false,
         success: false,
         error: true,
-        status: result.error.code || result.status || 500,
-        data: result.error.data || result.data || '',
-        message: result.error.message || result.message || 'error',
+        status: result?.error?.code || result.status || 500,
+        data: result?.error?.data || result.data || '',
+        message: result?.error?.message || result.message || 'error',
       });
       if (result.result || result.status === 200 || result.data) getObservable.next({
         loading: false,

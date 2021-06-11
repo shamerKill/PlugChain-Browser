@@ -1,11 +1,14 @@
 import { FC, useEffect, useState } from 'react';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
-
-import './pledge.scss';
 import { getOnlyId, useSafeLink } from '../../../../tools';
 import ComConButton from '../../../components/control/button';
 import { Link } from 'react-router-dom';
+import { fetchData } from '../../../../tools/ajax';
+import multiavatar from '@multiavatar/multiavatar/dist/esm';
+
+import './pledge.scss';
+import { formatNumberStr } from '../../../../tools/string';
 
 type TypeNodesInfo = {
   avatar: string;
@@ -13,6 +16,7 @@ type TypeNodesInfo = {
   rate: string;
   pledgedVolume: string;
   minVolume: string;
+  address: string;
 };
 
 const PageWalletPledge: FC = () => {
@@ -24,13 +28,20 @@ const PageWalletPledge: FC = () => {
   };
 
   useEffect(() => {
-    setNodes([
-      { avatar: require('../../../../assets/images/user_avatar.png'), name: '👋Nodes1🌈', rate: '90.2%', pledgedVolume: '100861.12', minVolume: '100' },
-      { avatar: require('../../../../assets/images/user_avatar.png'), name: 'Nodes2🌈', rate: '90.2%', pledgedVolume: '100861.12', minVolume: '100' },
-      { avatar: require('../../../../assets/images/user_avatar.png'), name: '👋Nodes2', rate: '90.2%', pledgedVolume: '100861.12', minVolume: '100' },
-      { avatar: require('../../../../assets/images/user_avatar.png'), name: '(0.0)👂', rate: '90.2%', pledgedVolume: '100861.12', minVolume: '100' },
-      { avatar: require('../../../../assets/images/user_avatar.png'), name: 'Nodes4🦢', rate: '90.2%', pledgedVolume: '100861.12', minVolume: '100' },
-    ]);
+    fetchData('GET', '/validators').subscribe(({ success, data }) => {
+      if (success) {
+        setNodes(data.mininum.map((node: any) => ({
+          avatar: multiavatar(node.description.moniker),
+          name: node.description.moniker,
+          // TODO: no year rate
+          rate: '0.00%',
+          pledgedVolume: formatNumberStr(`${parseFloat(node.delegator_shares)}`),
+          minVolume: formatNumberStr(`${parseFloat(node.min_self_delegation)}`),
+          address: node.operator_address,
+        })));
+      }
+      console.log(data);
+    });
   }, []);
 
   return (
@@ -51,8 +62,8 @@ const PageWalletPledge: FC = () => {
             <div className="pledge_node" key={getOnlyId()}>
               <div className="pledge_node_inner">
                 <div className="pledge_node_header">
-                  <img src={node.avatar} alt={node.name} className="node_avatar" />
-                  <Link className="node_name" to={`/wallet/transaction-pledge?id=${node.name}`}>{node.name}</Link>
+                  <div className="node_avatar" dangerouslySetInnerHTML={{__html: node.avatar}}></div>
+                  <Link className="node_name" to={`/wallet/transaction-pledge?id=${node.address}`}>{node.name}</Link>
                 </div>
                 <div className="pledge_node_content">
                   <div className="pledge_node_info">
@@ -69,7 +80,7 @@ const PageWalletPledge: FC = () => {
                       <dt className="pledge_node_dd"><I18 text="minPledgeVolume" />(PLUG)</dt>
                     </dl>
                   </div>
-                  <ComConButton className="pledge_node_button" onClick={() => goToChange(node.name)}>选择</ComConButton>
+                  <ComConButton className="pledge_node_button" onClick={() => goToChange(node.address)}>选择</ComConButton>
                 </div>
               </div>
             </div>

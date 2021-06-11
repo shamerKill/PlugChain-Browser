@@ -7,7 +7,6 @@ import { useLanguageHook } from '../../../services/config.services';
 import { debounceTime, distinctUntilKeyChanged } from 'rxjs/operators';
 import { BehaviorSubject, timer } from 'rxjs';
 import ComConTable, { TypeComConTableHeader, TypeComConTableContent } from '../../components/control/table.copy';
-import { Link } from 'react-router-dom';
 import ComConSvg from '../../components/control/icon';
 import { formatNumberStr } from '../../../tools/string';
 import { TypePageHomeData } from './home';
@@ -40,7 +39,7 @@ export const HomeChainInfo: FC<{observerData: BehaviorSubject<TypePageHomeData>}
   const TokenPledgeRateView = useMemo(() => <TokenPledgeRate pledgeRate={infoData.pledgeRate} />, [infoData.pledgeRate]);
 
   useEffect(() => {
-    const unObserve = observerData.pipe(distinctUntilKeyChanged('blockHeight')).subscribe(data => {
+    const unObserve = observerData.subscribe(data => {
       let resultData: typeof infoData = data;
       const keysArr = Object.keys(data) as (keyof typeof infoData)[];
       keysArr.forEach(key => {
@@ -135,6 +134,7 @@ export const HomeNewsInfo: FC<{observerData: BehaviorSubject<TypePageHomeData>}>
   const [ blockTableLoading, setBlockTableLoading ] = useState(false);
   const [ transTableHeader, setTransTableHeader ] = useState<TypeComConTableHeader>([]);
   const [ transTableContent, setTransTableContent] = useState<TypeComConTableContent>([]);
+  const [ transTableLoading, setTransTableLoading ] = useState(false);
 
   const changeTab = (tab: number) => {
     setTabSelect(tab);
@@ -169,24 +169,9 @@ export const HomeNewsInfo: FC<{observerData: BehaviorSubject<TypePageHomeData>}>
       key: getOnlyId(),
       value: <I18 text={text} />
     })));
-    setTransTableHeader([ 'ID', 'blockHeight', 'time', 'from', 'to', 'transactionVolume', 'feeNumber' ].map(text => ({
+    setTransTableHeader([ 'hash', 'blockHeight', 'time', 'from', 'to', 'transactionVolume', 'feeNumber' ].map(text => ({
       key: getOnlyId(),
       value: <I18 text={text} />
-    })));
-  }, []);
-  // set tables content
-  useEffect(() => {
-    const getBlockLink = (text: string) => <Link className="a_link" to={`./block/${text}`}>{text}</Link>;
-    const getAccountLink = (text: string) => <Link className="a_link" to={`./account/${text}`}>{text}</Link>;
-    const getTransactionLink = (text: string) => <Link className="a_link" to={`./transaction/${text}`}>{text}</Link>;
-    setTransTableContent([
-      [ getTransactionLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getBlockLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getAccountLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-      [ getTransactionLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getBlockLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getAccountLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-      [ getTransactionLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getBlockLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getAccountLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-      [ getTransactionLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getBlockLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), '2021-04-26 17:23:34', getAccountLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getAccountLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-    ].map(item => ({
-      key: getOnlyId(),
-      value: item.map(col => ({ value: col, key: getOnlyId() })),
     })));
   }, []);
 
@@ -196,6 +181,17 @@ export const HomeNewsInfo: FC<{observerData: BehaviorSubject<TypePageHomeData>}>
       if (blockListTable.length) {
         setBlockTableLoading(false);
         setBlockTableContent(blockListTable);
+      }
+    });
+    return () => observe.unsubscribe();
+  }, [observerData]);
+
+  useEffect(() => {
+    setTransTableLoading(true);
+    const observe = observerData.pipe(distinctUntilKeyChanged('txsListTable')).subscribe(({ txsListTable }) => {
+      if (txsListTable.length) {
+        setTransTableLoading(false);
+        setTransTableContent(txsListTable);
       }
     });
     return () => observe.unsubscribe();
@@ -237,8 +233,9 @@ export const HomeNewsInfo: FC<{observerData: BehaviorSubject<TypePageHomeData>}>
           <ComConTable
             boxClass="tab_content_inner"
             header={transTableHeader}
-            content={transTableContent} />
-        ), [transTableHeader, transTableContent])}
+            content={transTableContent}
+            loading={transTableLoading} />
+        ), [transTableHeader, transTableContent, transTableLoading])}
         </div>
       </div>
     </div>

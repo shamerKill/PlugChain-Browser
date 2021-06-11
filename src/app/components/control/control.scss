@@ -103,6 +103,12 @@
       white-space: nowrap;
       max-width: 15rem;
     }
+    .a_link_no {
+      @extend .a_link;
+      cursor: pointer;
+      color: var(--color-text-color);
+      opacity: var(--opacity-level-1);
+    }
     a {
       color: var(--color-primary);
       cursor: pointer;

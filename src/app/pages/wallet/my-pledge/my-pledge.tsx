@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
 
@@ -6,6 +6,9 @@ import './my-pledge.scss';
 import { getOnlyId, useSafeLink } from '../../../../tools';
 import { Link } from 'react-router-dom';
 import ComConButton from '../../../components/control/button';
+import useGetDispatch from '../../../../databases/hook';
+import { InRootState } from '../../../../@types/redux';
+import { fetchData } from '../../../../tools/ajax';
 
 type TypeNodesInfo = {
   avatar: string;
@@ -16,6 +19,7 @@ type TypeNodesInfo = {
 
 const PageMyPledge: FC = () => {
   const goLink = useSafeLink();
+  const [wallet] = useGetDispatch<InRootState['wallet']>('wallet');
   const [nodes, setNodes] = useState<TypeNodesInfo[]>([]);
 
   const goToDetail = (id: string) => {
@@ -31,6 +35,16 @@ const PageMyPledge: FC = () => {
       { avatar: require('../../../../assets/images/user_avatar.png'), name: 'Nodes4🦢', rate: '90.2%', pledgedVolume: '8.12' },
     ]);
   }, []);
+
+  useEffect(() => {
+    if (!wallet.hasWallet) return goLink('./login');
+    const pledgeSub = fetchData('GET', 'delegationsByAddress', { address: wallet.address }).subscribe(({ success, data }) => {
+      if (success) {
+        console.log(data);
+      }
+    });
+    return () => pledgeSub.unsubscribe();
+  }, [wallet, goLink]);
 
   return (
     <ComponentsLayoutBase className="page_my_pledge">

@@ -5,7 +5,7 @@ export { default as reportWebVitals } from './reportWebVitals';
 export { default as getEnvConfig } from './env-config';
 export { getOnlyId, delOnlyId, verifyOnlyId } from './only-id';
 export { randomString } from './random-str';
-export { useSafeLink } from './route.hook';
+export * from './route.hook';
 export { formatSearch, formatPath } from './url';
 export { useFormatSearch, useFormatPath } from './url.hook';
 export { saveSession, getSession, delSession } from './sessionStorage';

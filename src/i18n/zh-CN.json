@@ -45,6 +45,9 @@
   "from": "从",
   "to": "到",
   "more": "更多",
+  "hash": "哈希",
+  "input": "接收",
+  "output": "发送",
 
 
   "createYourAccount": "创建您的账户",
@@ -136,6 +139,7 @@
   "changePledgeNode": "选择质押节点",
   "confirmTransfer": "确认转让",
   "pledgeTransferTip1": "今日还能转让 1 次，本月还能转让质押 6 次。",
+  "toCut": "消耗比率",
 
   "close": "关闭",
   "confirm": "确认",
@@ -143,5 +147,9 @@
   "noOpen": "尚未开放",
   "onlyWallet": "只允许同时存在一个账户",
   "pledgeSuccess": "质押成功",
-  "success": "成功"
+  "success": "成功",
+  "addressInputError": "地址输入有误",
+  "volumeInputError": "数量输入有误",
+  "receiveSuccess": "领取成功",
+  "receiveError": "领取失败"
 }

@@ -5,26 +5,39 @@ import ComConButton from '../../../components/control/button';
 
 import './transaction.scss';
 import { Link } from 'react-router-dom';
+import { getEnvConfig, useSafeReplaceLink } from '../../../../tools';
+import useGetDispatch from '../../../../databases/hook';
+import { InRootState } from '../../../../@types/redux';
+import { fetchData } from '../../../../tools/ajax';
+import { formatNumberStr, formatStringNum } from '../../../../tools/string';
+import confirmTools from '../../../components/tools/confirm';
 
 const PageWalletTransaction: FC = () => {
+  const goLink = useSafeReplaceLink();
+  const [wallet] = useGetDispatch<InRootState['wallet']>('wallet');
   const [toAddress, setToAddress] = useState('');
-  const [balance, setBalance] = useState('');
-  const [volume, setVolume] = useState('0');
-  const [fee, setFee] = useState('0');
+  const [balance, setBalance] = useState('1000');
+  const [volume, setVolume] = useState('');
+  const [fee, setFee] = useState('');
   const [password, setPassword] = useState('');
   const [transactionLoading ,setTransactionLoading] = useState(false);
 
   const verifyTransaction = () => {
+    confirmTools.create({
+      message: '显示'
+    });
     setTransactionLoading(true);
   };
 
-  const transactionAllBalance = () => {
-    setVolume(balance);
-  };
+  const transactionAllBalance = () => setVolume(`${formatStringNum(balance)}`);
 
   useEffect(() => {
-    setBalance('100');
-  }, []);
+    if (!wallet.hasWallet) return goLink('./login');
+    const pledgeSub = fetchData('GET', 'balance', { address: wallet.address, coin: getEnvConfig.APP_TOKEN_NAME }).subscribe(({ success, data }) => {
+      if (success) setBalance(formatNumberStr(`${data.Balance}`));
+    });
+    return () => pledgeSub.unsubscribe();
+  }, [wallet, goLink]);
 
   
   return (

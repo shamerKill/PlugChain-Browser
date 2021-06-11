@@ -136,7 +136,8 @@ const ComConTable: FC<{
                 type="number"
                 className={formatClass(['control-table-goto-input'])}
                 value={goToPage}
-                onChange={e => setGoToPage(e.target.value)} />
+                onChange={e => setGoToPage(e.target.value)}
+                onKeyDown={(e) => e.code === 'Enter' && customGoToPage(goToPage)} />
             </div>
           ) : (<></>), [pagesList, goToPage, customGoToPage])
         }

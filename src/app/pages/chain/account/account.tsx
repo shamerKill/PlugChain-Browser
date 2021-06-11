@@ -1,72 +1,94 @@
-import { FC, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
-import ComConTable from '../../../components/control/table';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import ComConTable, { TypeComConTableContent, TypeComConTableHeader } from '../../../components/control/table.copy';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
 
 import './account.scss';
-import { useFormatPath } from '../../../../tools';
+import { formatTime, getEnvConfig, getOnlyId, useFormatPath, useFormatSearch, useSafeReplaceLink } from '../../../../tools';
 import ComConSvg from '../../../components/control/icon';
+import { justifySearch } from '../../../../tools/url';
+import { fetchData } from '../../../../tools/ajax';
+import { formatNumberStr } from '../../../../tools/string';
+import ComConLink from '../../../components/control/link';
 
 const PageChainAccount: FC = () => {
+  const replaceLink = useSafeReplaceLink();
+  const search = useFormatSearch<{ page: string }>();
   const [, pathAddress] = useFormatPath();
   const [address, setAddress] = useState('');
   const [coinVolume, setCoinVolume] = useState('');
-  const [coinPrice, setCoinPrice] = useState('');
-  const [marketValue, setMarketValue] = useState('');
+  // const [marketValue, setMarketValue] = useState('');
   const [transactionVolume, setTransactionVolume] = useState('');
   const [inputVolume, setInputVolume] = useState('');
   const [outputVolume, setOutputVolume] = useState('');
 
-  const [tableHeader, setTableHeader] = useState<string[]>([]);
-  const [tableContent, setTableContent] = useState<(string|ReactElement)[][]>([]);
+  const [tableHeader, setTableHeader] = useState<TypeComConTableHeader>([]);
+  const [tableContent, setTableContent] = useState<TypeComConTableContent>([]);
   const [page, setPage] = useState<number>(0);
   const [allCount, setAllCount] = useState<number>(0);
   const [limit] = useState<number>(10);
   const [loading, setLoading] = useState<boolean>(false);
 
   const onPageChange = useCallback((num: number) => {
+    const searchObj = search || {page: num};
+    searchObj.page = `${num}`;
+    replaceLink(`?${justifySearch(searchObj)}`);
     setPage(num);
-    setAllCount(100);
+  }, [search, replaceLink]);
+  useEffect(() => {
+    if (!search) return;
+    onPageChange(Number(search.page) || 1);
+  }, [search, onPageChange]);
+
+  useEffect(() => {
+    setTableHeader(
+      [ 'hash', 'blockHeight', 'time', 'from', 'to', 'transactionVolume', 'feeNumber' ]
+        .map(text => ({ key: getOnlyId(), value: <I18 text={text} /> }))
+    );
   }, []);
 
   useEffect(() => {
-    setTableHeader([ 'ID', 'blockHeight', 'time', 'from', 'to', 'transactionVolume', 'feeNumber' ]);
-    setAddress('0x1f8dec5061b0d9bf17e5828f249142b39dab84b4');
-    setCoinVolume('29,291.291');
-    setCoinPrice('6.5');
-    setTransactionVolume('2');
-    setInputVolume('30,912.12');
-    setOutputVolume('100.1');
-    onPageChange(1);
-  }, [onPageChange]);
+    if (!page || !address || !limit) return;
+    setLoading(true);
+    const subOption = fetchData('GET', 'address_txs', { address, coin: getEnvConfig.APP_TOKEN_NAME, page, limit }).subscribe(({success, data}) => {
+      if (success) {
+        setLoading(false);
+        setAllCount(parseInt(data.TxNum));
+        setTableContent(data.Txs.map((tx: any) => {
+          const txTypeOutput = tx.from === address ? true : false;
+          return {
+            key: getOnlyId(),
+            value: [
+              { key: getOnlyId(), value: <ComConLink link={`../transaction/${tx.hash}`}>{ tx.hash }</ComConLink> },
+              { key: getOnlyId(), value: <ComConLink link={`../block/${tx.block_id}`}>{ tx.block_id }</ComConLink> },
+              { key: getOnlyId(), value: formatTime(new Date(tx.create_time)) },
+              { key: getOnlyId(), value: <ComConLink noLink={txTypeOutput} link={`../account/${tx.from}`}>{ tx.from }</ComConLink> },
+              { key: getOnlyId(), value: <ComConLink noLink={!txTypeOutput} link={`../account/${tx.to}`}>{ tx.to }</ComConLink> },
+              { key: getOnlyId(), value: tx.amount },
+              { key: getOnlyId(), value: tx.fee },
+            ]
+          };
+        }));
+      }
+    });
+    return () => subOption.unsubscribe();
+  }, [page, limit, address]);
 
   useEffect(() => {
-    if (pathAddress === undefined) return;
-    console.log(pathAddress);
+    setAddress(pathAddress);
   }, [pathAddress]);
 
   useEffect(() => {
-    setMarketValue((parseFloat(coinPrice) * parseFloat(coinVolume)).toFixed(2));
-  }, [coinPrice, coinVolume]);
-
-  useEffect(() => {
-    setLoading(true);
-    const getLink = (text: string): ReactElement => <Link className="a_link" to="/">{text}</Link>;
-    if (page) {
-      setLoading(true);
-      const doTimer = setTimeout(() => {
-        setLoading(false);
-        setTableContent([
-          [ getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('12345'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-          [ getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('12345'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-          [ getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('12345'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-          [ getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('12345'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-        ]);
-      }, 1000);
-      return () => clearTimeout(doTimer);
-    }
-  }, [page, limit]);
+    if (address === undefined) return;
+    fetchData('GET', 'balance', { address, coin: getEnvConfig.APP_TOKEN_NAME }).subscribe(({ success, data }) => {
+      if (success) {
+        setCoinVolume(formatNumberStr(`${data.Balance}`));
+        setTransactionVolume(formatNumberStr(`${data.TxNum}`));
+        setInputVolume(formatNumberStr(`${data.RecipientAmount}`));
+        setOutputVolume(formatNumberStr(`${data.SendAmount}`));
+      }
+    });
+  }, [address]);
 
   return (
     <ComponentsLayoutBase className="page_chain_account">
@@ -88,7 +110,7 @@ const PageChainAccount: FC = () => {
             <dt className="account_info_dt"><I18 text="extra" /></dt>
             <dd className="account_info_dd">
               { coinVolume }&nbsp;PLUG
-              <span className="account_info_small">≈&nbsp;${marketValue}</span>
+              {/* <span className="account_info_small">≈&nbsp;${marketValue}</span> */}
             </dd>
           </dl>
           <dl className="account_info_dl">
@@ -111,7 +133,7 @@ const PageChainAccount: FC = () => {
           <ComConTable
             showTools
             loading={loading}
-            header={tableHeader.map(text => <I18 text={text} />)}
+            header={tableHeader}
             content={tableContent}
             allCount={allCount}
             page={page}

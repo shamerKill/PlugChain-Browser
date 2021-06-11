@@ -44,6 +44,9 @@
   "from": "From",
   "to": "To",
   "more": "More",
+  "hash": "Hash",
+  "input": "input",
+  "output": "output",
 
 
   "createYourAccount": "Create Account",
@@ -135,6 +138,7 @@
   "changePledgeNode": "Select pledge node",
   "confirmTransfer": "Confirmation of transfer",
   "pledgeTransferTip1": "It can be transferred once today and transferred 6 times this month",
+  "toCut": "Consumption ratio",
 
   "close": "close",
   "confirm": "confirm",
@@ -142,6 +146,10 @@
   "noOpen": "temporarily unavailable",
   "onlyWallet": "more than one account",
   "pledgeSuccess": "Successful pledge",
-  "success": "success"
+  "success": "success",
+  "addressInputError": "Wrong address input",
+  "volumeInputError": "Wrong volume input",
+  "receiveSuccess": "Success for receive",
+  "receiveError": "Error for receive"
 
 }

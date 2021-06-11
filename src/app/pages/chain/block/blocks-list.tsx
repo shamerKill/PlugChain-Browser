@@ -1,9 +1,11 @@
-import { FC, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import I18 from '../../../../i18n/component';
-import { formatSearch, useSafeLink } from '../../../../tools';
+import { formatSearch, formatTime, getOnlyId, useSafeLink } from '../../../../tools';
+import { fetchData } from '../../../../tools/ajax';
 import { justifySearch } from '../../../../tools/url';
-import ComConTable from '../../../components/control/table';
+import ComConLink from '../../../components/control/link';
+import ComConTable, { TypeComConTableContent, TypeComConTableHeader } from '../../../components/control/table.copy';
 import ComponentsLayoutBase from '../../../components/layout/base';
 
 import './blocks.scss';
@@ -11,43 +13,62 @@ import './blocks.scss';
 const PageBlocksList: FC = () => {
   const location = useLocation();
   const goLink = useSafeLink();
-  const [tableHeader, setTableHeader] = useState<string[]>([]);
-  const [tableContent, setTableContent] = useState<(string|ReactElement)[][]>([]);
+  const [blockHeight, setBlockHeight] = useState(0);
+  const [tableHeader, setTableHeader] = useState<TypeComConTableHeader>([]);
+  const [tableContent, setTableContent] = useState<TypeComConTableContent>([]);
   const [page, setPage] = useState<number>(1);
-  const [allCount, setAllCount] = useState<number>(0);
   const [limit, setLimit] = useState<number>(10);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    setTableHeader([ 'blockHeight', 'blockTimeStamp', 'producer', 'blockId', 'transactionVolume', 'feeNumber' ]);
+    setTableHeader(
+      [ 'blockHeight', 'blockTimeStamp', 'producer', 'blockId', 'transactionVolume', 'feeNumber' ]
+        .map(text => ({ key: getOnlyId(), value: <I18 text={text} /> }))
+    );
   }, []);
-
-  useEffect(() => {
-    const getLink = (text: string): ReactElement => <Link className="a_link" to="/">{text}</Link>;
-    if (page) {
-      setTableContent([
-        [ getLink('13456233'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-        [ getLink('13456233'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-        [ getLink('13456233'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-        [ getLink('13456233'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-      ]);
-    }
-  }, [page, limit]);
 
   const onPageChange = useCallback((num: number) => {
     const searchObj = formatSearch<{page: string, limit: string}>(location.search);
     searchObj.page = `${num}`;
     goLink(`./blocks-list?${justifySearch(searchObj)}`);
-    setLoading(true);
-    setTimeout(() => setLoading(false), 1000);
   }, [goLink, location.search]);
 
   useEffect(() => {
     const searchObj = formatSearch<{page: string, limit: string}>(location.search);
     setPage(parseFloat(searchObj.page) || 1);
     setLimit(parseFloat(searchObj.limit) || 10);
-    setAllCount(1000);
   }, [location.search]);
+
+
+  useEffect(() => {
+    const getBlockHeight = fetchData('GET', 'info').subscribe(({ success, data }) => (success && setBlockHeight(parseInt(data.block_num))));
+    return () => getBlockHeight.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (blockHeight === 0) return;
+    // block List
+    const maxHeight = blockHeight - (page - 1) * limit;
+    const minHeight = blockHeight - page * limit;
+    setLoading(true);
+    const getBlockList = fetchData('GET', '/blockchain', { minHeight: minHeight, maxHeight: maxHeight }).subscribe(({ success, data: blockList }) => {
+      setLoading(false);
+      if (success) {
+        setTableContent(blockList.map((block: any) => ({
+          key: getOnlyId(),
+          value: [
+            { key: getOnlyId(), value: <ComConLink link={`./block/${block.block_id}`}>{ block.block_id }</ComConLink> },
+            { key: getOnlyId(), value: formatTime(block.time) },
+            { key: getOnlyId(), value: <ComConLink link={`./account/${block.address}`}>{ block.address }</ComConLink> },
+            { key: getOnlyId(), value: <ComConLink link={`./block/${block.block_id}`}>{ block.hash }</ComConLink> },
+            { key: getOnlyId(), value: block.tx_num },
+            { key: getOnlyId(), value: block.tx_fee },
+          ]
+        })));
+      }
+    });
+    return () => getBlockList.unsubscribe();
+  }, [blockHeight, page, limit]);
 
 
   return (
@@ -58,13 +79,13 @@ const PageBlocksList: FC = () => {
           <ComConTable
             showTools
             loading={loading}
-            header={tableHeader.map(text => <I18 text={text} />)}
+            header={tableHeader}
             content={tableContent}
-            allCount={allCount}
+            allCount={blockHeight}
             page={page}
             limit={limit}
             onPageChange={onPageChange} />
-        ), [tableHeader, tableContent, allCount, page, limit, onPageChange, loading])}
+        ), [tableHeader, tableContent, blockHeight, page, limit, onPageChange, loading])}
       </div>
     </ComponentsLayoutBase>
   );

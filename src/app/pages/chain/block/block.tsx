@@ -1,11 +1,13 @@
-import { FC, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import I18 from '../../../../i18n/component';
 import useI18 from '../../../../i18n/hooks';
-import { useFormatPath } from '../../../../tools';
+import { formatTime, getOnlyId, useFormatPath } from '../../../../tools';
+import { fetchData } from '../../../../tools/ajax';
 import ComConSvg from '../../../components/control/icon';
+import ComConLink from '../../../components/control/link';
 import ComConLoading from '../../../components/control/loading';
-import ComConTable from '../../../components/control/table';
+import ComConTable, { TypeComConTableContent, TypeComConTableHeader } from '../../../components/control/table.copy';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import alertTools from '../../../components/tools/alert';
 
@@ -14,8 +16,8 @@ import './blocks.scss';
 const PageBlockInfo: FC = () => {
   const [, blockId ] = useFormatPath();
   const copySuccess = useI18('copySuccess');
-  const [tableHeader, setTableHeader] = useState<string[]>([]);
-  const [tableContent, setTableContent] = useState<(string|ReactElement)[][]>([]);
+  const [tableHeader, setTableHeader] = useState<TypeComConTableHeader>([]);
+  const [tableContent, setTableContent] = useState<TypeComConTableContent>([]);
   const [page, setPage] = useState<number>(0);
   const [allCount, setAllCount] = useState<number>(0);
   const [limit] = useState<number>(10);
@@ -31,46 +33,60 @@ const PageBlockInfo: FC = () => {
 
   const onPageChange = useCallback((num: number) => {
     setPage(num);
-    setAllCount(100);
   }, []);
 
   useEffect(() => {
-    setLoading(true);
-    const getLink = (text: string): ReactElement => <Link className="a_link" to="/">{text}</Link>;
-    if (page) {
-      setLoading(true);
-      const doTimer = setTimeout(() => {
-        setLoading(false);
-        setTableContent([
-          [ getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('12345'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-          [ getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('12345'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-          [ getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('12345'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-          [ getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('12345'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-        ]);
-      }, 1000);
-      return () => clearTimeout(doTimer);
-    }
-  }, [page, limit]);
+    setTableHeader(
+      [ 'hash', 'blockHeight', 'time', 'from', 'to', 'transactionVolume', 'feeNumber' ]
+        .map(text => ({ key: getOnlyId(), value: <I18 text={text} /> }))
+    );
+    onPageChange(1);
+  }, [onPageChange]);
 
   useEffect(() => {
-    setTableHeader([ 'ID', 'blockHeight', 'time', 'from', 'to', 'transactionVolume', 'feeNumber' ]);
-    onPageChange(1);
+    if (page === 0 || blockId === undefined || !limit) return;
+    setLoading(true);
+    const subOption = fetchData('GET', 'block_txs', { height: blockId, page, limit }).subscribe(({success, data}) => {
+      if (success) {
+        setLoading(false);
+        setTableContent(data.Txs?.slice(0, 10).map((tx: any) => ({
+          key: getOnlyId(),
+          value: [
+            { key: getOnlyId(), value: <ComConLink link={`../transaction/${tx.hash}`}>{ tx.hash }</ComConLink> },
+            { key: getOnlyId(), value: <ComConLink link={`../block/${tx.block_id}`}>{ tx.block_id }</ComConLink> },
+            { key: getOnlyId(), value: formatTime(new Date(tx.create_time)) },
+            { key: getOnlyId(), value: <ComConLink link={`../account/${tx.from}`}>{ tx.from }</ComConLink> },
+            { key: getOnlyId(), value: <ComConLink link={`../account/${tx.to}`}>{ tx.to }</ComConLink> },
+            { key: getOnlyId(), value: tx.amount },
+            { key: getOnlyId(), value: tx.fee },
+          ]
+        })));
+        setAllCount(parseInt(data.TxNum));
+      }
+    });
+    return () => subOption.unsubscribe();
+  }, [ page, blockId, limit ]);
+
+  useEffect(() => {
+    if (blockId === undefined) return;
     setInfoLoading(true);
-    const doTimer = setTimeout(() => {
-      setInfoLoading(false);
-      setBlockInfo({
-        id: '5a7bd162f4d23ab0804374d00b54babe0d517d3d6178d8cade5eb7d3757c1357',
-        size: 6080,
-        node: 'D1c4f27a',
-        tranVol: 1920,
-        fee: 19200,
-        producer: 'A2Fj1etiW7yQSbSKcgK3vpd4Y1YrgGXT5T',
-        hash: 'abffb9e7a0aca6d9c9c315de8fb070c333c7f797d20215cb12cf70a972a7c00f',
-        time: '2021-04-29 09:22:09',
-      });
-    }, 1000);
-    return () => clearTimeout(doTimer);
-  }, [onPageChange]);
+    const sub = fetchData('GET', 'block_detail', { height: blockId }).subscribe(({ success, data }) => {
+      if (success) {
+        setInfoLoading(false);
+        setBlockInfo({
+          id: data.BlockId,
+          size: data.Bytes,
+          node: data.Node,
+          tranVol: data.TxNum,
+          fee: data.Fee,
+          producer: data.Miner,
+          hash: data.LastBlockId,
+          time: formatTime(new Date(data.Timestamp)),
+        });
+      }
+    });
+    return () => sub.unsubscribe();
+  }, [blockId]);
   
   return (
     <ComponentsLayoutBase className="block_page">
@@ -102,11 +118,11 @@ const PageBlockInfo: FC = () => {
           </dl>
           <dl className="block_info_dl">
             <dt className="block_info_dt"><I18 text="transactionVolume" /></dt>
-            <dd className="block_info_dd">{blockInfo.tranVol || ''}</dd>
+            <dd className="block_info_dd">{blockInfo.tranVol}</dd>
           </dl>
           <dl className="block_info_dl">
             <dt className="block_info_dt"><I18 text="feeNumber" /></dt>
-            <dd className="block_info_dd">{blockInfo.fee ? `${blockInfo.fee} PLUG` : ''}</dd>
+            <dd className="block_info_dd">{blockInfo.fee}PLUG</dd>
           </dl>
           <dl className="block_info_dl">
             <dt className="block_info_dt"><I18 text="producer" /></dt>
@@ -129,7 +145,7 @@ const PageBlockInfo: FC = () => {
           <ComConTable
             showTools
             loading={loading}
-            header={tableHeader.map(text => <I18 text={text} />)}
+            header={tableHeader}
             content={tableContent}
             allCount={allCount}
             page={page}

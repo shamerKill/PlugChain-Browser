@@ -18,6 +18,9 @@ const chainId = getEnvConfig.APP_CHAIN_ID;
 
 const defaultTransGasLimit = '100000';
 
+
+export const walletVerifyAddress = (address: string) => (new RegExp(`${addressPrefix}[\\d|a-z|A-Z]{39}`)).test(address);
+
 export const walletVerifyMnemonic = async (mnemonics: string[]) => {
   if (![ 12, 15, 18, 21, 24 ].includes(mnemonics.length)) return false;
   try {
@@ -57,6 +60,13 @@ export const walletFormMnemonic = async (mnemonic: string, options?: Partial<Dir
 
 export const walletGetOffline = async (wallet: DirectSecp256k1HdWallet) => {
   const client = await SigningStargateClient.offline(wallet);
+  // /cosmos.staking.v1beta1.MsgBeginRedelegate
+  // {
+  //   delegatorAddress: "",
+  //   validatorSrcAddress: "",
+  //   validatorDstAddress: "",
+  //   amount: amount,
+  // }
   return client;
 };
 
@@ -83,8 +93,8 @@ export const walletGetAccountInfo = async (wallet: DirectSecp256k1HdWallet) => n
 });
 
 
-export const walletSign = async ({ wallet, toAddress, volume, memo = '', gasLimit = defaultTransGasLimit }:
-  { wallet: DirectSecp256k1HdWallet; toAddress: string; volume: string; memo: string; gasLimit: string; }) => {
+export const walletSign = async ({ wallet, toAddress, volume, gasAmount, memo = '', gasLimit = defaultTransGasLimit }:
+  { wallet: DirectSecp256k1HdWallet; toAddress: string; volume: string; gasAmount: string; memo: string; gasLimit: string; }) => {
   const account = await walletGetAccountInfo(wallet);
   const result = await (await walletGetOffline(wallet)).sign(
     account.address, [ {
@@ -96,7 +106,7 @@ export const walletSign = async ({ wallet, toAddress, volume, memo = '', gasLimi
       },
     } ], { amount: [ {
       denom: appTokenName,
-      amount: '1',
+      amount: gasAmount,
     } ], gas: gasLimit }, memo, {
       accountNumber: account.accountNumber,
       sequence: account.sequence,
@@ -108,11 +118,11 @@ export const walletSign = async ({ wallet, toAddress, volume, memo = '', gasLimi
   return rawTx;
 };
 
-export const walletTransfer = ({ wallet, toAddress, volume, memo = '', gasLimit = defaultTransGasLimit }:
-  { wallet: DirectSecp256k1HdWallet; toAddress: string; volume: string; memo?: string; gasLimit?: string; }) => {
+export const walletTransfer = ({ wallet, toAddress, volume, gasAmount, memo = '', gasLimit = defaultTransGasLimit }:
+  { wallet: DirectSecp256k1HdWallet; toAddress: string; volume: string; gasAmount: string; memo?: string; gasLimit?: string; }) => {
   // result: tx push result; success: tx success in chain; loading: tx loading in chain;
   const resultObserver = new BehaviorSubject<{ result: any; success: boolean; loading: boolean; error: boolean; }>({ result: null, success: false, loading: false, error: false });
-  walletSign({ wallet, toAddress, volume, memo, gasLimit }).then(txRaw => {
+  walletSign({ wallet, toAddress, volume, gasAmount, memo, gasLimit }).then(txRaw => {
     walletFetch('broadcast_tx_async', { tx: txRaw }).subscribe(({ success, data }) => {
       if (success) resultObserver.next({...resultObserver.getValue(), result: data, loading: true});
     });

@@ -1,23 +1,26 @@
-import { FC, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
-import ComConTable from '../../../components/control/table';
-import { Link } from 'react-router-dom';
-
-import './account.scss';
+import ComConTable, { TypeComConTableContent, TypeComConTableHeader } from '../../../components/control/table.copy';
 import ComConButton from '../../../components/control/button';
 import ComConSvg from '../../../components/control/icon';
-import { useSafeLink } from '../../../../tools';
+import { formatClass, formatTime, getEnvConfig, getOnlyId, useFormatSearch, useSafeLink } from '../../../../tools';
 import useGetDispatch from '../../../../databases/hook';
 import { InRootState } from '../../../../@types/redux';
+import { fetchData } from '../../../../tools/ajax';
+import { formatNumberStr } from '../../../../tools/string';
+import { justifySearch } from '../../../../tools/url';
+
+import './account.scss';
+import ComConLink from '../../../components/control/link';
 
 const PageWalletAccount: FC = () => {
   const goLink = useSafeLink();
+  const search = useFormatSearch<{ page: string }>();
   const [wallet] = useGetDispatch<InRootState['wallet']>('wallet');
   const [address, setAddress] = useState('');
   const [coinVolume, setCoinVolume] = useState('');
-  const [coinPrice, setCoinPrice] = useState('');
-  const [marketValue, setMarketValue] = useState('');
+  // const [marketValue, setMarketValue] = useState('');
   const [transactionVolume, setTransactionVolume] = useState('');
   const [inputVolume, setInputVolume] = useState('');
   const [outputVolume, setOutputVolume] = useState('');
@@ -26,60 +29,90 @@ const PageWalletAccount: FC = () => {
   const [redeemVol, setRedeemVol] = useState('0.00');
   const [rewardVol, setRewardVol] = useState('0.00');
 
-  const [tableHeader, setTableHeader] = useState<string[]>([]);
-  const [tableContent, setTableContent] = useState<(string|ReactElement)[][]>([]);
+  const [tableHeader, setTableHeader] = useState<TypeComConTableHeader>([]);
+  const [tableContent, setTableContent] = useState<TypeComConTableContent>([]);
   const [page, setPage] = useState<number>(0);
   const [allCount, setAllCount] = useState<number>(0);
   const [limit] = useState<number>(10);
   const [loading, setLoading] = useState<boolean>(false);
 
   const onPageChange = useCallback((num: number) => {
+    const searchObj = search || {page: num};
+    searchObj.page = `${num}`;
+    goLink(`?${justifySearch(searchObj)}`);
     setPage(num);
-    setAllCount(100);
-  }, []);
+  }, [search, goLink]);
 
   useEffect(() => {
+    if (!page || !address || !limit) return;
     setLoading(true);
-    const getLink = (text: string): ReactElement => <Link className="a_link" to="/">{text}</Link>;
-    if (page) {
-      setLoading(true);
-      const doTimer = setTimeout(() => {
+    const subOption = fetchData('GET', 'address_txs', { address, coin: getEnvConfig.APP_TOKEN_NAME, page, limit }).subscribe(({success, data}) => {
+      if (success) {
         setLoading(false);
-        setTableContent([
-          [ <span className="account_transaction_type transaction_input">接收</span>, getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('12345'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-          [ <span className="account_transaction_type transaction_output">发送</span>, getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('12345'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-          [ <span className="account_transaction_type transaction_output">发送</span>, getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('12345'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-          [ <span className="account_transaction_type transaction_input">接收</span>, getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('12345'), '2021-04-26 17:23:34', getLink('AF4g7NtfRJb57AAF4g7NtfRJb57AAF4g7NtfRJb57A'), getLink('11c6aa6e40bf2211c6aa6e40bf22'), '0', '0' ],
-        ]);
-      }, 1000);
-      return () => clearTimeout(doTimer);
-    }
-  }, [page, limit]);
-
-  useEffect(() => {
-    setMarketValue((parseFloat(coinPrice) * parseFloat(coinVolume)).toFixed(2));
-  }, [coinPrice, coinVolume]);
+        setAllCount(parseInt(data.TxNum));
+        setTableContent(data.Txs.map((tx: any) => {
+          const txTypeOutput = tx.from === address ? true : false;
+          const txTypeClass = formatClass(['account_transaction_type', `transaction_${txTypeOutput ? 'output' : 'input'}`]);
+          const txTypeEle = <I18 text={txTypeOutput ? 'output' : 'input'} />
+          return {
+            key: getOnlyId(),
+            value: [
+              { key: getOnlyId(), value: <span className={txTypeClass}>{txTypeEle}</span> },
+              { key: getOnlyId(), value: <ComConLink link={`../transaction/${tx.hash}`}>{ tx.hash }</ComConLink> },
+              { key: getOnlyId(), value: <ComConLink link={`../block/${tx.block_id}`}>{ tx.block_id }</ComConLink> },
+              { key: getOnlyId(), value: formatTime(new Date(tx.create_time)) },
+              { key: getOnlyId(), value: <ComConLink noLink={txTypeOutput} link={`../account/${tx.from}`}>{ tx.from }</ComConLink> },
+              { key: getOnlyId(), value: <ComConLink noLink={!txTypeOutput} link={`../account/${tx.to}`}>{ tx.to }</ComConLink> },
+              { key: getOnlyId(), value: tx.amount },
+              { key: getOnlyId(), value: tx.fee },
+            ]
+          };
+        }));
+      }
+    });
+    return () => subOption.unsubscribe();
+  }, [page, limit, address]);
 
   useEffect(() => {
     if (!wallet.hasWallet) return goLink('./login');
     setAddress(wallet.address);
-    console.log(wallet);
   }, [wallet, goLink]);
 
   useEffect(() => {
-    setTableHeader([ '', 'ID', 'blockHeight', 'time', 'from', 'to', 'transactionVolume', 'feeNumber' ]);
-    setCoinVolume('29,291.291');
-    setCoinPrice('6.5');
-    setTransactionVolume('2');
-    setInputVolume('30,912.12');
-    setOutputVolume('100.1');
-    onPageChange(1);
-  }, [onPageChange]);
+    if (!address) return; 
+    const balanceSub = fetchData('GET', 'balance', { address, coin: getEnvConfig.APP_TOKEN_NAME }).subscribe(({ success, data }) => {
+      if (success) {
+        setCoinVolume(formatNumberStr(`${data.Balance}`));
+        setTransactionVolume(formatNumberStr(`${data.TxNum}`));
+        setInputVolume(formatNumberStr(`${data.RecipientAmount}`));
+        setOutputVolume(formatNumberStr(`${data.SendAmount}`));
+      }
+    });
+    const pledgeSub = fetchData('GET', 'account', { address }).subscribe(({ success, data}) => {
+      if (success) {
+        setPledgingVol(formatNumberStr(`${data.delegation_number}`));
+        setRedeemVol(formatNumberStr(`${data.undelegation_number}`));
+        setRewardVol(formatNumberStr(`${data.reward_number}`));
+      }
+    });
+    return () => {
+      balanceSub.unsubscribe();
+      pledgeSub.unsubscribe();
+    };
+  }, [address]);
+
   useEffect(() => {
-    setPledgingVol('0.00');
-    setRedeemVol('0.00');
-    setRewardVol('0.00');
+    if (!search) return;
+    onPageChange(Number(search.page) || 1);
+  }, [search, onPageChange]);
+
+  useEffect(() => {
+    setTableHeader(
+      [ '', 'ID', 'blockHeight', 'time', 'from', 'to', 'transactionVolume', 'feeNumber' ]
+        .map(text => ({ key: getOnlyId(), value: <I18 text={text} /> }))
+    );
   }, []);
+  
   return (
     <ComponentsLayoutBase className="page_wallet_account">
       <div className="account_info">
@@ -100,7 +133,7 @@ const PageWalletAccount: FC = () => {
           <dl className="account_info_dl account_info_important">
             <dd className="account_info_dd">
               { coinVolume }&nbsp;PLUG
-              <span className="account_info_small">≈&nbsp;${marketValue}</span>
+              {/* <span className="account_info_small">≈&nbsp;${marketValue}</span> */}
             </dd>
             <dt className="account_info_dt"><I18 text="extra" /></dt>
           </dl>
@@ -155,7 +188,7 @@ const PageWalletAccount: FC = () => {
           <ComConTable
             showTools
             loading={loading}
-            header={tableHeader.map(text => <I18 text={text} />)}
+            header={tableHeader}
             content={tableContent}
             allCount={allCount}
             page={page}

@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import ComponentsLayoutBase from '../../components/layout/base';
 import I18 from '../../../i18n/component';
 import useI18 from '../../../i18n/hooks';
@@ -29,17 +29,18 @@ export type TypePageHomeData = {
   pledgeRate: number;
   nowVolume: string; 
   historyMaxVolume: string;
-  blockListTable: TypeComConTableContent,
+  blockListTable: TypeComConTableContent;
+  txsListTable: TypeComConTableContent;
 };
 
 const PageHome: FC = () => {
   const searchPlaceholder = useI18('searchPlaceholder');
   const [searchValue, setSearchValue] = useState('');
-  const [homeDataObserve] = useState(new BehaviorSubject<TypePageHomeData>({
+  const homeDataObserve = useRef(new BehaviorSubject<TypePageHomeData>({
     blockHeight: '', transactionVolume: '', pendingBlockVolume: '', newBlockTransaction: '',
     transactionRate: 0, price: '', priceRate: 0, markValue: '', allTokenVolume: '',
     allPledge: '', pledgeRate: 0, nowVolume: '', historyMaxVolume: '',
-    blockListTable: [],
+    blockListTable: [], txsListTable: [],
   }));
 
   // searchData
@@ -47,7 +48,7 @@ const PageHome: FC = () => {
     if (searchValue === '') return alertTools.create({ message: '没有内容', time: 5000, type: 'error' });
   }, [searchValue]);
 
-  const updateData = useCallback((obj: Partial<TypePageHomeData>) => homeDataObserve.next({ ...homeDataObserve.getValue(), ...obj }), [homeDataObserve]);
+  const updateData = useCallback((obj: Partial<TypePageHomeData>) => homeDataObserve.current.next({ ...homeDataObserve.current.getValue(), ...obj }), []);
 
   useEffect(() => {
     // block List
@@ -55,16 +56,34 @@ const PageHome: FC = () => {
       if (blockList.status === 200) updateData({ blockListTable: blockList.data.slice(0, 10).map((block: any) => ({
         key: getOnlyId(),
         value: [
-          { key: getOnlyId(), value: <ComConLink link={`./block/${block.hash}`}>{ block.block_id }</ComConLink> },
+          { key: getOnlyId(), value: <ComConLink link={`./block/${block.block_id}`}>{ block.block_id }</ComConLink> },
           { key: getOnlyId(), value: formatTime(block.time) },
           { key: getOnlyId(), value: <ComConLink link={`./account/${block.address}`}>{ block.address }</ComConLink> },
-          { key: getOnlyId(), value: <ComConLink link={`./block/${block.hash}`}>{ block.hash }</ComConLink> },
+          { key: getOnlyId(), value: <ComConLink link={`./block/${block.block_id}`}>{ block.hash }</ComConLink> },
           { key: getOnlyId(), value: block.tx_num },
           { key: getOnlyId(), value: block.tx_fee },
         ]
       })), blockHeight: blockList.data[0].block_id });
     });
     return () => getBlockList.unsubscribe();
+  }, [updateData]);
+  useEffect(() => {
+    // txs List
+    const getTxsList = timer(changeSeconds(0.1), changeSeconds(5)).pipe(switchMap(() => fetchData('GET', '/txs', { page: 1, limit: 10 }))).subscribe(txsList => {
+      if (txsList.status === 200) updateData({ txsListTable: txsList.data.info.slice(0, 10).map((tx: any) => ({
+        key: getOnlyId(),
+        value: [
+          { key: getOnlyId(), value: <ComConLink link={`./transaction/${tx.hash}`}>{ tx.hash }</ComConLink> },
+          { key: getOnlyId(), value: <ComConLink link={`./block/${tx.block_id}`}>{ tx.block_id }</ComConLink> },
+          { key: getOnlyId(), value: formatTime(new Date(tx.create_time)) },
+          { key: getOnlyId(), value: <ComConLink link={`./account/${tx.from}`}>{ tx.from }</ComConLink> },
+          { key: getOnlyId(), value: <ComConLink link={`./account/${tx.to}`}>{ tx.to }</ComConLink> },
+          { key: getOnlyId(), value: tx.amount },
+          { key: getOnlyId(), value: tx.fee },
+        ]
+      }))});
+    });
+    return () => getTxsList.unsubscribe();
   }, [updateData]);
   // TODO: kline
   // useEffect(() => {
@@ -117,9 +136,9 @@ const PageHome: FC = () => {
         </div>
       </div>
       {/* chainInfo */}
-      <HomeChainInfo observerData={homeDataObserve} />
+      <HomeChainInfo observerData={homeDataObserve.current} />
       {/* newInfo */}
-      <HomeNewsInfo observerData={homeDataObserve} />
+      <HomeNewsInfo observerData={homeDataObserve.current} />
     </ComponentsLayoutBase>
   );
 };

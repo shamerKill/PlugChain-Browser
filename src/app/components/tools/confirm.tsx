@@ -13,10 +13,10 @@ const confirmTools: {
 
 export default confirmTools;
 
-// TODO： confirm
 type TypeConfirmButton = React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> | {text: string; onClick?: () => void;};
 type TypeConfirmArg = {
   message: ReactElement | string;
+  success?: () => void;
   close?: () => void;
   buttons?: TypeConfirmButton[];
 };
@@ -35,52 +35,49 @@ const ComToolConfirm: FC<TypeConfirmArg> = ({message, close, buttons}) => {
       closeIng && 'com-con-tool-confirm-close',
     ])}>
       <button className="com-tool-alert-close" onClick={() => setCloseIng(true)}><ComConSvg xlinkHref="#icon-close" /></button>
-      <p className="com-tool-confirm-message">{message}</p>
-      {
-        buttons?.map(button => button)
-      }
+      <div className="com-tool-confirm-message">{message}</div>
+      <div className="com-tool-confirm-buttons">
+        {
+          buttons?.map(button => button)
+        }
+      </div>
     </div>
   );
 };
 
 export const ComToolConfirmBox: FC = () => {
   const alertBox = useRef(null);
-  const [alertObj, setAlertObj] = useState<{[key: string]: ReactElement}>({});
-  const [alertList, setAlertList] = useState<ReactElement[]>([]);
+  const double = useRef(0);
+  const [alertShow, setAlertShow] = useState(false);
+  const [confirmInfo, setConfirmInfo] = useState<TypeConfirmArg>({ message: '' });
   confirmTools.create = useCallback((arg) => {
-    const key = `${alertList.length}${getOnlyId()}`;
+    setAlertShow(true);
+    double.current = 0;
     // close function
-    const close = () => {
-      setAlertObj(state => {
-        const result: typeof alertObj = {};
-        Object.keys(state).forEach(item => {
-          if (item !== key) result[item] = state[item];
-        });
-        return result;
-      });
+    const close = (success: boolean) => {
+      if (success && arg.success && double.current === 0) arg.success();
+      if (success === false && arg.close && double.current === 0) arg.close();
+      double.current = double.current + 1;
+      setAlertShow(false);
     };
     // default buttons
-    let buttons = arg.buttons;
-    if (buttons === undefined) {
-      buttons = [
-        <button key={getOnlyId()} onClick={close}><I18 text="close"/></button>,
-        <button key={getOnlyId()} onClick={close}><I18 text="confirm"/></button>
+    let buttonsGet = arg.buttons;
+    if (buttonsGet === undefined) {
+      buttonsGet = [
+        <button className="com-confirm-close" key={getOnlyId()} onClick={() => close(false)}><I18 text="close"/></button>,
+        <button className="com-confirm-success" key={getOnlyId()} onClick={() => close(true)}><I18 text="confirm"/></button>
       ];
-    } else if ((buttons[0] as any)?.text) {
-      buttons = buttons.map((item: any) => {
-        return <button key={getOnlyId()} onClick={item.onClick}>{ item.text }</button>
+    } else if ((buttonsGet[0] as any)?.text) {
+      buttonsGet = buttonsGet.map((item: any) => {
+        return <button className="com-confirm-success" key={getOnlyId()} onClick={item.onClick}>{ item.text }</button>
       })
     }
-    // create reactElement
-    const alertEle = <ComToolConfirm key={key} {...arg} close={close} />;
-    // add element to html
-    setAlertObj(state => ({[key]: alertEle, ...state}));
-    return close;
-  }, [alertList]);
-  useEffect(() => {
-    setAlertList(Object.values(alertObj));
-  }, [alertObj]);
+    setConfirmInfo({ ...arg, close: () => close(false), buttons: buttonsGet });
+    return () => close(false);
+  }, []);
   return (
-    <div ref={alertBox} id="com-use-confirm-root">{ alertList }</div>
+    <div ref={alertBox} id="com-use-confirm-root" className={formatClass([alertShow && 'com-use-confirm-show'])}>
+      <ComToolConfirm {...confirmInfo} />
+    </div>
   );
 };

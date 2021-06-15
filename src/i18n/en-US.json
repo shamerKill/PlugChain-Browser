@@ -139,6 +139,8 @@
   "confirmTransfer": "Confirmation of transfer",
   "pledgeTransferTip1": "It can be transferred once today and transferred 6 times this month",
   "toCut": "Consumption ratio",
+  "noMyPledged": "No pledge record",
+  "goToPledge": "Go to pledge",
 
   "close": "close",
   "confirm": "confirm",
@@ -149,7 +151,14 @@
   "success": "success",
   "addressInputError": "Wrong address input",
   "volumeInputError": "Wrong volume input",
+  "feeInputError": "Wrong fee input",
   "receiveSuccess": "Success for receive",
-  "receiveError": "Error for receive"
+  "receiveError": "Error for receive",
 
+  "exeConfirm": "Do you confirm the implementation?",
+  "exeSuccess": "Successful implementation",
+  "exeError": "Failed implementation",
+
+  "confirmTransition": "Do you confirm the transfer?",
+  "confirmDelegate": "Do you confirm the pledge?"
 }

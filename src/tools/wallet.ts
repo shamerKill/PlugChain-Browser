@@ -1,9 +1,10 @@
-import { DirectSecp256k1HdWallet, DirectSecp256k1HdWalletOptions } from '@cosmjs/proto-signing';
-import { SigningStargateClient, accountFromAny, Account } from '@cosmjs/stargate';
+import { DirectSecp256k1HdWallet, DirectSecp256k1HdWalletOptions, EncodeObject } from '@cosmjs/proto-signing';
+import { SigningStargateClient, accountFromAny, Account, StdFee } from '@cosmjs/stargate';
 import minimal from 'protobufjs/minimal';
 import base64js from 'base64-js';
 import { QueryAccountResponse } from '@cosmjs/stargate/build/codec/cosmos/auth/v1beta1/query';
 import { TxRaw } from '@cosmjs/stargate/build/codec/cosmos/tx/v1beta1/tx';
+import { MsgDelegate, MsgUndelegate, MsgBeginRedelegate } from '@cosmjs/stargate/build/codec/cosmos/staking/v1beta1/tx';
 import { fetchData } from './ajax';
 import getEnvConfig from './env-config';
 import { randomNumber } from './random-num';
@@ -16,7 +17,8 @@ const appTokenName = getEnvConfig.APP_TOKEN_NAME;
 const addressPrefix = getEnvConfig.WALLET_ADDRESS_PREFIX;
 const chainId = getEnvConfig.APP_CHAIN_ID;
 
-const defaultTransGasLimit = '100000';
+const defaultTransGasLimit = '80000';
+const defaultDelegateLimit = '160000';
 
 
 export const walletVerifyAddress = (address: string) => (new RegExp(`${addressPrefix}[\\d|a-z|A-Z]{39}`)).test(address);
@@ -92,57 +94,78 @@ export const walletGetAccountInfo = async (wallet: DirectSecp256k1HdWallet) => n
   })();
 });
 
-
-export const walletSign = async ({ wallet, toAddress, volume, gasAmount, memo = '', gasLimit = defaultTransGasLimit }:
-  { wallet: DirectSecp256k1HdWallet; toAddress: string; volume: string; gasAmount: string; memo: string; gasLimit: string; }) => {
+export const walletSign = async ({ wallet, message, fee, memo = '' }:
+  { wallet: DirectSecp256k1HdWallet, message: readonly EncodeObject[], fee: StdFee, memo?: string }) => {
   const account = await walletGetAccountInfo(wallet);
-  const result = await (await walletGetOffline(wallet)).sign(
-    account.address, [ {
-      typeUrl: '/cosmos.bank.v1beta1.MsgSend',
-      value: {
-        fromAddress: account.address,
-        toAddress: toAddress,
-        amount: [ { amount: volume, denom: appTokenName } ],
-      },
-    } ], { amount: [ {
-      denom: appTokenName,
-      amount: gasAmount,
-    } ], gas: gasLimit }, memo, {
-      accountNumber: account.accountNumber,
-      sequence: account.sequence,
-      chainId: chainId,
-    },
-  );
+  const result = await ((await walletGetOffline(wallet)).sign(
+    account.address, [ ...message ], fee, memo, { accountNumber: account.accountNumber, sequence: account.sequence, chainId: chainId },
+  ));
   const raw = TxRaw.encode(result).finish();
   const rawTx = base64js.fromByteArray(raw);
   return rawTx;
 };
 
-export const walletTransfer = ({ wallet, toAddress, volume, gasAmount, memo = '', gasLimit = defaultTransGasLimit }:
-  { wallet: DirectSecp256k1HdWallet; toAddress: string; volume: string; gasAmount: string; memo?: string; gasLimit?: string; }) => {
-  // result: tx push result; success: tx success in chain; loading: tx loading in chain;
-  const resultObserver = new BehaviorSubject<{ result: any; success: boolean; loading: boolean; error: boolean; }>({ result: null, success: false, loading: false, error: false });
-  walletSign({ wallet, toAddress, volume, gasAmount, memo, gasLimit }).then(txRaw => {
-    walletFetch('broadcast_tx_async', { tx: txRaw }).subscribe(({ success, data }) => {
-      if (success) resultObserver.next({...resultObserver.getValue(), result: data, loading: true});
-    });
-    let watchLoading: Subscription|null = null;
-    const resultSubscription = resultObserver.subscribe(({ loading, result, success }) => {
-      if (loading && result && result.code === 0 && result.hash) watchLoading = timer(0, changeSeconds(3)).subscribe(() => {
-        walletFetch('tx_search', { query: `tx.hash='${result.hash}'`, page: '1' }).subscribe(search => {
-          if (search.success && search.data.total_count !== '0') {
-            resultObserver.next({error: false, result: search.data.txs, loading: false, success: true});
-            watchLoading?.unsubscribe();
-            resultSubscription.unsubscribe();
-          }
-        });
+export const walletTransfer = ({ wallet, toAddress, volume, gasAll, memo = '', gasLimit = defaultTransGasLimit }:
+  { wallet: DirectSecp256k1HdWallet; toAddress: string; volume: string; gasAll: string; memo?: string; gasLimit?: string; }) => {
+  const { fetchData, resultObserver } = walletFetchObserve();
+  (async () => {
+    const account = await walletGetAccountInfo(wallet);
+    const inputVolume = walletTokenToAmount(volume);
+    const transferMessage: readonly EncodeObject[] = [ {
+      typeUrl: '/cosmos.bank.v1beta1.MsgSend',
+      value: {
+        fromAddress: account.address,
+        toAddress: toAddress,
+        amount: [ { amount: inputVolume, denom: appTokenName } ],
+      },
+    } ];
+    const transferFee = walletGetFee('transfer', { allAmount: gasAll, gasLimit: gasLimit });
+    const signRaw = await walletSign({ wallet, message: transferMessage, fee: transferFee, memo });
+    fetchData(signRaw);
+  })();
+  return resultObserver;
+};
+
+export const walletDelegate = ({ wallet, validatorAddress, volume, gasAll, gasLimit = defaultDelegateLimit, reDelegateAddress }:
+  { wallet: DirectSecp256k1HdWallet; validatorAddress: string; volume: string; gasAll: string; gasLimit?: string; reDelegateAddress?: string; },
+type: 'delegate'|'unDelegate'|'reDelegate' = 'delegate') => {
+  const { fetchData, resultObserver } = walletFetchObserve();
+  (async () => {
+    const account = await walletGetAccountInfo(wallet);
+    const inputVolume = walletTokenToAmount(volume);
+    let typeUrl: string;
+    let value: any;
+    if (type === 'unDelegate') {
+      typeUrl = '/cosmos.staking.v1beta1.MsgUndelegate';
+      value = MsgUndelegate.fromPartial({
+        delegatorAddress: account.address,
+        validatorAddress: validatorAddress,
+        amount: { amount: inputVolume, denom: appTokenName },
       });
-      else if (success) {
-        if (watchLoading) watchLoading.unsubscribe();
-        resultSubscription.unsubscribe();
-      }
-    });
-  });
+    } else if (type === 'reDelegate') {
+      typeUrl = '/cosmos.staking.v1beta1.MsgBeginRedelegate';
+      value = MsgBeginRedelegate.fromPartial({
+        delegatorAddress: account.address,
+        validatorSrcAddress: validatorAddress,
+        validatorDstAddress: reDelegateAddress,
+        amount: { amount: inputVolume, denom: appTokenName },
+      });
+    } else {
+      typeUrl = '/cosmos.staking.v1beta1.MsgDelegate';
+      value = MsgDelegate.fromPartial({
+        delegatorAddress: account.address,
+        validatorAddress: validatorAddress,
+        amount: { amount: inputVolume, denom: appTokenName },
+      });
+    }
+    const transferMessage: readonly EncodeObject[] = [ {
+      typeUrl: typeUrl,
+      value: value,
+    } ];
+    const transferFee = walletGetFee('delegate', { allAmount: gasAll, gasLimit: gasLimit });
+    const signRaw = await walletSign({ wallet, message: transferMessage, fee: transferFee });
+    fetchData(signRaw);
+  })();
   return resultObserver;
 };
 
@@ -163,3 +186,55 @@ const walletFetch = (method: string, params: { [key: string]: any}) => fetchData
     params: params,
   }, true,
 );
+
+export const walletAmountToToken = (amount: string): string => (parseInt(amount) / Math.pow(10, 6)).toString();
+export const walletTokenToAmount = (token: string): string => (parseFloat(token) * Math.pow(10, 6)).toString();
+
+const walletGetFee = (type: 'transfer'|'delegate', fee?: { allAmount?: string; gasLimit?: string; }): StdFee => {
+  let defaultGasLimit = '0';
+  let defaultAmount = '0';
+  if (fee) {
+    if (fee.gasLimit) defaultGasLimit = fee.gasLimit;
+    else if ( type === 'transfer' ) defaultGasLimit = defaultTransGasLimit;
+    else if ( type === 'delegate' ) defaultGasLimit = defaultDelegateLimit;
+
+    if (fee.allAmount) defaultAmount = (parseFloat(walletTokenToAmount(fee.allAmount)) / parseFloat(defaultGasLimit)).toFixed();
+  }
+  let resultFee: StdFee = {
+    amount: [ {
+      denom: appTokenName,
+      amount: defaultAmount,
+    } ], gas: defaultGasLimit,
+  };
+  return resultFee;
+};
+
+const walletFetchObserve = () => {
+  const resultObserver = new BehaviorSubject<{ result: any; success: boolean; loading: boolean; error: boolean; }>({ result: null, success: false, loading: true, error: false });
+  const fetchData = (txRaw: string) => {
+    walletFetch('broadcast_tx_async', { tx: txRaw }).subscribe(({ success, data, error, message }) => {
+      if (success) resultObserver.next({...resultObserver.getValue(), result: data});
+      if (error) resultObserver.next({...resultObserver.getValue(), result: message, error: true, loading: false});
+    });
+    let watchLoading: Subscription|null = null;
+    const resultSubscription = resultObserver.subscribe(({ loading, result, success, error }) => {
+      if (loading && result && result.code === 0 && result.hash) watchLoading = timer(0, changeSeconds(3)).subscribe(() => {
+        walletFetch('tx_search', { query: `tx.hash='${result.hash}'`, page: '1', prove: false }).subscribe(search => {
+          if (search.success && search.data.total_count !== '0') {
+            resultObserver.next({error: false, result: search.data.txs, loading: false, success: true});
+            watchLoading?.unsubscribe();
+            resultSubscription.unsubscribe();
+          }
+        });
+      });
+      else if (success) {
+        if (watchLoading) watchLoading.unsubscribe();
+        resultSubscription.unsubscribe();
+      } else if (error) {
+        if (watchLoading) watchLoading.unsubscribe();
+        resultSubscription.unsubscribe();
+      }
+    });
+  };
+  return { resultObserver, fetchData };
+};

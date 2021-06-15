@@ -4,7 +4,7 @@ import I18 from '../../../../i18n/component';
 import ComConTable, { TypeComConTableContent, TypeComConTableHeader } from '../../../components/control/table.copy';
 import ComConButton from '../../../components/control/button';
 import ComConSvg from '../../../components/control/icon';
-import { formatClass, formatTime, getEnvConfig, getOnlyId, useFormatSearch, useSafeLink } from '../../../../tools';
+import { formatClass, formatTime, getEnvConfig, getOnlyId, useFormatSearch, useSafeLink, walletAmountToToken } from '../../../../tools';
 import useGetDispatch from '../../../../databases/hook';
 import { InRootState } from '../../../../@types/redux';
 import { fetchData } from '../../../../tools/ajax';
@@ -89,10 +89,11 @@ const PageWalletAccount: FC = () => {
       }
     });
     const pledgeSub = fetchData('GET', 'account', { address }).subscribe(({ success, data}) => {
+      console.log(data);
       if (success) {
-        setPledgingVol(formatNumberStr(`${data.delegation_number}`));
-        setRedeemVol(formatNumberStr(`${data.undelegation_number}`));
-        setRewardVol(formatNumberStr(`${data.reward_number}`));
+        setPledgingVol(formatNumberStr(walletAmountToToken(`${data.delegation_number}`)));
+        setRedeemVol(formatNumberStr(walletAmountToToken(`${data.undelegation_number}`)));
+        setRewardVol(formatNumberStr(walletAmountToToken(`${data.reward_number}`)));
       }
     });
     return () => {

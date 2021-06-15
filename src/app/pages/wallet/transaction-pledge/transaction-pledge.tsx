@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import ComConSvg from '../../../components/control/icon';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
@@ -7,13 +7,13 @@ import multiavatar from '@multiavatar/multiavatar/dist/esm';
 import './transaction-pledge.scss';
 import { Link } from 'react-router-dom';
 import ComConButton from '../../../components/control/button';
-import { timer } from 'rxjs';
 import alertTools from '../../../components/tools/alert';
-import { getEnvConfig, useFormatSearch, useSafeLink } from '../../../../tools';
+import { getEnvConfig, sleep, useFormatSearch, useSafeLink, verifyNumber, verifyPassword, walletDecode, walletDelegate } from '../../../../tools';
 import useGetDispatch from '../../../../databases/hook';
 import { InRootState } from '../../../../@types/redux';
 import { fetchData } from '../../../../tools/ajax';
 import { formatNumberStr, formatStringNum } from '../../../../tools/string';
+import confirmTools from '../../../components/tools/confirm';
 
 type TypeNodeInfo = {
   avatar: string;
@@ -29,22 +29,47 @@ const PageWalletTransactionPledge: FC = () => {
   const goLink = useSafeLink();
   const [wallet] = useGetDispatch<InRootState['wallet']>('wallet');
   const nodeSearch = useFormatSearch<{id: string}>();
-  const [fee, setFee] = useState('0');
   const [nodeInfo, setNodeInfo] = useState<TypeNodeInfo>({
     avatar: '', name: '', address: '', rate: '', minVolume: '', pledgedVolume: '', toCut: '',
   });
   const [balance, setBalance] = useState('');
   const [volume, setVolume] = useState('');
+  const [fee, setFee] = useState('');
   const [password, setPassword] = useState('');
   const [pledgeLoading ,setPledgeLoading] = useState(false);
 
   const verifyPledge = () => {
+    if (!verifyNumber(volume)) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
+    if (!verifyNumber(fee)) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning'});
+    if (!verifyPassword(password)) return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning'});
     setPledgeLoading(true);
-    timer(2000).subscribe(() => {
-      alertTools.create({ message: <I18 text="pledgeSuccess" />, type: 'info'});
-      goLink('/wallet/my-pledge');
+    confirmTools.create({
+      message: <I18 text="confirmDelegate" />,
+      success: submitPledge,
+      close: () => setPledgeLoading(false),
     });
   };
+
+  const submitPledge = useCallback(async () => {
+    await sleep(0.1);
+    let useWallet
+    try {
+      useWallet = await walletDecode( wallet.encryptionKey, password );
+    } catch (err) {
+      setPledgeLoading(false);
+      return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
+    }
+    const subOption = walletDelegate({ wallet: useWallet, validatorAddress: nodeInfo.address, volume: volume, gasAll: fee }, 'delegate').subscribe(data => {
+      if (!data.loading) setPledgeLoading(false);
+      if (data.success) {
+        alertTools.create({ message: <I18 text="exeSuccess" />, type: 'success' });
+        goLink('/wallet/my-pledge');
+      } else if (data.error) {
+        alertTools.create({ message: <I18 text="exeSuccess" />, type: 'success' });
+      }
+    });
+    return () => subOption.unsubscribe();
+  }, [fee, nodeInfo.address, password, volume, wallet.encryptionKey, goLink]);
 
   const pledgeAllBalance = () => {
     setVolume(`${formatStringNum(balance)}`);
@@ -136,6 +161,7 @@ const PageWalletTransactionPledge: FC = () => {
             disabled={pledgeLoading}
             value={fee}
             onChange={e => setFee(e.target.value)} />
+          <p className="pledge_box_info">PLUG</p>
         </div>
         <p className="pledge_box_title"><I18 text="password" /></p>
         <div className="pledge_box_label">

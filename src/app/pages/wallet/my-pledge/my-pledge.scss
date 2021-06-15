@@ -31,11 +31,11 @@
     padding: 0.5rem 0;
   }
   .node_avatar {
-    width: 2rem;
-    height: 2rem;
+    width: 3rem;
+    height: 3rem;
     border: 1px solid var(--color-primary-border);
     border-radius: 50%;
-    padding: 0.3rem;
+    padding: 0.1rem;
   }
   .node_name {
     padding-left: 1rem;
@@ -71,6 +71,12 @@
   }
   .pledge_node_dd {
     opacity: var(--opacity-level-1);
+  }
+  .pledge_no_node {
+    text-align: center;
+    width: 100%;
+    font-size: 1.6rem;
+    padding: 2rem 0;
   }
   @media (max-width: 1020px) {
     .pledge_node {

@@ -13,7 +13,7 @@ import { switchMap } from 'rxjs/operators';
 import { changeSeconds, formatTime } from '../../../tools/time';
 import ComConLink from '../../components/control/link';
 import { TypeComConTableContent } from '../../components/control/table.copy';
-import { getOnlyId } from '../../../tools';
+import { getOnlyId, walletAmountToToken } from '../../../tools';
 
 export type TypePageHomeData = {
   blockHeight: string;
@@ -101,8 +101,8 @@ const PageHome: FC = () => {
         price: `${coin.data.price}`,
         priceRate: parseFloat(`${coin.data.price_drift_ratio}`),
         markValue: `${coin.data.total_price}`,
-        allTokenVolume: `${coin.data.supply}`,
-        allPledge: `${coin.data.staking}`,
+        allTokenVolume: walletAmountToToken(`${coin.data.supply}`),
+        allPledge: walletAmountToToken(`${coin.data.staking}`),
         pledgeRate: parseFloat(`${coin.data.staking_ratio}`),
       });
       if (info.success) updateData({

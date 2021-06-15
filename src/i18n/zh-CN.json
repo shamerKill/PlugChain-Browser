@@ -140,6 +140,8 @@
   "confirmTransfer": "确认转让",
   "pledgeTransferTip1": "今日还能转让 1 次，本月还能转让质押 6 次。",
   "toCut": "消耗比率",
+  "noMyPledged": "暂无质押记录",
+  "goToPledge": "前往质押",
 
   "close": "关闭",
   "confirm": "确认",
@@ -150,6 +152,14 @@
   "success": "成功",
   "addressInputError": "地址输入有误",
   "volumeInputError": "数量输入有误",
+  "feeInputError": "手续费输入有误",
   "receiveSuccess": "领取成功",
-  "receiveError": "领取失败"
+  "receiveError": "领取失败",
+
+  "exeConfirm": "是否确认执行？",
+  "exeSuccess": "执行成功",
+  "exeError": "执行失败",
+
+  "confirmTransition": "是否确认转账？",
+  "confirmDelegate": "是否确认质押？"
 }

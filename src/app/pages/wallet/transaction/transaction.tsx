@@ -1,33 +1,64 @@
-import { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
 import ComConButton from '../../../components/control/button';
 
 import './transaction.scss';
 import { Link } from 'react-router-dom';
-import { getEnvConfig, useSafeReplaceLink } from '../../../../tools';
+import { getEnvConfig, sleep, useSafeReplaceLink, verifyNumber, verifyPassword, walletDecode, walletTransfer, walletVerifyAddress } from '../../../../tools';
 import useGetDispatch from '../../../../databases/hook';
 import { InRootState } from '../../../../@types/redux';
 import { fetchData } from '../../../../tools/ajax';
 import { formatNumberStr, formatStringNum } from '../../../../tools/string';
 import confirmTools from '../../../components/tools/confirm';
+import alertTools from '../../../components/tools/alert';
 
 const PageWalletTransaction: FC = () => {
   const goLink = useSafeReplaceLink();
   const [wallet] = useGetDispatch<InRootState['wallet']>('wallet');
   const [toAddress, setToAddress] = useState('');
-  const [balance, setBalance] = useState('1000');
+  const [balance, setBalance] = useState('');
   const [volume, setVolume] = useState('');
   const [fee, setFee] = useState('');
   const [password, setPassword] = useState('');
   const [transactionLoading ,setTransactionLoading] = useState(false);
 
   const verifyTransaction = () => {
-    confirmTools.create({
-      message: '显示'
-    });
+    if (!walletVerifyAddress(toAddress)) return alertTools.create({ message: <I18 text="addressInputError" />, type: 'warning' });
+    if (!verifyNumber(volume, true)) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
+    if (!verifyNumber(fee, true)) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
+    if (!verifyPassword(password)) return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
     setTransactionLoading(true);
+    confirmTools.create({
+      message: <I18 text="confirmTransition" />,
+      success: transactionCallback,
+      close: () => setTransactionLoading(false),
+    });
   };
+
+  const transactionCallback = useCallback(async () => {
+    await sleep(0.1);
+    let useWallet
+    try {
+      useWallet = await walletDecode( wallet.encryptionKey, password );
+    } catch (err) {
+      setTransactionLoading(false);
+      return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
+    }
+    const subOption = walletTransfer({wallet: useWallet, toAddress, volume, gasAll: fee, }).subscribe(data => {
+      if (!data.loading) setTransactionLoading(false);
+      if (data.success) {
+        alertTools.create({ message: <I18 text="exeSuccess" />, type: 'success' });
+        setToAddress('');
+        setVolume('');
+        setFee('');
+        setPassword('');
+      } else if (data.error) {
+        alertTools.create({ message: <I18 text="exeSuccess" />, type: 'success' });
+      }
+    });
+    return () => subOption.unsubscribe();
+  }, [fee, password, volume, toAddress, wallet.encryptionKey]);
 
   const transactionAllBalance = () => setVolume(`${formatStringNum(balance)}`);
 

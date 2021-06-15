@@ -19,11 +19,11 @@
       min-width: 20rem;
     }
     .account_avatar {
-      width: 2rem;
-      height: 2rem;
+      width: 3rem;
+      height: 3rem;
       border: 1px solid var(--color-primary-border);
       border-radius: 50%;
-      padding: 0.3rem;
+      padding: 0.1rem;
     }
     .account_name {
       padding-left: 1rem;
@@ -104,14 +104,151 @@
     font-weight: 900;
     font-size: (18/12)+rem;
   }
+
+  .transaction_box {
+    padding: 1rem;
+  }
+  .transaction_box_title {
+    padding: 1rem 0 0.5rem;
+  }
+  .transaction_box_label {
+    display: flex;
+    width: 50rem;
+    max-width: 100%;
+    position: relative;
+    align-items: center;
+  }
+  .transaction_box_input {
+    border: 1px solid var(--color-primary-border);
+    background: var(--color-primary-background);
+    line-height: 2em;
+    padding: 0.3em 0.5em;
+    flex: 1.5rem;
+  }
+  .transaction_box_info {
+    position: absolute;
+    top: 50%;
+    right: 0.5em;
+    opacity: var(--opacity-level-2);
+    font-size: 1.2rem;
+    line-height: 2rem;
+    margin-top: -1rem;
+  }
+  .transaction_box_forget {
+    color: var(--color-primary-gray);
+    padding: 0 0 0 1rem;
+  }
+
+  .pledge_list {
+    .pledge_node_title {
+      padding: 2rem 0 1rem 4rem;
+      font-weight: bolder;
+      font-size: (16/12)+rem;
+      position: relative;
+      &::before {
+        content: '';
+        width: 2.4rem;
+        height: 0.8rem;
+        background-image: url('../../../../assets/images/pledge_item.png');
+        background-size: 100% 100%;
+        position: absolute;
+        top: 50%;
+        left: 1rem;
+      }
+    }
+    .pledge_nodes {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .pledge_node {
+      width: (100%/3);
+      padding: 1rem;
+    }
+    .pledge_node_selected {
+      .pledge_node_inner {
+        border-color: var(--color-primary);
+        box-shadow: var(--primary-box-shadow);
+        background: none;
+        &::before {
+          content: '';
+          position: absolute;
+          z-index: -1;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          background: var(--color-primary);
+          opacity: var(--opacity-level-3);
+        }
+      }
+    }
+    .pledge_node_inner {
+      background-color: var(--color-primary-background);
+      padding: 1rem;
+      border-radius: 0.5rem;
+    }
+    .pledge_node_header {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--color-primary-border);
+      padding: 0.5rem 0;
+    }
+    .node_avatar {
+      width: 3rem;
+      height: 3rem;
+      border: 1px solid var(--color-primary-border);
+      border-radius: 50%;
+      padding: 0.1rem;
+    }
+    .node_name {
+      padding-left: 1rem;
+      font-size: (14/12)+rem;
+      color: var(--color-primary-text);
+      text-decoration: underline;
+    }
+    .pledge_node_info {
+      display: flex;
+      justify-content: space-between;
+    }
+    .pledge_node_dl {
+      padding-top: 1rem;
+      &:nth-child(1) {
+        .pledge_node_dt {
+          color: var(--color-primary-green);
+        }
+      }
+      &:nth-child(2) {
+        text-align: center;
+      }
+      &:nth-child(3) {
+        text-align: right;
+      }
+    }
+    .pledge_node_dt {
+      font-size: (16/12)+rem;
+    }
+    .pledge_node_dd {
+      opacity: var(--opacity-level-1);
+    }
+  }
   @media (max-width: 1020px) {
     .info_item_box {
       width: 50%;
+    }
+    .pledge_list {
+      .pledge_node, .info_item_box {
+        width: 50%;
+      }
     }
   }
   @media (max-width: 720px) {
     .info_item_box {
       width: 100%;
+    }
+    .pledge_list {
+      .pledge_node, .info_item_box {
+        width: 100%;
+      }
     }
   }
 }

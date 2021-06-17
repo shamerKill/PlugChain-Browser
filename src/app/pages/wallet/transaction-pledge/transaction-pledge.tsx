@@ -2,13 +2,12 @@ import { FC, useCallback, useEffect, useState } from 'react';
 import ComConSvg from '../../../components/control/icon';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
-import multiavatar from '@multiavatar/multiavatar/dist/esm';
 
 import './transaction-pledge.scss';
 import { Link } from 'react-router-dom';
 import ComConButton from '../../../components/control/button';
 import alertTools from '../../../components/tools/alert';
-import { getEnvConfig, sleep, useFormatSearch, useSafeLink, verifyNumber, verifyPassword, walletDecode, walletDelegate } from '../../../../tools';
+import { getEnvConfig, sleep, useFormatSearch, useSafeLink, verifyNumber, verifyPassword, walletAmountToToken, walletDecode, walletDelegate } from '../../../../tools';
 import useGetDispatch from '../../../../databases/hook';
 import { InRootState } from '../../../../@types/redux';
 import { fetchData } from '../../../../tools/ajax';
@@ -61,11 +60,12 @@ const PageWalletTransactionPledge: FC = () => {
     }
     const subOption = walletDelegate({ wallet: useWallet, validatorAddress: nodeInfo.address, volume: volume, gasAll: fee }, 'delegate').subscribe(data => {
       if (!data.loading) setPledgeLoading(false);
+      console.log(data);
       if (data.success) {
         alertTools.create({ message: <I18 text="exeSuccess" />, type: 'success' });
         goLink('/wallet/my-pledge');
       } else if (data.error) {
-        alertTools.create({ message: <I18 text="exeSuccess" />, type: 'success' });
+        alertTools.create({ message: <p><I18 text="exeError" /><br />{ data.result }</p>, type: 'error' });
       }
     });
     return () => subOption.unsubscribe();
@@ -91,11 +91,11 @@ const PageWalletTransactionPledge: FC = () => {
     const nodeInfoSub = fetchData('GET', '/validatorByAddress', { operator_address: nodeSearch.id }).subscribe(({ success, data}) => {
       if (success) {
         setNodeInfo({
-          avatar: multiavatar(data.description.moniker) as any as string,
+          avatar: data.description.image ? `${getEnvConfig.STATIC_URL}/${data.operator_address}/image.png` : `${getEnvConfig.STATIC_URL}/default/image.png`,
           name: data.description.moniker,
           // TODO: no year rate
           rate: '0.00%',
-          pledgedVolume: formatNumberStr(`${parseFloat(data.delegator_shares)}`),
+          pledgedVolume: formatNumberStr(walletAmountToToken(`${parseFloat(data.delegator_shares)}`)),
           minVolume: formatNumberStr(`${parseFloat(data.min_self_delegation)}`),
           address: data.operator_address,
           toCut: `${(data.commission.commission_rates.rate * 100).toFixed(2)}%`,
@@ -110,7 +110,7 @@ const PageWalletTransactionPledge: FC = () => {
       <div className="pledge_header">
         <div className="header_account">
           <div className="account_user">
-            <div className="account_avatar" dangerouslySetInnerHTML={{__html: nodeInfo.avatar}}></div>
+            <img className="account_avatar" alt={nodeInfo.name} src={nodeInfo.avatar} />
             <span className="account_name">{ nodeInfo.name }</span>
           </div>
           <p className="account_address">
@@ -164,15 +164,17 @@ const PageWalletTransactionPledge: FC = () => {
           <p className="pledge_box_info">PLUG</p>
         </div>
         <p className="pledge_box_title"><I18 text="password" /></p>
-        <div className="pledge_box_label">
-          <input
-            className="pledge_box_input"
-            type="password"
-            disabled={pledgeLoading}
-            value={password}
-            onChange={e => setPassword(e.target.value)} />
-          <Link className="pledge_box_forget" to="./reset"><I18 text="forgetPassword" /></Link>
-        </div>
+        <form>
+          <div className="pledge_box_label">
+            <input
+              className="pledge_box_input"
+              type="new-password"
+              disabled={pledgeLoading}
+              value={password}
+              onChange={e => setPassword(e.target.value)} />
+            <Link className="pledge_box_forget" to="./reset"><I18 text="forgetPassword" /></Link>
+          </div>
+        </form>
         <ComConButton
           loading={pledgeLoading}
           onClick={verifyPledge}

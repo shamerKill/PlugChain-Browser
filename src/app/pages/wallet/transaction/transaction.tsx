@@ -111,15 +111,17 @@ const PageWalletTransaction: FC = () => {
             <p className="transaction_box_info">PLUG</p>
           </div>
           <p className="transaction_box_title"><I18 text="password" /></p>
-          <div className="transaction_box_label">
-            <input
-              className="transaction_box_input"
-              type="password"
-              disabled={transactionLoading}
-              value={password}
-              onChange={e => setPassword(e.target.value)} />
-            <Link className="transaction_box_forget" to="./reset"><I18 text="forgetPassword" /></Link>
-          </div>
+          <form>
+            <div className="transaction_box_label">
+              <input
+                className="transaction_box_input"
+                type="new-password"
+                disabled={transactionLoading}
+                value={password}
+                onChange={e => setPassword(e.target.value)} />
+              <Link className="transaction_box_forget" to="./reset"><I18 text="forgetPassword" /></Link>
+            </div>
+          </form>
           <ComConButton
             loading={transactionLoading}
             onClick={verifyTransaction}

@@ -14,6 +14,8 @@ import confirmTools from '../../../components/tools/confirm';
 import { Link } from 'react-router-dom';
 
 import './info-pledge.scss';
+import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
+import { Subscription } from 'rxjs';
 
 type TypePledgeNodeInfo = {
   avatar: any;
@@ -49,20 +51,82 @@ const PageInfoPledge: FC = () => {
   const [exeLoading, setExeLoading] = useState(false);
   const [showNodes, setShowNodes] = useState(false);
   const [nodeSelected, setNodeSelected] = useState<number>(0);
+  const [showReward, setShowReward] = useState(false);
 
   const backupToken = () => {
-    if (!showPass) return setShowPass(true);
+    if (!showPass || showNodes || showReward) {
+      setShowNodes(false);
+      setShowReward(false);
+      return setShowPass(true);
+    }
     if (!verifyNumber(volume, true)) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
     if (!verifyNumber(fee, true)) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
     if (!verifyPassword(password)) return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
     setExeLoading(true);
     confirmTools.create({
       message: <I18 text="exeConfirm" />,
-      success: submitBackup,
+      success: () => submitBackup(),
       close: () => setExeLoading(false),
     });
   };
   const submitBackup = useCallback(async () => {
+    await sleep(0.1);
+    let useWallet: DirectSecp256k1HdWallet
+    try {
+      useWallet = await walletDecode( wallet.encryptionKey, password );
+    } catch (err) {
+      setExeLoading(false);
+      return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
+    }
+    let subOption: Subscription;
+    if (volume === pledgeNodeInfo.pledged) {
+      subOption = walletDelegate({ wallet: useWallet, validatorAddress: pledgeNodeInfo.address, volume: volume, gasAll: fee }, 'withdrawRewards').subscribe(data => {
+        if (data.success) {
+          subOption.unsubscribe();
+          subOption = walletDelegate({ wallet: useWallet, validatorAddress: pledgeNodeInfo.address, volume: volume, gasAll: fee }, 'unDelegate').subscribe(res => {
+            if (!res.loading) setExeLoading(false);
+            if (res.success) {
+              alertTools.create({ message: <I18 text="exeSuccess" />, type: 'success' });
+              goLink('/wallet/my-pledge');
+            } else if (res.error) {
+              alertTools.create({ message: <p><I18 text="exeError" /><br />{res.result}</p>, type: 'error', time: 0 });
+            }
+          });
+        } else if (data.error) {
+          setExeLoading(false);
+          alertTools.create({ message: <p><I18 text="exeError" /><br />{data.result}</p>, type: 'error', time: 0 });
+        }
+      });
+    } else {
+      subOption = walletDelegate({ wallet: useWallet, validatorAddress: pledgeNodeInfo.address, volume: volume, gasAll: fee }, 'unDelegate').subscribe(res => {
+        if (!res.loading) setExeLoading(false);
+        if (res.success) {
+          alertTools.create({ message: <I18 text="exeSuccess" />, type: 'success' });
+          goLink('/wallet/my-pledge');
+        } else if (res.error) {
+          alertTools.create({ message: <p><I18 text="exeError" /><br />{res.result}</p>, type: 'error', time: 0 });
+        }
+      });
+    }
+    return () => subOption.unsubscribe();
+  }, [pledgeNodeInfo, goLink, password, wallet, fee, volume,]);
+
+  const backupReward = () => {
+    if (!showPass || showNodes || !showReward) {
+      setShowNodes(false);
+      setShowReward(true);
+      return setShowPass(true);
+    }
+    if (!verifyNumber(fee, true)) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
+    if (!verifyPassword(password)) return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
+    setExeLoading(true);
+    confirmTools.create({
+      message: <I18 text="exeConfirm" />,
+      success: () => submitReward(),
+      close: () => setExeLoading(false),
+    });
+  };
+  const submitReward = useCallback(async () => {
     await sleep(0.1);
     let useWallet
     try {
@@ -71,25 +135,26 @@ const PageInfoPledge: FC = () => {
       setExeLoading(false);
       return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
     }
-    const subOption = walletDelegate({ wallet: useWallet, validatorAddress: pledgeNodeInfo.address, volume: pledgeNodeInfo.pledged, gasAll: fee }, 'unDelegate').subscribe(data => {
+    const subOption = walletDelegate({ wallet: useWallet, validatorAddress: pledgeNodeInfo.address, volume: volume, gasAll: fee }, 'withdrawRewards').subscribe(data => {
       if (!data.loading) setExeLoading(false);
       if (data.success) {
         alertTools.create({ message: <I18 text="exeSuccess" />, type: 'success' });
         goLink('/wallet/my-pledge');
       } else if (data.error) {
-        alertTools.create({ message: <I18 text="exeSuccess" />, type: 'success' });
+        alertTools.create({ message: <p><I18 text="exeError" /><br />{data.result}</p>, type: 'error', time: 0 });
       }
     });
     return () => subOption.unsubscribe();
-  }, [pledgeNodeInfo, goLink, password, wallet, fee]);
+  }, [pledgeNodeInfo, goLink, password, wallet, fee, volume]);
 
   const changeNodeSelected = (index: number) => {
     setNodeSelected(index);
   }
   const rePledgeToken = () => {
-    if (!showNodes) {
+    if (!showNodes || showReward) {
       setShowNodes(true);
       setShowPass(true);
+      setShowReward(false);
       return;
     }
     if (!nodes?.[nodeSelected]) return alertTools.create({ message: <I18 text="exeError" />, type: 'warning' });
@@ -112,17 +177,17 @@ const PageInfoPledge: FC = () => {
       setExeLoading(false);
       return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
     }
-    const subOption = walletDelegate({ wallet: useWallet, validatorAddress: pledgeNodeInfo.address, volume: pledgeNodeInfo.pledged, gasAll: fee, reDelegateAddress: nodes?.[nodeSelected].address }, 'reDelegate').subscribe(data => {
+    const subOption = walletDelegate({ wallet: useWallet, validatorAddress: pledgeNodeInfo.address, volume: volume, gasAll: fee, reDelegateAddress: nodes?.[nodeSelected].address }, 'reDelegate').subscribe(data => {
       if (!data.loading) setExeLoading(false);
       if (data.success) {
         alertTools.create({ message: <I18 text="exeSuccess" />, type: 'success' });
         goLink('/wallet/my-pledge');
       } else if (data.error) {
-        alertTools.create({ message: <I18 text="exeSuccess" />, type: 'success' });
+        alertTools.create({ message: <p><I18 text="exeError" /><br />{data.result}</p>, type: 'error', time: 0 });
       }
     });
     return () => subOption.unsubscribe();
-  }, [pledgeNodeInfo, goLink, password, wallet, fee, nodeSelected, nodes]);
+  }, [pledgeNodeInfo, goLink, password, wallet, fee, nodeSelected, nodes, volume]);
 
   useEffect(() => {
     if (!wallet.hasWallet) return goLink('./login');
@@ -135,9 +200,9 @@ const PageInfoPledge: FC = () => {
               avatar: multiavatar(node.description.moniker),
               name: node.description.moniker,
               address: node.operator_address,
-              pledged: formatNumberStr(`${parseFloat(walletAmountToToken(node.shares))}`),
+              pledged: formatNumberStr(`${parseFloat(walletAmountToToken(node.shares || '0'))}`),
               rewardRate: '0.00%',
-              earned: formatNumberStr(`${parseFloat(walletAmountToToken(node.my_reward))}`),
+              earned: formatNumberStr(`${parseFloat(walletAmountToToken(node.my_reward || '0'))}`),
             });
           }
         });
@@ -154,12 +219,11 @@ const PageInfoPledge: FC = () => {
           name: node.description.moniker,
           // TODO: no year rate
           rate: '0.00%',
-          pledgedVolume: formatNumberStr(`${parseFloat(node.delegator_shares)}`),
+          pledgedVolume: formatNumberStr(walletAmountToToken(`${parseFloat(node.delegator_shares)}`)),
           minVolume: formatNumberStr(`${parseFloat(node.min_self_delegation)}`),
           address: node.operator_address,
         })));
       }
-      console.log(data);
     });
   }, [nodes, showNodes, search]);
   return (
@@ -238,16 +302,22 @@ const PageInfoPledge: FC = () => {
         {/* password */}
         {showPass && (
           <div className="transaction_box">
-            <p className="transaction_box_title"><I18 text="transactionNumber" /></p>
-            <div className="transaction_box_label">
-              <input
-                className="transaction_box_input"
-                type="number"
-                disabled={exeLoading}
-                value={volume}
-                onChange={e => setVolume(e.target.value)} />
-              <p className="transaction_box_info">PLUG</p>
-            </div>
+            {
+              !showReward && (
+                <React.Fragment>
+                  <p className="transaction_box_title"><I18 text="transactionNumber" /></p>
+                  <div className="transaction_box_label">
+                    <input
+                      className="transaction_box_input"
+                      type="number"
+                      disabled={exeLoading}
+                      value={volume}
+                      onChange={e => setVolume(e.target.value)} />
+                    <p className="transaction_box_info">PLUG</p>
+                  </div>
+                </React.Fragment>
+              )
+            }
             <p className="transaction_box_title"><I18 text="feeNumber" /></p>
             <div className="transaction_box_label">
               <input
@@ -259,15 +329,17 @@ const PageInfoPledge: FC = () => {
               <p className="transaction_box_info">PLUG</p>
             </div>
             <p className="transaction_box_title"><I18 text="password" /></p>
-            <div className="transaction_box_label">
-              <input
-                className="transaction_box_input"
-                type="password"
-                value={password}
-                disabled={exeLoading}
-                onChange={e => setPassword(e.target.value)} />
-              <Link className="transaction_box_forget" to="./reset"><I18 text="forgetPassword" /></Link>
-            </div>
+            <form>
+              <div className="transaction_box_label">
+                <input
+                  className="transaction_box_input"
+                  type="new-password"
+                  value={password}
+                  disabled={exeLoading}
+                  onChange={e => setPassword(e.target.value)} />
+                <Link className="transaction_box_forget" to="./reset"><I18 text="forgetPassword" /></Link>
+              </div>
+            </form>
           </div>
         )}
         <div className="info_buttons">
@@ -275,9 +347,18 @@ const PageInfoPledge: FC = () => {
             className="info_button"
             disabled={exeLoading}
             loading={exeLoading}
-            onClick={backupToken}>
+            onClick={() => backupToken()}>
             <ComConSvg className="info_button_icon" xlinkHref="#icon-redeem" />
-            <I18 text="redeem" />
+            <I18 text="redeemAll" />
+          </ComConButton>
+          <ComConButton
+            className="info_button"
+            disabled={exeLoading}
+            loading={exeLoading}
+            onClick={() => backupReward()}
+            contrast>
+            <ComConSvg className="info_button_icon" xlinkHref="#icon-transfer" />
+            <I18 text="redeemRewards" />
           </ComConButton>
           <ComConButton
             className="info_button"

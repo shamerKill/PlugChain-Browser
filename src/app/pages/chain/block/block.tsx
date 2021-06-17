@@ -114,7 +114,7 @@ const PageBlockInfo: FC = () => {
           </dl>
           <dl className="block_info_dl">
             <dt className="block_info_dt"><I18 text="productionBlockNode" /></dt>
-            <dd className="block_info_dd"><Link to="/">{blockInfo.node}</Link></dd>
+            <dd className="block_info_dd">{blockInfo.node}</dd>
           </dl>
           <dl className="block_info_dl">
             <dt className="block_info_dt"><I18 text="transactionVolume" /></dt>
@@ -126,7 +126,7 @@ const PageBlockInfo: FC = () => {
           </dl>
           <dl className="block_info_dl">
             <dt className="block_info_dt"><I18 text="producer" /></dt>
-            <dd className="block_info_dd"><Link to="/">{blockInfo.producer}</Link></dd>
+            <dd className="block_info_dd">{blockInfo.producer}</dd>
           </dl>
           <dl className="block_info_dl">
             <dt className="block_info_dt"><I18 text="rootHashTree" /></dt>

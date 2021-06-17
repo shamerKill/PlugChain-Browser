@@ -1,8 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
-import multiavatar from '@multiavatar/multiavatar/dist/esm';
-import { getOnlyId, useSafeLink } from '../../../../tools';
+import { getEnvConfig, getOnlyId, useSafeLink } from '../../../../tools';
 import { Link } from 'react-router-dom';
 import ComConButton from '../../../components/control/button';
 import useGetDispatch from '../../../../databases/hook';
@@ -34,7 +33,7 @@ const PageMyPledge: FC = () => {
     const pledgeSub = fetchData('GET', 'delegationsByAddress', { address: wallet.address }).subscribe(({ success, data }) => {
       if (success && data && data.length > 0) {
         setNodes(data.map((node: any) => ({
-          avatar: multiavatar(node.description.moniker),
+          avatar: node.description.image ? `${getEnvConfig.STATIC_URL}/${node.operator_address}/image.png` : `${getEnvConfig.STATIC_URL}/default/image.png`,
           name: node.description.moniker,
           // TODO: no year rate
           rate: '0.00%',
@@ -55,7 +54,7 @@ const PageMyPledge: FC = () => {
               <div className="pledge_node" key={getOnlyId()}>
                 <div className="pledge_node_inner">
                   <div className="pledge_node_header">
-                    <div className="node_avatar" dangerouslySetInnerHTML={{__html: node.avatar}}></div>
+                    <img className="node_avatar" src={node.avatar} alt={node.name} />
                     <Link className="node_name" to={`/wallet/transaction-pledge?id=${node.name}`}>{node.name}</Link>
                     <ComConButton contrast className="node_detail" onClick={() => goToDetail(node.name)}><I18 text="detail" /></ComConButton>
                   </div>

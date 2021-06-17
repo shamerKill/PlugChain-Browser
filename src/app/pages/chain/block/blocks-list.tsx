@@ -59,7 +59,7 @@ const PageBlocksList: FC = () => {
           value: [
             { key: getOnlyId(), value: <ComConLink link={`./block/${block.block_id}`}>{ block.block_id }</ComConLink> },
             { key: getOnlyId(), value: formatTime(block.time) },
-            { key: getOnlyId(), value: <ComConLink link={`./account/${block.address}`}>{ block.address }</ComConLink> },
+            { key: getOnlyId(), value: <ComConLink link={`./account/${block.address}`} noLink>{ block.address }</ComConLink> },
             { key: getOnlyId(), value: <ComConLink link={`./block/${block.block_id}`}>{ block.hash }</ComConLink> },
             { key: getOnlyId(), value: block.tx_num },
             { key: getOnlyId(), value: block.tx_fee },

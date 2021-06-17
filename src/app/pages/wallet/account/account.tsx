@@ -4,15 +4,14 @@ import I18 from '../../../../i18n/component';
 import ComConTable, { TypeComConTableContent, TypeComConTableHeader } from '../../../components/control/table.copy';
 import ComConButton from '../../../components/control/button';
 import ComConSvg from '../../../components/control/icon';
-import { formatClass, formatTime, getEnvConfig, getOnlyId, useFormatSearch, useSafeLink, walletAmountToToken } from '../../../../tools';
+import { formatClass, formatTime, getEnvConfig, getOnlyId, useFormatSearch, useSafeLink, walletAmountToToken, fetchData, justifySearch } from '../../../../tools';
 import useGetDispatch from '../../../../databases/hook';
 import { InRootState } from '../../../../@types/redux';
-import { fetchData } from '../../../../tools/ajax';
 import { formatNumberStr } from '../../../../tools/string';
-import { justifySearch } from '../../../../tools/url';
+import ComConLink from '../../../components/control/link';
+import { Link } from 'react-router-dom';
 
 import './account.scss';
-import ComConLink from '../../../components/control/link';
 
 const PageWalletAccount: FC = () => {
   const goLink = useSafeLink();
@@ -89,7 +88,6 @@ const PageWalletAccount: FC = () => {
       }
     });
     const pledgeSub = fetchData('GET', 'account', { address }).subscribe(({ success, data}) => {
-      console.log(data);
       if (success) {
         setPledgingVol(formatNumberStr(walletAmountToToken(`${data.delegation_number}`)));
         setRedeemVol(formatNumberStr(walletAmountToToken(`${data.undelegation_number}`)));
@@ -118,7 +116,10 @@ const PageWalletAccount: FC = () => {
     <ComponentsLayoutBase className="page_wallet_account">
       <div className="account_info">
         {/* title */}
-        <h2 className="account_info_title"><I18 text="myAssets" /></h2>
+        <h2 className="account_info_title">
+          <I18 text="myAssets" />
+          <Link className="account_info_reset" to="./reset"><I18 text="resetAccount"/></Link>
+        </h2>
         <h2 className="account_address">
           <ComConSvg className="account_icon_card" xlinkHref="#icon-card" />
           &nbsp;&nbsp;{address}

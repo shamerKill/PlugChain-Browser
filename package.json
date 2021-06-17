@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
@@ -37,6 +38,7 @@
     "camelcase": "^6.1.0",
     "case-sensitive-paths-webpack-plugin": "2.3.0",
     "css-loader": "4.3.0",
+    "default-passive-events": "^2.0.0",
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
     "echarts": "^5.1.1",
@@ -176,6 +178,7 @@
     "@types/node-fetch": "^2.5.10",
     "@types/react-router-dom": "^5.1.7",
     "pre-commit": "^1.2.2",
-    "sass": "^1.32.12"
+    "sass": "^1.32.12",
+    "source-map-explorer": "^2.5.2"
   }
 }

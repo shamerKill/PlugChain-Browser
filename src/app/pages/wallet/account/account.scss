@@ -9,6 +9,13 @@
     color: var(--color-primary-text-contrast);
     background-image: var(--background-image-contrast);
     font-size: (16/12)+rem;
+    .account_info_reset {
+      float: right;
+      font-size: 0.5em;
+      opacity: var(--opacity-level-1);
+      color: var(--color-primary-text-contrast);
+      text-decoration: underline;
+    }
   }
   .account_address {
     padding: 1rem;

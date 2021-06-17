@@ -1,11 +1,10 @@
 import { FC, useEffect, useState } from 'react';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
-import { getOnlyId, useSafeLink } from '../../../../tools';
+import { getEnvConfig, getOnlyId, useSafeLink, walletAmountToToken } from '../../../../tools';
 import ComConButton from '../../../components/control/button';
 import { Link } from 'react-router-dom';
 import { fetchData } from '../../../../tools/ajax';
-import multiavatar from '@multiavatar/multiavatar/dist/esm';
 
 import './pledge.scss';
 import { formatNumberStr } from '../../../../tools/string';
@@ -31,16 +30,15 @@ const PageWalletPledge: FC = () => {
     fetchData('GET', '/validators').subscribe(({ success, data }) => {
       if (success) {
         setNodes(data.mininum.map((node: any) => ({
-          avatar: multiavatar(node.description.moniker),
+          avatar: node.description.image ? `${getEnvConfig.STATIC_URL}/${node.operator_address}/image.png` : `${getEnvConfig.STATIC_URL}/default/image.png`,
           name: node.description.moniker,
           // TODO: no year rate
           rate: '0.00%',
-          pledgedVolume: formatNumberStr(`${parseFloat(node.delegator_shares)}`),
+          pledgedVolume: formatNumberStr(walletAmountToToken(`${parseFloat(node.delegator_shares)}`)),
           minVolume: formatNumberStr(`${parseFloat(node.min_self_delegation)}`),
           address: node.operator_address,
         })));
       }
-      console.log(data);
     });
   }, []);
 
@@ -62,7 +60,7 @@ const PageWalletPledge: FC = () => {
             <div className="pledge_node" key={getOnlyId()}>
               <div className="pledge_node_inner">
                 <div className="pledge_node_header">
-                  <div className="node_avatar" dangerouslySetInnerHTML={{__html: node.avatar}}></div>
+                  <img className="node_avatar" alt={node.name} src={node.avatar} />
                   <Link className="node_name" to={`/wallet/transaction-pledge?id=${node.address}`}>{node.name}</Link>
                 </div>
                 <div className="pledge_node_content">

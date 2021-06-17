@@ -5,6 +5,7 @@ import base64js from 'base64-js';
 import { QueryAccountResponse } from '@cosmjs/stargate/build/codec/cosmos/auth/v1beta1/query';
 import { TxRaw } from '@cosmjs/stargate/build/codec/cosmos/tx/v1beta1/tx';
 import { MsgDelegate, MsgUndelegate, MsgBeginRedelegate } from '@cosmjs/stargate/build/codec/cosmos/staking/v1beta1/tx';
+import { MsgWithdrawDelegatorReward } from '@cosmjs/stargate/build/codec/cosmos/distribution/v1beta1/tx';
 import { fetchData } from './ajax';
 import getEnvConfig from './env-config';
 import { randomNumber } from './random-num';
@@ -18,7 +19,7 @@ const addressPrefix = getEnvConfig.WALLET_ADDRESS_PREFIX;
 const chainId = getEnvConfig.APP_CHAIN_ID;
 
 const defaultTransGasLimit = '80000';
-const defaultDelegateLimit = '160000';
+const defaultDelegateLimit = '200000';
 
 
 export const walletVerifyAddress = (address: string) => (new RegExp(`${addressPrefix}[\\d|a-z|A-Z]{39}`)).test(address);
@@ -62,13 +63,6 @@ export const walletFormMnemonic = async (mnemonic: string, options?: Partial<Dir
 
 export const walletGetOffline = async (wallet: DirectSecp256k1HdWallet) => {
   const client = await SigningStargateClient.offline(wallet);
-  // /cosmos.staking.v1beta1.MsgBeginRedelegate
-  // {
-  //   delegatorAddress: "",
-  //   validatorSrcAddress: "",
-  //   validatorDstAddress: "",
-  //   amount: amount,
-  // }
   return client;
 };
 
@@ -128,7 +122,7 @@ export const walletTransfer = ({ wallet, toAddress, volume, gasAll, memo = '', g
 
 export const walletDelegate = ({ wallet, validatorAddress, volume, gasAll, gasLimit = defaultDelegateLimit, reDelegateAddress }:
   { wallet: DirectSecp256k1HdWallet; validatorAddress: string; volume: string; gasAll: string; gasLimit?: string; reDelegateAddress?: string; },
-type: 'delegate'|'unDelegate'|'reDelegate' = 'delegate') => {
+type: 'delegate'|'unDelegate'|'reDelegate'|'withdrawRewards' = 'delegate') => {
   const { fetchData, resultObserver } = walletFetchObserve();
   (async () => {
     const account = await walletGetAccountInfo(wallet);
@@ -149,6 +143,12 @@ type: 'delegate'|'unDelegate'|'reDelegate' = 'delegate') => {
         validatorSrcAddress: validatorAddress,
         validatorDstAddress: reDelegateAddress,
         amount: { amount: inputVolume, denom: appTokenName },
+      });
+    } else if (type === 'withdrawRewards') {
+      typeUrl = '/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward';
+      value = MsgWithdrawDelegatorReward.fromPartial({
+        delegatorAddress: account.address,
+        validatorAddress: validatorAddress,
       });
     } else {
       typeUrl = '/cosmos.staking.v1beta1.MsgDelegate';
@@ -198,7 +198,7 @@ const walletGetFee = (type: 'transfer'|'delegate', fee?: { allAmount?: string; g
     else if ( type === 'transfer' ) defaultGasLimit = defaultTransGasLimit;
     else if ( type === 'delegate' ) defaultGasLimit = defaultDelegateLimit;
 
-    if (fee.allAmount) defaultAmount = (parseFloat(walletTokenToAmount(fee.allAmount)) / parseFloat(defaultGasLimit)).toFixed();
+    if (fee.allAmount) defaultAmount = Math.ceil((parseFloat(walletTokenToAmount(fee.allAmount)) / parseFloat(defaultGasLimit))).toFixed();
   }
   let resultFee: StdFee = {
     amount: [ {
@@ -221,7 +221,8 @@ const walletFetchObserve = () => {
       if (loading && result && result.code === 0 && result.hash) watchLoading = timer(0, changeSeconds(3)).subscribe(() => {
         walletFetch('tx_search', { query: `tx.hash='${result.hash}'`, page: '1', prove: false }).subscribe(search => {
           if (search.success && search.data.total_count !== '0') {
-            resultObserver.next({error: false, result: search.data.txs, loading: false, success: true});
+            if (search.data.txs?.[0]?.tx_result?.code !== 0) resultObserver.next({error: true, result: search.data.txs?.[0]?.tx_result?.log, loading: false, success: false});
+            else resultObserver.next({error: false, result: search.data.txs, loading: false, success: true});
             watchLoading?.unsubscribe();
             resultSubscription.unsubscribe();
           }

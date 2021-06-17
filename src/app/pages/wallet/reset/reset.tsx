@@ -21,7 +21,7 @@ const PageWalletReset: FC = () => {
   return (
     <ComponentsLayoutBase className="page_wallet_reset">
       <div className="reset_inner">
-        <h2 className="page_wallet_title"><I18 text="resetPassword" /></h2>
+        <h2 className="page_wallet_title"><I18 text="resetAccount" /></h2>
         <div className="reset_box">
           <p className="reset_box_title"><I18 text="backupWord" /></p>
           <div className="reset_box_label">
@@ -35,24 +35,26 @@ const PageWalletReset: FC = () => {
             onBlur={() => setAreaFocus(false)}
             onFocus={() => setAreaFocus(true)}></textarea>
           </div>
-          <p className="reset_box_title"><I18 text="newPassword" /></p>
-          <div className="reset_box_label">
-            <input
-              className="reset_box_input"
-              type="password"
-              disabled={resetLoading}
-              value={newPassword}
-              onChange={e => setNewPassword(e.target.value)} />
-          </div>
-          <p className="reset_box_title"><I18 text="repeatPassword" /></p>
-          <div className="reset_box_label">
-            <input
-              className="reset_box_input"
-              type="password"
-              disabled={resetLoading}
-              value={confirmPassword}
-              onChange={e => setConfirmPassword(e.target.value)} />
-          </div>
+          <form>
+            <p className="reset_box_title"><I18 text="password" /></p>
+            <div className="reset_box_label">
+              <input
+                className="reset_box_input"
+                type="new-password"
+                disabled={resetLoading}
+                value={newPassword}
+                onChange={e => setNewPassword(e.target.value)} />
+            </div>
+            <p className="reset_box_title"><I18 text="repeatPassword" /></p>
+            <div className="reset_box_label">
+              <input
+                className="reset_box_input"
+                type="new-password"
+                disabled={resetLoading}
+                value={confirmPassword}
+                onChange={e => setConfirmPassword(e.target.value)} />
+            </div>
+          </form>
           <ComConButton
             loading={resetLoading}
             onClick={verifyReset}

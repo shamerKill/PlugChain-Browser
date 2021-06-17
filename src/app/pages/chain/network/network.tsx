@@ -2,12 +2,13 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
 import { TokenPledgeRate, DayTransactionVolume } from '../../home/home-components';
-import { changeSeconds, formatClass } from '../../../../tools';
+import { changeSeconds, formatClass, walletAmountToToken } from '../../../../tools';
 
 import './network.scss';
 import ComConSvg from '../../../components/control/icon';
 import { timer, zip } from 'rxjs';
 import { fetchData, zipAllSuccess } from '../../../../tools/ajax';
+import { formatNumberStr } from '../../../../tools/string';
 
 const PageChainNetwork: FC = () => {
   const [infoData, setInfoData] = useState<{
@@ -37,24 +38,24 @@ const PageChainNetwork: FC = () => {
     const getInfo = timer(0, changeSeconds(5)).subscribe(() => zip([
       fetchData('GET', 'info'), fetchData('GET', 'num_unconfirmed_txs'), fetchData('GET', 'coin_info'),
     ]).pipe(zipAllSuccess()).subscribe(([info, unNum, coin]) => {
-      if (unNum.success) setInfoData(state => ({ ...state, pendingBlockVolume: `${unNum.data}` }));
+      if (unNum.success) setInfoData(state => ({ ...state, pendingBlockVolume: formatNumberStr(`${unNum.data}`) }));
       if (coin.success) setInfoData(state => ({
         ...state,
-        price: `${coin.data.price}`,
+        price: formatNumberStr(`${coin.data.price}`),
         priceRate: parseFloat(`${coin.data.price_drift_ratio}`),
         markValue: `${coin.data.total_price}`,
-        allTokenVolume: `${coin.data.supply}`,
-        allPledge: `${coin.data.staking}`,
+        allTokenVolume: formatNumberStr(walletAmountToToken(`${coin.data.supply}`)),
+        allPledge: formatNumberStr(walletAmountToToken(`${coin.data.staking}`)),
         pledgeRate: parseFloat(`${coin.data.staking_ratio}`),
       }));
       if (info.success) setInfoData(state => ({
         ...state,
-        blockHeight: `${info.data.block_num}`,
-        nowVolume: `${info.data.avg_tx}`,
-        historyMaxVolume: `${info.data.max_avg_tx}`,
-        newBlockTransaction: `${info.data.tx_nums}`,
+        blockHeight: formatNumberStr(`${info.data.block_num}`),
+        nowVolume: formatNumberStr(`${info.data.avg_tx}`),
+        historyMaxVolume: formatNumberStr(`${info.data.max_avg_tx}`),
+        newBlockTransaction: formatNumberStr(`${info.data.tx_nums}`),
         transactionRate: info.data.ratio,
-        transactionVolume: `${info.data.total_tx_num}`,
+        transactionVolume: formatNumberStr(`${info.data.total_tx_num}`),
       }));
     }));
     return () => getInfo.unsubscribe();

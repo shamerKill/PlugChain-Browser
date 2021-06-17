@@ -1,14 +1,12 @@
 import { StrictMode } from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
 import App from './app/App';
-import { reportWebVitals } from './tools';
+// import { reportWebVitals } from './tools';
+import 'default-passive-events';
 
 
 (async () => {
-  // 如果不是正式，使用mock
-  // if (getEnvConfig.PRODUCTION === false) (await import('./mocks')).default();
-
-  ReactDOM.render(
+  render(
     <StrictMode>
       <App />
     </StrictMode>,
@@ -17,4 +15,4 @@ import { reportWebVitals } from './tools';
 })();
 
 
-reportWebVitals(undefined);
+// reportWebVitals(undefined);

@@ -14,6 +14,7 @@ import { changeSeconds, formatTime } from '../../../tools/time';
 import ComConLink from '../../components/control/link';
 import { TypeComConTableContent } from '../../components/control/table.copy';
 import { getOnlyId, walletAmountToToken } from '../../../tools';
+import { formatNumberStr } from '../../../tools/string';
 
 export type TypePageHomeData = {
   blockHeight: string;
@@ -58,7 +59,7 @@ const PageHome: FC = () => {
         value: [
           { key: getOnlyId(), value: <ComConLink link={`./block/${block.block_id}`}>{ block.block_id }</ComConLink> },
           { key: getOnlyId(), value: formatTime(block.time) },
-          { key: getOnlyId(), value: <ComConLink link={`./account/${block.address}`}>{ block.address }</ComConLink> },
+          { key: getOnlyId(), value: <ComConLink link={`./account/${block.address}`} noLink>{ block.address }</ComConLink> },
           { key: getOnlyId(), value: <ComConLink link={`./block/${block.block_id}`}>{ block.hash }</ComConLink> },
           { key: getOnlyId(), value: block.tx_num },
           { key: getOnlyId(), value: block.tx_fee },
@@ -85,33 +86,26 @@ const PageHome: FC = () => {
     });
     return () => getTxsList.unsubscribe();
   }, [updateData]);
-  // TODO: kline
-  // useEffect(() => {
-  //   const getKline = timer(0, changeSeconds(5)).pipe(switchMap(() => fetchData('GET', '/kline'))).subscribe(kline => {
-  //     console.log(kline);
-  //   });
-  //   return () => getKline.unsubscribe();
-  // }, [updateData]);
   useEffect(() => {
     const getInfo = timer(changeSeconds(0.1), changeSeconds(5)).subscribe(() => zip([
       fetchData('GET', 'info'), fetchData('GET', 'num_unconfirmed_txs'), fetchData('GET', 'coin_info'),
     ]).pipe(zipAllSuccess()).subscribe(([info, unNum, coin]) => {
-      if (unNum.success) updateData({ pendingBlockVolume: `${unNum.data}` });
+      if (unNum.success) updateData({ pendingBlockVolume: formatNumberStr(`${unNum.data}`) });
       if (coin.success) updateData({
-        price: `${coin.data.price}`,
+        price: formatNumberStr(`${coin.data.price}`),
         priceRate: parseFloat(`${coin.data.price_drift_ratio}`),
         markValue: `${coin.data.total_price}`,
-        allTokenVolume: walletAmountToToken(`${coin.data.supply}`),
-        allPledge: walletAmountToToken(`${coin.data.staking}`),
+        allTokenVolume: formatNumberStr(walletAmountToToken(`${coin.data.supply}`)),
+        allPledge: formatNumberStr(walletAmountToToken(`${coin.data.staking}`)),
         pledgeRate: parseFloat(`${coin.data.staking_ratio}`),
       });
       if (info.success) updateData({
-        blockHeight: `${info.data.block_num}`,
-        nowVolume: `${info.data.avg_tx}`,
-        historyMaxVolume: `${info.data.max_avg_tx}`,
-        newBlockTransaction: `${info.data.tx_nums}`,
+        blockHeight: formatNumberStr(`${info.data.block_num}`),
+        nowVolume: formatNumberStr(`${info.data.avg_tx}`),
+        historyMaxVolume: formatNumberStr(`${info.data.max_avg_tx}`),
+        newBlockTransaction: formatNumberStr(`${info.data.tx_nums}`),
         transactionRate: info.data.ratio,
-        transactionVolume: `${info.data.total_tx_num}`,
+        transactionVolume: formatNumberStr(`${info.data.total_tx_num}`),
       });
     }));
     return () => getInfo.unsubscribe();

@@ -65,6 +65,16 @@ const ComLayFooter: FC = () => {
             </dl>
             <dl className={formatClass(['layout-footer-list'])}>
               <dt className={formatClass(['layout-footer-list-title'])}>
+                <I18 text="footerList3Title" />
+              </dt>
+              <dd>
+                <p className={formatClass(['layout-footer-list-item'])}>
+                  <Link to="/nodes/node-apply"><I18 text="footerList3-1" /></Link>
+                </p>
+              </dd>
+            </dl>
+            <dl className={formatClass(['layout-footer-list'])}>
+              <dt className={formatClass(['layout-footer-list-title'])}>
                 <I18 text="footerList2Title" />
               </dt>
               <dd>

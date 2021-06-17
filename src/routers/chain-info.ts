@@ -1,12 +1,11 @@
 import loadable from '@loadable/component';
 import { RouteProps } from 'react-router-dom';
-import PageHome from '../app/pages/home/home';
 export const chainInfoPath = '';
 
 export const chainInfoRouter: RouteProps[] = [
   {
     path: '',
-    component: PageHome,
+    component: loadable(() => import('../app/pages/home/home')),
     exact: true,
   },
   {
@@ -32,5 +31,9 @@ export const chainInfoRouter: RouteProps[] = [
   {
     path: 'account/:address?',
     component: loadable(() => import('../app/pages/chain/account/account')),
+  },
+  {
+    path: 'nodes/node-apply',
+    component: loadable(() => import('../app/pages/chain/nodes/node-apply')),
   },
 ];

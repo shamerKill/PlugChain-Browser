@@ -44,7 +44,7 @@ const ComToolAlert: FC<TypeAlertArg> = ({message, close, time = 5000, type = 'in
       type === 'warning' && 'com-con-tool-alert-warning',
       type === 'success' && 'com-con-tool-alert-success'
     ])}>
-      <p className="com-tool-alert-message">{message}</p>
+      <div className="com-tool-alert-message">{message}</div>
       <button className="com-tool-alert-close" onClick={() => setCloseIng(true)}><ComConSvg xlinkHref="#icon-close" /></button>
     </div>
   );

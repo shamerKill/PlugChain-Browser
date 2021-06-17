@@ -57,14 +57,16 @@ const PageWalletCreate: FC = () => {
           <ComConSvg className="wallet_password_icon" xlinkHref={inputType === 'text' ? '#icon-show' : '#icon-hide'} />
         </button>
       </div>
-      <div className="wallet_password_box">
-        <input
-          placeholder={rePasswordText}
-          className="wallet_password_input"
-          type="password"
-          value={rePassword}
-          onChange={e => setRePassword(e.target.value)} />
-      </div>
+      <form>
+        <div className="wallet_password_box">
+          <input
+            placeholder={rePasswordText}
+            className="wallet_password_input"
+            type="new-password"
+            value={rePassword}
+            onChange={e => setRePassword(e.target.value)} />
+        </div>
+      </form>
       <p className="wallet_password_tip_bottom"><I18 text="passwordTip" /></p>
       <div className="wallet_buttons">
         <button

@@ -4,12 +4,26 @@ import * as echarts from 'echarts';
 import { windowResizeObserver } from '../../../services/global.services';
 
 import './home.scss';
+import { timer } from 'rxjs';
+import { changeSeconds, formatTime } from '../../../tools';
+import { switchMap } from 'rxjs/operators';
+import { fetchData } from '../../../tools/ajax';
 
 export const DayTransactionVolume: FC = () => {
   const transactionVolume = useI18('transactionVolume');
   const box = useRef<HTMLDivElement>(null);
   const myChart = useRef<echarts.ECharts>();
   const [data, setData] = useState<{time: string, volume: string}[]>([]);
+
+  useEffect(() => {
+    const subOption = timer(0, changeSeconds(5)).pipe(switchMap(() => fetchData('GET', '/kline'))).subscribe(data => {
+      if (data.success) setData(data.data.map((item: any) => ({
+        time: formatTime(new Date(item.time), 'hh:mm:ss'),
+        volume: `${item.volume || 0}`
+      })));
+    });
+    return () => subOption.unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (myChart.current) {
@@ -69,15 +83,6 @@ export const DayTransactionVolume: FC = () => {
         left: 40,
       }
     });
-    setData([
-      { time: '00:01', volume: '46.8' },
-      { time: '00:02', volume: '48.7' },
-      { time: '00:03', volume: '49.6' },
-      { time: '00:04', volume: '46.5' },
-      { time: '00:05', volume: '53.4' },
-      { time: '00:06', volume: '86.3' },
-      { time: '00:07', volume: '46.2' },
-    ]);
     windowResizeObserver.subscribe(() => myChart.current?.resize());
   }, []);
   return <div ref={box} className="chain_view_box"></div>

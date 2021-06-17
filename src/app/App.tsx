@@ -1,5 +1,5 @@
 import { Provider } from 'react-redux';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import Routers from './routers';
 import dataStore from '../databases';
 import { themeService } from '../services/config.services';

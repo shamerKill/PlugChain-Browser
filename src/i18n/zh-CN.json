@@ -16,9 +16,10 @@
   "footerList2-1": "比特币浏览器",
   "footerList2-2": "以太坊浏览器",
   "footerList2-3": "泰达币浏览器",
+  "footerList3Title": "节点信息",
+  "footerList3-1": "验证者申请",
   "footerListMore": "更多",
   "footerFriendLinks": "友情链接",
-
 
   "searchPlaceholder": "搜索地址、交易、区块高度",
   "newBlockHeight": "最新区块",
@@ -29,7 +30,7 @@
   "markValue": "市值",
   "allTokenVolume": "总供应量",
   "allPledge": "全网抵押",
-  "24hTransactionVolume": "24h交易量",
+  "24hTransactionVolume": "交易量",
   "secondNumber": "每秒处理交易数据",
   "nowVolume": "当前",
   "historyMaxVolume": "历史最高",
@@ -48,7 +49,6 @@
   "hash": "哈希",
   "input": "接收",
   "output": "发送",
-
 
   "createYourAccount": "创建您的账户",
   "password": "密码",
@@ -97,7 +97,7 @@
   "canTransactionNumber": "可转数量",
   "allTransaction": "全部划转",
   "forgetPassword": "忘记了?",
-  "resetPassword": "重置密码",
+  "resetAccount": "重置账号",
   "backupWord": "助记词",
   "newPassword": "新密码",
   "repeatPassword": "重复密码",
@@ -133,7 +133,8 @@
   "detail": "详情",
   "myPledged": "我的质押",
   "pledgeNumber": "质押数量",
-  "redeem": "赎回",
+  "redeemAll": "赎回质押",
+  "redeemRewards": "赎回收益",
   "changePledge": "转账质押",
   "earned": "已收益",
   "changePledgeNode": "选择质押节点",
@@ -161,5 +162,25 @@
   "exeError": "执行失败",
 
   "confirmTransition": "是否确认转账？",
-  "confirmDelegate": "是否确认质押？"
+  "confirmDelegate": "是否确认质押？",
+
+  "apply-title1": "1. 填写基本信息",
+  "apply-upload-text": "上传头像",
+  "apply-upload-desc": "400 x 400px的jpg/png格式图片，最大2M",
+  "apply-node-name": "节点名",
+  "apply-node-ID": "节点ID",
+  "apply-node-website": "网址",
+  "apply-node-email": "邮箱",
+  "apply-node-email-tip": "我们将通过邮箱与您进行下一步验证，请注意查收邮件",
+  "apply-node-media": "社交媒体",
+  "apply-node-telegram": "电报 ID",
+  "apply-node-twitter": "推特 ID",
+  "apply-node-weChat": "微信 ID",
+  "apply-title2": "2. 填写描述信息",
+  "apply-node-desc": "节点介绍",
+  "apply-node-serve": "服务器信息",
+  "apply-node-serve-link": "查看详细的推荐硬件配置和环境 >>",
+  "apply-node-reward": "收益分配方案",
+  "apply-node-reward-info": "节点收益分配由各节点负责人自行安排，默认没有固定投票收益",
+  "apply-node-submit": "提交申请"
 }

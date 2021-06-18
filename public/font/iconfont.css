@@ -1,0 +1,111 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 2548479 */
+  src: url('iconfont.woff2?t=1624013581354') format('woff2'),
+       url('iconfont.woff?t=1624013581354') format('woff'),
+       url('iconfont.ttf?t=1624013581354') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-search:before {
+  content: "\e67c";
+}
+
+.icon-upload:before {
+  content: "\e612";
+}
+
+.icon-water:before {
+  content: "\e601";
+}
+
+.icon-redeem:before {
+  content: "\e660";
+}
+
+.icon-looking:before {
+  content: "\e776";
+}
+
+.icon-contract-create:before {
+  content: "\e606";
+}
+
+.icon-transfer:before {
+  content: "\e68b";
+}
+
+.icon-pledge:before {
+  content: "\e604";
+}
+
+.icon-person:before {
+  content: "\e666";
+}
+
+.icon-card:before {
+  content: "\e600";
+}
+
+.icon-qr-code:before {
+  content: "\e63f";
+}
+
+.icon-copy:before {
+  content: "\ec7a";
+}
+
+.icon-network:before {
+  content: "\ec4a";
+}
+
+.icon-chart:before {
+  content: "\e85f";
+}
+
+.icon-up:before {
+  content: "\e80f";
+}
+
+.icon-down:before {
+  content: "\f088";
+}
+
+.icon-show:before {
+  content: "\e61e";
+}
+
+.icon-hide:before {
+  content: "\e623";
+}
+
+.icon-transition:before {
+  content: "\f087";
+}
+
+.icon-block:before {
+  content: "\e6d3";
+}
+
+.icon-more-copy:before {
+  content: "\e7fd";
+}
+
+.icon-ego-menu:before {
+  content: "\e605";
+}
+
+.icon-more:before {
+  content: "\e611";
+}
+
+.icon-close:before {
+  content: "\e695";
+}
+

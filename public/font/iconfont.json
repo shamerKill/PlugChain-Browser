@@ -1,0 +1,177 @@
+{
+  "id": "2548479",
+  "name": "no name",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1509768",
+      "name": "搜索",
+      "font_class": "search",
+      "unicode": "e67c",
+      "unicode_decimal": 59004
+    },
+    {
+      "icon_id": "5485649",
+      "name": "上传 (1)",
+      "font_class": "upload",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "16094836",
+      "name": "水龙头",
+      "font_class": "water",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "5831348",
+      "name": "打回重阅",
+      "font_class": "redeem",
+      "unicode": "e660",
+      "unicode_decimal": 58976
+    },
+    {
+      "icon_id": "21785611",
+      "name": "文档",
+      "font_class": "looking",
+      "unicode": "e776",
+      "unicode_decimal": 59254
+    },
+    {
+      "icon_id": "7316195",
+      "name": "创建工单",
+      "font_class": "contract-create",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "392130",
+      "name": "转账",
+      "font_class": "transfer",
+      "unicode": "e68b",
+      "unicode_decimal": 59019
+    },
+    {
+      "icon_id": "4244896",
+      "name": "009-挖矿监控",
+      "font_class": "pledge",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "311221",
+      "name": "账户1",
+      "font_class": "person",
+      "unicode": "e666",
+      "unicode_decimal": 58982
+    },
+    {
+      "icon_id": "1116",
+      "name": "账户",
+      "font_class": "card",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "791870",
+      "name": "二维码",
+      "font_class": "qr-code",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    },
+    {
+      "icon_id": "5993150",
+      "name": "复制",
+      "font_class": "copy",
+      "unicode": "ec7a",
+      "unicode_decimal": 60538
+    },
+    {
+      "icon_id": "5928197",
+      "name": "信号",
+      "font_class": "network",
+      "unicode": "ec4a",
+      "unicode_decimal": 60490
+    },
+    {
+      "icon_id": "16399003",
+      "name": "图表",
+      "font_class": "chart",
+      "unicode": "e85f",
+      "unicode_decimal": 59487
+    },
+    {
+      "icon_id": "1234965",
+      "name": "向下",
+      "font_class": "up",
+      "unicode": "e80f",
+      "unicode_decimal": 59407
+    },
+    {
+      "icon_id": "21700063",
+      "name": "向下",
+      "font_class": "down",
+      "unicode": "f088",
+      "unicode_decimal": 61576
+    },
+    {
+      "icon_id": "5485672",
+      "name": "显示",
+      "font_class": "show",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
+    },
+    {
+      "icon_id": "10031217",
+      "name": "隐藏",
+      "font_class": "hide",
+      "unicode": "e623",
+      "unicode_decimal": 58915
+    },
+    {
+      "icon_id": "19317228",
+      "name": "交易",
+      "font_class": "transition",
+      "unicode": "f087",
+      "unicode_decimal": 61575
+    },
+    {
+      "icon_id": "20009133",
+      "name": "box盒子",
+      "font_class": "block",
+      "unicode": "e6d3",
+      "unicode_decimal": 59091
+    },
+    {
+      "icon_id": "21610466",
+      "name": "下 拉",
+      "font_class": "more-copy",
+      "unicode": "e7fd",
+      "unicode_decimal": 59389
+    },
+    {
+      "icon_id": "879161",
+      "name": "菜单",
+      "font_class": "ego-menu",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "12911875",
+      "name": "下 拉",
+      "font_class": "more",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "15765344",
+      "name": "关  闭",
+      "font_class": "close",
+      "unicode": "e695",
+      "unicode_decimal": 59029
+    }
+  ]
+}

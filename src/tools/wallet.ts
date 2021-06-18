@@ -10,7 +10,7 @@ import { fetchData } from './ajax';
 import getEnvConfig from './env-config';
 import { randomNumber } from './random-num';
 import { toHex } from './string';
-import { BehaviorSubject, Observable, Subscription, timer, zip } from 'rxjs';
+import { BehaviorSubject, Subscription, timer, zip } from 'rxjs';
 import { changeSeconds } from './time';
 
 const rpcURI = getEnvConfig.WALLET_RPC_BASE;

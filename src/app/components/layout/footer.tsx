@@ -8,12 +8,6 @@ import alertTools from '../tools/alert';
 
 const links = [
   { link: '/', src: require('../../../assets/logo/protocol-full-light.png') },
-  { link: '/', src: require('../../../assets/logo/protocol-full-light.png') },
-  { link: '/', src: require('../../../assets/logo/protocol-full-light.png') },
-  { link: '/', src: require('../../../assets/logo/protocol-full-light.png') },
-  { link: '/', src: require('../../../assets/logo/protocol-full-light.png') },
-  { link: '/', src: require('../../../assets/logo/protocol-full-light.png') },
-  { link: '/', src: require('../../../assets/logo/protocol-full-light.png') },
 ];
 
 const ComLayFooter: FC = () => {
@@ -61,6 +55,9 @@ const ComLayFooter: FC = () => {
                 <p className={formatClass(['layout-footer-list-item'])}>
                   <Link to="/" onClick={noOpenData}><I18 text="footerList1-1" /></Link>
                 </p>
+                <p className={formatClass(['layout-footer-list-item'])}>
+                  <a href="https://github.com/oracleNetworkProtocol/plugchain">Github</a>
+                </p>
               </dd>
             </dl>
             <dl className={formatClass(['layout-footer-list'])}>
@@ -82,11 +79,11 @@ const ComLayFooter: FC = () => {
                   <Link to="/" onClick={noOpenData}><I18 text="footerList2-1" /></Link>
                 </p>
                 <p className={formatClass(['layout-footer-list-item'])}>
-                  <Link to="/" onClick={noOpenData}><I18 text="footerList2-2" /></Link>
+                  <a href="https://etherscan.io/"><I18 text="footerList2-2" /></a>
                 </p>
-                <p className={formatClass(['layout-footer-list-item'])}>
+                {/* <p className={formatClass(['layout-footer-list-item'])}>
                   <Link to="/" onClick={noOpenData}><I18 text="footerList2-3" /></Link>
-                </p>
+                </p> */}
                 <p className={formatClass(['layout-footer-list-item'])}>
                   <Link to="/" onClick={noOpenData}><I18 text="footerListMore" /></Link>
                 </p>

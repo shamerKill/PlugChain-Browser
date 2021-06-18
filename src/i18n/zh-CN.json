@@ -71,6 +71,7 @@
   "inputWordPlaceholder": "输入助记词，并使用分号\"，\"隔开每个单词",
   "noExistingPLUGAccount": "还没有PLUGChain账号?",
   "mnemonicError": "助记词输入有误",
+  "delNowAccount": "是否从当前设备移除当前账户？",
 
   "networkOverview": "网络概览",
   "statisticalChart": "统计图表",
@@ -98,6 +99,7 @@
   "allTransaction": "全部划转",
   "forgetPassword": "忘记了?",
   "resetAccount": "重置账号",
+  "delAccount": "删除账号",
   "backupWord": "助记词",
   "newPassword": "新密码",
   "repeatPassword": "重复密码",
@@ -182,5 +184,12 @@
   "apply-node-serve-link": "查看详细的推荐硬件配置和环境 >>",
   "apply-node-reward": "收益分配方案",
   "apply-node-reward-info": "节点收益分配由各节点负责人自行安排，默认没有固定投票收益",
-  "apply-node-submit": "提交申请"
+  "apply-node-submit": "提交申请",
+
+  "apply-error-name": "节点名输入有误",
+  "apply-error-ID": "节点ID输入有误",
+  "apply-error-email": "节点邮箱输入有误",
+  "apply-error-describe": "节点介绍输入有误",
+  "apply-error-serve": "服务器信息输入有误",
+  "apply-error-avatar": "头像尺寸格式错误"
 }

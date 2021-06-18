@@ -115,7 +115,7 @@ const PageWalletTransaction: FC = () => {
             <div className="transaction_box_label">
               <input
                 className="transaction_box_input"
-                type="new-password"
+                type="password"
                 disabled={transactionLoading}
                 value={password}
                 onChange={e => setPassword(e.target.value)} />

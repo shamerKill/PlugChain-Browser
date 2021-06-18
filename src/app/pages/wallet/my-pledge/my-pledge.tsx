@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
-import { getEnvConfig, getOnlyId, useSafeLink } from '../../../../tools';
+import { getEnvConfig, getOnlyId, useSafeLink, walletChainReward } from '../../../../tools';
 import { Link } from 'react-router-dom';
 import ComConButton from '../../../components/control/button';
 import useGetDispatch from '../../../../databases/hook';
@@ -32,13 +32,21 @@ const PageMyPledge: FC = () => {
     if (!wallet.hasWallet) return goLink('./login');
     const pledgeSub = fetchData('GET', 'delegationsByAddress', { address: wallet.address }).subscribe(({ success, data }) => {
       if (success && data && data.length > 0) {
-        setNodes(data.map((node: any) => ({
-          avatar: node.description.image ? `${getEnvConfig.STATIC_URL}/${node.operator_address}/image.png` : `${getEnvConfig.STATIC_URL}/default/image.png`,
-          name: node.description.moniker,
-          // TODO: no year rate
-          rate: '0.00%',
-          pledgedVolume: formatNumberStr(`${parseFloat(walletAmountToToken(node.shares))}`),
-        })));
+        const resultArr: typeof nodes = [];
+        data.mininum.forEach(async (node: any) => {
+          const obj = {
+            avatar: node.description.image ? `${getEnvConfig.STATIC_URL}/${node.operator_address}/image.png` : `${getEnvConfig.STATIC_URL}/default/image.png`,
+            name: node.description.moniker,
+            rate: `${await (walletChainReward(parseFloat(`${node.commission.commission_rates.rate}`)))}%`,
+            pledgedVolume: formatNumberStr(walletAmountToToken(`${parseFloat(node.delegator_shares)}`)),
+            minVolume: formatNumberStr(`${parseFloat(node.min_self_delegation)}`),
+            address: node.operator_address,
+          };
+          resultArr.push(obj);
+          if (resultArr.length === data.mininum.length) {
+            setNodes(resultArr);
+          }
+        });
       }
     });
     return () => pledgeSub.unsubscribe();

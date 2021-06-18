@@ -7,7 +7,7 @@ import './transaction-pledge.scss';
 import { Link } from 'react-router-dom';
 import ComConButton from '../../../components/control/button';
 import alertTools from '../../../components/tools/alert';
-import { getEnvConfig, sleep, useFormatSearch, useSafeLink, verifyNumber, verifyPassword, walletAmountToToken, walletDecode, walletDelegate } from '../../../../tools';
+import { getEnvConfig, sleep, useFormatSearch, useSafeLink, verifyNumber, verifyPassword, walletAmountToToken, walletChainReward, walletDecode, walletDelegate } from '../../../../tools';
 import useGetDispatch from '../../../../databases/hook';
 import { InRootState } from '../../../../@types/redux';
 import { fetchData } from '../../../../tools/ajax';
@@ -88,18 +88,18 @@ const PageWalletTransactionPledge: FC = () => {
   useEffect(() => {
     if (!nodeSearch) return;
     if (!nodeSearch.id) return goLink('./pledge');
-    const nodeInfoSub = fetchData('GET', '/validatorByAddress', { operator_address: nodeSearch.id }).subscribe(({ success, data}) => {
+    const nodeInfoSub = fetchData('GET', '/validatorByAddress', { operator_address: nodeSearch.id }).subscribe(async ({ success, data}) => {
       if (success) {
-        setNodeInfo({
+        const obj = {
           avatar: data.description.image ? `${getEnvConfig.STATIC_URL}/${data.operator_address}/image.png` : `${getEnvConfig.STATIC_URL}/default/image.png`,
           name: data.description.moniker,
-          // TODO: no year rate
-          rate: '0.00%',
+          rate: `${await (walletChainReward(parseFloat(`${data.commission.commission_rates.rate}`)))}%`,
           pledgedVolume: formatNumberStr(walletAmountToToken(`${parseFloat(data.delegator_shares)}`)),
           minVolume: formatNumberStr(`${parseFloat(data.min_self_delegation)}`),
           address: data.operator_address,
           toCut: `${(data.commission.commission_rates.rate * 100).toFixed(2)}%`,
-        });
+        };
+        setNodeInfo(obj);
       }
     });
     return () => nodeInfoSub.unsubscribe();
@@ -168,7 +168,7 @@ const PageWalletTransactionPledge: FC = () => {
           <div className="pledge_box_label">
             <input
               className="pledge_box_input"
-              type="new-password"
+              type="password"
               disabled={pledgeLoading}
               value={password}
               onChange={e => setPassword(e.target.value)} />

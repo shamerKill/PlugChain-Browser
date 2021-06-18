@@ -186,6 +186,9 @@
     flex-wrap: wrap;
     justify-content: space-between;
     padding: 0 1rem;
+    .layout-footer-list {
+      margin: 1rem 0;
+    }
     .layout-footer-list-title {
       font-size: (20/12)+rem;
       padding-bottom: (12/12)+rem;
@@ -243,7 +246,7 @@
   }
   @media (min-width: 640px) {
     .layout-footer-lists {
-      width: 30rem;
+      width: 60rem;
     }
   }
 }

@@ -1,6 +1,7 @@
 import { getEnvConfig } from '../tools';
 import { InRootState } from '../@types/redux';
 
+console.log(getEnvConfig);
 const local = localStorage.getItem(getEnvConfig.SAVE_DATABASE_NAME);
 
 let localOutput: InRootState | {[key: string]: any} = {};

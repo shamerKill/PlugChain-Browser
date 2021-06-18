@@ -62,7 +62,7 @@ const PageWalletCreate: FC = () => {
           <input
             placeholder={rePasswordText}
             className="wallet_password_input"
-            type="new-password"
+            type="password"
             value={rePassword}
             onChange={e => setRePassword(e.target.value)} />
         </div>

@@ -1,6 +1,7 @@
 import getEnvConfig from './env-config';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { useRef } from 'react';
+import dataStore from '../databases';
 
 export type TypeAjaxResult<T = any> = {
   loading: boolean;
@@ -24,7 +25,7 @@ const formatUrl = (url: string, query?: TypeQuery): string => {
   return pathName;
 };
 
-const fetchOptions: { [key: string]: string } = {
+const fetchOptions: { [key: string]: any } = {
   // credentials: 'include',
 };
 
@@ -37,6 +38,9 @@ export const fetchData = <T = any>(type: 'GET'|'POST', url: string, query?: Type
   const getObservable = new BehaviorSubject(status);
   fetch(formatUrl(url, type === 'GET' ? query : undefined), {
     ...fetchOptions,
+    headers: [
+      [ 'lang', dataStore.getState().config.language.split('-')[0] ],
+    ],
     method: type,
     body: (() => {
       // 格式化post请求数据

@@ -72,6 +72,7 @@
   "inputWordPlaceholder": "Enter the mnemonic words and use semicolons to separate each word",
   "noExistingPLUGAccount": "Don't Have PLUG Account?",
   "mnemonicError": "Wrong input of mnemonic words",
+  "delNowAccount": "Remove current account from current device?",
 
   "networkOverview": "NetworkOverview",
   "statisticalChart": "Chart",
@@ -99,6 +100,7 @@
   "allTransaction": "Transfer All",
   "forgetPassword": "ForgetPassword?",
   "resetAccount": "Reset Account",
+  "delAccount": "Delete Account",
   "backupWord": "Mnemonic Words",
   "newPassword": "NewPassword",
   "repeatPassword": "RepeatPassword",
@@ -183,5 +185,12 @@
   "apply-node-serve-link": "Learn More >>",
   "apply-node-reward": "Reward Plan",
   "apply-node-reward-info": "The income distribution of each node is arranged by the person in charge of each node, and there is no fixed voting income by default",
-  "apply-node-submit": "submit"
+  "apply-node-submit": "submit",
+
+  "apply-error-name": "Error input for node name",
+  "apply-error-ID": "Error input for node ID",
+  "apply-error-email": "Error input for email",
+  "apply-error-describe": "Error input for node's describe",
+  "apply-error-serve": "Error input for node's server info",
+  "apply-error-avatar": "Error size for node's avatar"
 }

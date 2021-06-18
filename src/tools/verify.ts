@@ -9,3 +9,8 @@ export const verifyNumber = (num: string, bigZero?: boolean): boolean => {
   if (bigZero && parseFloat(num) <= 0) return false;
   return true;
 };
+
+export const verifyEmail = (email: string): boolean => {
+  const reg = /^[a-z|A-Z|\d|_|-]+@[a-z|A-Z|\d]+(\.[a-z|A-Z|\d|_|-]+)+$/;
+  return reg.test(email);
+};

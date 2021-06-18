@@ -10,7 +10,7 @@ import { fetchData } from './ajax';
 import getEnvConfig from './env-config';
 import { randomNumber } from './random-num';
 import { toHex } from './string';
-import { BehaviorSubject, Subscription, timer } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, timer, zip } from 'rxjs';
 import { changeSeconds } from './time';
 
 const rpcURI = getEnvConfig.WALLET_RPC_BASE;
@@ -18,9 +18,33 @@ const appTokenName = getEnvConfig.APP_TOKEN_NAME;
 const addressPrefix = getEnvConfig.WALLET_ADDRESS_PREFIX;
 const chainId = getEnvConfig.APP_CHAIN_ID;
 
-const defaultTransGasLimit = '80000';
+const defaultTransGasLimit = '100000';
 const defaultDelegateLimit = '200000';
 
+
+let chainAllValue: number;
+let chainAllPledged: number;
+let chainYearAddRate: number;
+const computeRate = (nodeRate: number) => {
+  if (chainAllValue && chainAllPledged && chainYearAddRate)
+    return parseFloat((chainAllValue * ( chainYearAddRate * (1 - nodeRate) ) / chainAllPledged).toFixed(4)) * 100;
+  else
+    return 0;
+};
+export const walletChainReward = (nodeRate: number) => new Promise(resolve => {
+  if (!chainAllValue || !chainAllPledged || !chainYearAddRate) zip([
+    fetchData('GET', `${getEnvConfig.WALLET_RPC_QUERY}/minting/inflation`),
+    fetchData('GET', 'coin_info'),
+  ]).subscribe(([ mint, coin ]) => {
+    if (mint.success && coin.success) {
+      chainAllValue = parseFloat(`${coin.data.supply}`);
+      chainAllPledged = parseFloat(`${coin.data.staking}`);
+      chainYearAddRate = parseFloat(`${mint.data}`);
+      resolve(computeRate(nodeRate));
+    }
+  });
+  else resolve(computeRate(nodeRate));
+});
 
 export const walletVerifyAddress = (address: string) => (new RegExp(`${addressPrefix}[\\d|a-z|A-Z]{39}`)).test(address);
 

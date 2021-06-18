@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
-import { getEnvConfig, getOnlyId, useSafeLink, walletAmountToToken } from '../../../../tools';
+import { getEnvConfig, getOnlyId, useSafeLink, walletAmountToToken, walletChainReward } from '../../../../tools';
 import ComConButton from '../../../components/control/button';
 import { Link } from 'react-router-dom';
 import { fetchData } from '../../../../tools/ajax';
@@ -29,15 +29,21 @@ const PageWalletPledge: FC = () => {
   useEffect(() => {
     fetchData('GET', '/validators').subscribe(({ success, data }) => {
       if (success) {
-        setNodes(data.mininum.map((node: any) => ({
-          avatar: node.description.image ? `${getEnvConfig.STATIC_URL}/${node.operator_address}/image.png` : `${getEnvConfig.STATIC_URL}/default/image.png`,
-          name: node.description.moniker,
-          // TODO: no year rate
-          rate: '0.00%',
-          pledgedVolume: formatNumberStr(walletAmountToToken(`${parseFloat(node.delegator_shares)}`)),
-          minVolume: formatNumberStr(`${parseFloat(node.min_self_delegation)}`),
-          address: node.operator_address,
-        })));
+        const resultArr: typeof nodes = [];
+        data.mininum.forEach(async (node: any) => {
+          const obj = {
+            avatar: node.description.image ? `${getEnvConfig.STATIC_URL}/${node.operator_address}/image.png` : `${getEnvConfig.STATIC_URL}/default/image.png`,
+            name: node.description.moniker,
+            rate: `${await (walletChainReward(parseFloat(`${node.commission.commission_rates.rate}`)))}%`,
+            pledgedVolume: formatNumberStr(walletAmountToToken(`${parseFloat(node.delegator_shares)}`)),
+            minVolume: formatNumberStr(`${parseFloat(node.min_self_delegation)}`),
+            address: node.operator_address,
+          };
+          resultArr.push(obj);
+          if (resultArr.length === data.mininum.length) {
+            setNodes(resultArr);
+          }
+        });
       }
     });
   }, []);

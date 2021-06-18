@@ -114,7 +114,6 @@ const ComConTable: FC<{
       </div>
       {/* tools */}
       <div className={formatClass(['control-table-tools', showTools && 'control-table-tools-show'])}>
-        {/* TODO: limit */}
         {/* click */}
         {
           useMemo(() => pagesList.length ? (

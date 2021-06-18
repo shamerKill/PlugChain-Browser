@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { formatClass, getOnlyId, sleep, useFormatSearch, useSafeLink, verifyNumber, verifyPassword, walletAmountToToken, walletDecode, walletDelegate } from '../../../../tools';
+import { formatClass, getEnvConfig, getOnlyId, sleep, useFormatSearch, useSafeLink, verifyNumber, verifyPassword, walletAmountToToken, walletChainReward, walletDecode, walletDelegate } from '../../../../tools';
 import ComConSvg from '../../../components/control/icon';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
@@ -214,15 +214,21 @@ const PageInfoPledge: FC = () => {
     if (!showNodes || nodes) return;
     fetchData('GET', '/validators').subscribe(({ success, data }) => {
       if (success) {
-        setNodes(data.mininum.filter((node: any) => node.description.moniker !== search?.id).map((node: any) => ({
-          avatar: multiavatar(node.description.moniker),
-          name: node.description.moniker,
-          // TODO: no year rate
-          rate: '0.00%',
-          pledgedVolume: formatNumberStr(walletAmountToToken(`${parseFloat(node.delegator_shares)}`)),
-          minVolume: formatNumberStr(`${parseFloat(node.min_self_delegation)}`),
-          address: node.operator_address,
-        })));
+        const resultArr: TypeNodesInfo[] = [];
+        data.mininum.forEach(async (node: any) => {
+          const obj = {
+            avatar: node.description.image ? `${getEnvConfig.STATIC_URL}/${node.operator_address}/image.png` : `${getEnvConfig.STATIC_URL}/default/image.png`,
+            name: node.description.moniker,
+            rate: `${await (walletChainReward(parseFloat(`${node.commission.commission_rates.rate}`)))}%`,
+            pledgedVolume: formatNumberStr(walletAmountToToken(`${parseFloat(node.delegator_shares)}`)),
+            minVolume: formatNumberStr(`${parseFloat(node.min_self_delegation)}`),
+            address: node.operator_address,
+          };
+          resultArr.push(obj);
+          if (resultArr.length === data.mininum.length) {
+            setNodes(resultArr.filter(node => node.name !== search?.id));
+          }
+        });
       }
     });
   }, [nodes, showNodes, search]);
@@ -333,7 +339,7 @@ const PageInfoPledge: FC = () => {
               <div className="transaction_box_label">
                 <input
                   className="transaction_box_input"
-                  type="new-password"
+                  type="password"
                   value={password}
                   disabled={exeLoading}
                   onChange={e => setPassword(e.target.value)} />

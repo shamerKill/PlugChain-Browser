@@ -24,7 +24,6 @@ const PageWalletBackup: FC = () => {
 
   useEffect(() => {
     if (!password) return;
-    console.log(password);
     walletCreate()
       .then(wallet => walletToMnemonic(wallet))
       .then(mnemonic => mnemonic.split(' '))

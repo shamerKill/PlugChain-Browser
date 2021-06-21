@@ -19,7 +19,7 @@ export const DayTransactionVolume: FC = () => {
     const subOption = timer(0, changeSeconds(5)).pipe(switchMap(() => fetchData('GET', '/kline'))).subscribe(data => {
       if (data.success) setData(data.data.map((item: any) => ({
         time: formatTime(new Date(item.time), 'hh:mm:ss'),
-        volume: `${item.volume || 0}`
+        volume: `${item.tx_num || 0}`
       })));
     });
     return () => subOption.unsubscribe();
@@ -62,6 +62,7 @@ export const DayTransactionVolume: FC = () => {
       yAxis: {
         type: 'value',
         splitNumber: 3,
+        minInterval: 1,
       },
       series: [{
         type: 'line',
@@ -128,7 +129,7 @@ export const TokenPledgeRate: FC<{ pledgeRate: number }> = ({ pledgeRate }) => {
         splitLine: {
           show: false,
           distance: 0,
-          length: 10
+          length: 10,
         },
         axisTick: {
           show: false

@@ -23,6 +23,7 @@ const PageMyPledge: FC = () => {
   const goLink = useSafeLink();
   const [wallet] = useGetDispatch<InRootState['wallet']>('wallet');
   const [nodes, setNodes] = useState<TypeNodesInfo[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
   const goToDetail = (id: string) => {
     goLink(`/wallet/info-pledge?id=${id}`);
@@ -33,7 +34,7 @@ const PageMyPledge: FC = () => {
     const pledgeSub = fetchData('GET', 'delegationsByAddress', { address: wallet.address }).subscribe(({ success, data }) => {
       if (success && data && data.length > 0) {
         const resultArr: typeof nodes = [];
-        data.mininum.forEach(async (node: any) => {
+        data.forEach(async (node: any) => {
           const obj = {
             avatar: node.description.image ? `${getEnvConfig.STATIC_URL}/${node.operator_address}/image.png` : `${getEnvConfig.STATIC_URL}/default/image.png`,
             name: node.description.moniker,
@@ -43,7 +44,8 @@ const PageMyPledge: FC = () => {
             address: node.operator_address,
           };
           resultArr.push(obj);
-          if (resultArr.length === data.mininum.length) {
+          if (resultArr.length === data.length) {
+            setLoaded(true);
             setNodes(resultArr);
           }
         });
@@ -83,7 +85,7 @@ const PageMyPledge: FC = () => {
             ))
           }
           {
-            nodes.length === 0 && (
+            nodes.length === 0 && loaded && (
               <p className="pledge_no_node"><I18 text="noMyPledged" />. <Link to="./pledge"><I18 text="goToPledge" /></Link></p>
             )
           }

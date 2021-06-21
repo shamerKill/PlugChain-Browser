@@ -31,7 +31,7 @@ const PageWalletLogin: FC = () => {
   const login = async () => {
     setSignInIng(true);
     await sleep(0.5);
-    const words = wordText.split(/[^a-zA-Z]+/g).filter(item => Boolean(item));
+    const words = wordText.split(new RegExp('[^a-zA-Z]+', 'g')).filter(item => Boolean(item));
     if (!(await walletVerifyMnemonic(words))) {
       setSignInIng(false);
       return alertTools.create({ message: <I18 text="mnemonicError" />, type: 'warning' });

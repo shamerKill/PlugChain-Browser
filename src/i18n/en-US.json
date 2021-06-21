@@ -194,5 +194,7 @@
   "apply-error-serve": "Error input for node's server info",
   "apply-error-avatar": "Error size for node's avatar",
 
-  "double-click": "double click"
+  "double-click": "double click",
+  "no-data": "No Data",
+  "undefined-data": "undefined data"
 }

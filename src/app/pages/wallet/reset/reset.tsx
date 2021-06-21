@@ -27,7 +27,7 @@ const PageWalletReset: FC = () => {
     if (confirmPassword !== newPassword) return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
     setResetLoading(true);
     await sleep(0.5);
-    const words = backupWord.split(/[^a-zA-Z]+/g).filter(item => Boolean(item));
+    const words = backupWord.split(new RegExp('[^a-zA-Z]+', 'g')).filter(item => Boolean(item));
     if (!(await walletVerifyMnemonic(words))) {
       setResetLoading(false);
       return alertTools.create({ message: <I18 text="mnemonicError" />, type: 'warning' });

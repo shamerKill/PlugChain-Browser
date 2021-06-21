@@ -138,6 +138,7 @@ export const walletTransfer = ({ wallet, toAddress, volume, gasAll, memo = '', g
       },
     } ];
     const transferFee = walletGetFee('transfer', { allAmount: gasAll, gasLimit: gasLimit });
+    console.log({ wallet, message: transferMessage, fee: transferFee, memo });
     const signRaw = await walletSign({ wallet, message: transferMessage, fee: transferFee, memo });
     fetchData(signRaw);
   })();
@@ -221,8 +222,7 @@ const walletGetFee = (type: 'transfer'|'delegate', fee?: { allAmount?: string; g
     if (fee.gasLimit) defaultGasLimit = fee.gasLimit;
     else if ( type === 'transfer' ) defaultGasLimit = defaultTransGasLimit;
     else if ( type === 'delegate' ) defaultGasLimit = defaultDelegateLimit;
-
-    if (fee.allAmount) defaultAmount = Math.ceil((parseFloat(walletTokenToAmount(fee.allAmount)) / parseFloat(defaultGasLimit))).toFixed();
+    if (fee.allAmount) defaultAmount = `${(parseFloat(fee?.allAmount || '0') * parseFloat(defaultGasLimit))}`;
   }
   let resultFee: StdFee = {
     amount: [ {

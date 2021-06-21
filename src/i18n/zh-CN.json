@@ -193,5 +193,7 @@
   "apply-error-serve": "服务器信息输入有误",
   "apply-error-avatar": "头像尺寸格式错误",
 
-  "double-click": "双击"
+  "double-click": "双击",
+  "no-data": "没有数据",
+  "undefined-data": "未知数据"
 }

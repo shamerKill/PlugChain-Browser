@@ -67,7 +67,13 @@ const PageWalletTransaction: FC = () => {
     const pledgeSub = fetchData('GET', 'balance', { address: wallet.address, coin: getEnvConfig.APP_TOKEN_NAME }).subscribe(({ success, data }) => {
       if (success) setBalance(formatNumberStr(`${data.Balance}`));
     });
-    return () => pledgeSub.unsubscribe();
+    const feeSub = fetchData('GET', 'tx_fee').subscribe(({success, data}) => {
+      if (success) setFee(data);
+    });
+    return () => {
+      feeSub.unsubscribe();
+      pledgeSub.unsubscribe();
+    };
   }, [wallet, goLink]);
 
   

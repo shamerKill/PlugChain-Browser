@@ -13,7 +13,7 @@ import { switchMap } from 'rxjs/operators';
 import { changeSeconds, formatTime } from '../../../tools/time';
 import ComConLink from '../../components/control/link';
 import { TypeComConTableContent } from '../../components/control/table.copy';
-import { getOnlyId, walletAmountToToken } from '../../../tools';
+import { getOnlyId, useSafeLink, walletAmountToToken, walletVerifyAddress } from '../../../tools';
 import { formatNumberStr } from '../../../tools/string';
 
 export type TypePageHomeData = {
@@ -36,7 +36,9 @@ export type TypePageHomeData = {
 
 const PageHome: FC = () => {
   const searchPlaceholder = useI18('searchPlaceholder');
+  const goLink = useSafeLink();
   const [searchValue, setSearchValue] = useState('');
+  const [ chainHeight, setChainHeight ] = useState('0');
   const homeDataObserve = useRef(new BehaviorSubject<TypePageHomeData>({
     blockHeight: '', transactionVolume: '', pendingBlockVolume: '', newBlockTransaction: '',
     transactionRate: 0, price: '', priceRate: 0, markValue: '', allTokenVolume: '',
@@ -46,25 +48,35 @@ const PageHome: FC = () => {
 
   // searchData
   const searchCallback = useCallback(() => {
-    if (searchValue === '') return alertTools.create({ message: '没有内容', time: 5000, type: 'error' });
-  }, [searchValue]);
+    if (searchValue === '') return alertTools.create({ message: <I18 text="no-data" />, time: 5000, type: 'error' });
+    if (!Number.isNaN(parseInt(searchValue))) {
+      if (parseInt(searchValue) <= parseInt(chainHeight)) return goLink(`./block/${searchValue}`);
+      else return alertTools.create({ message: <I18 text="no-data" />, time: 5000, type: 'error' });
+    }
+    if (walletVerifyAddress(searchValue)) return goLink(`./account/${searchValue}`);
+    if (searchValue.length === 64) return goLink(`./transaction/${searchValue}`);
+    alertTools.create({ message: <I18 text="undefined-data" />, time: 5000, type: 'error' });
+  }, [searchValue, goLink, chainHeight]);
 
   const updateData = useCallback((obj: Partial<TypePageHomeData>) => homeDataObserve.current.next({ ...homeDataObserve.current.getValue(), ...obj }), []);
 
   useEffect(() => {
     // block List
     const getBlockList = timer(changeSeconds(0.1), changeSeconds(5)).pipe(switchMap(() => fetchData('GET', '/blockchain'))).subscribe(blockList => {
-      if (blockList.status === 200) updateData({ blockListTable: blockList.data.slice(0, 10).map((block: any) => ({
-        key: getOnlyId(),
-        value: [
-          { key: getOnlyId(), value: <ComConLink link={`./block/${block.block_id}`}>{ block.block_id }</ComConLink> },
-          { key: getOnlyId(), value: formatTime(block.time) },
-          { key: getOnlyId(), value: <ComConLink link={`./account/${block.address}`} noLink>{ block.address }</ComConLink> },
-          { key: getOnlyId(), value: <ComConLink link={`./block/${block.block_id}`}>{ block.hash }</ComConLink> },
-          { key: getOnlyId(), value: block.tx_num },
-          { key: getOnlyId(), value: block.tx_fee },
-        ]
-      })), blockHeight: blockList.data[0].block_id });
+      if (blockList.status === 200) {
+        updateData({ blockListTable: blockList.data.slice(0, 10).map((block: any) => ({
+          key: getOnlyId(),
+          value: [
+            { key: getOnlyId(), value: <ComConLink link={`./block/${block.block_id}`}>{ block.block_id }</ComConLink> },
+            { key: getOnlyId(), value: formatTime(block.time) },
+            { key: getOnlyId(), value: <ComConLink link={`./account/${block.address}`} noLink>{ block.address }</ComConLink> },
+            { key: getOnlyId(), value: <ComConLink link={`./block/${block.block_id}`}>{ block.hash }</ComConLink> },
+            { key: getOnlyId(), value: block.tx_num },
+            { key: getOnlyId(), value: block.tx_fee },
+          ]
+        })), blockHeight: blockList.data[0].block_id });
+        setChainHeight(blockList.data[0].block_id);
+      }
     });
     return () => getBlockList.unsubscribe();
   }, [updateData]);

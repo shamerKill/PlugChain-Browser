@@ -18,10 +18,14 @@
     width: (205/12)+rem;
     min-width: (205/12)+rem;
     height: 4.5rem;
+    position: relative;
+    z-index: 5;
   }
   .layout-header-menu {
     display: flex;
     align-items: center;
+    position: relative;
+    z-index: 2;
   }
   .layout-header-menu-ul {
     display: flex;
@@ -48,7 +52,7 @@
   }
   .layout-header-phone-create {
     position: relative;
-    z-index: -5;
+    z-index: -1;
   }
   .layout-header-phone-change {
     background: none;

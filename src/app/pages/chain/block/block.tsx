@@ -81,7 +81,7 @@ const PageBlockInfo: FC = () => {
           fee: data.Fee,
           producer: data.Miner,
           hash: data.LastBlockId,
-          time: formatTime(new Date(data.Timestamp)),
+          time: formatTime(new Date(data.Timestamp || null)),
         });
       }
     });

@@ -12,9 +12,11 @@ import { formatNumberStr } from '../../../../tools/string';
 import ComConLink from '../../../components/control/link';
 import ComConToolsCopy from '../../../components/tools/copy';
 import alertTools from '../../../components/tools/alert';
+import { useHistory } from 'react-router-dom';
 
 const PageChainAccount: FC = () => {
   const replaceLink = useSafeReplaceLink();
+  const history = useHistory();
   const search = useFormatSearch<{ page: string }>();
   const [, pathAddress] = useFormatPath();
   const [address, setAddress] = useState('');
@@ -82,15 +84,20 @@ const PageChainAccount: FC = () => {
 
   useEffect(() => {
     if (address === undefined) return;
-    fetchData('GET', 'balance', { address, coin: getEnvConfig.APP_TOKEN_NAME }).subscribe(({ success, data }) => {
+    const subOption = fetchData('GET', 'balance', { address, coin: getEnvConfig.APP_TOKEN_NAME }).subscribe(({ success, data, error, message }) => {
       if (success) {
         setCoinVolume(formatNumberStr(`${data.Balance}`));
         setTransactionVolume(formatNumberStr(`${data.TxNum}`));
         setInputVolume(formatNumberStr(`${data.RecipientAmount}`));
         setOutputVolume(formatNumberStr(`${data.SendAmount}`));
       }
+      if (error) {
+        alertTools.create({ message: message || <I18 text="no-data" />, type: 'warning'});
+        history.goBack();
+      }
     });
-  }, [address]);
+    return () => subOption.unsubscribe();
+  }, [address, history]);
 
   const copy = (address: string) => {
     ComConToolsCopy(address);

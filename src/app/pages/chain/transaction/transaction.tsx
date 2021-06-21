@@ -1,8 +1,7 @@
 import { FC, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { timer } from 'rxjs';
+import { Link, useHistory } from 'react-router-dom';
 import I18 from '../../../../i18n/component';
-import { useFormatPath } from '../../../../tools';
+import { fetchData, formatTime, useFormatPath } from '../../../../tools';
 import ComConSvg from '../../../components/control/icon';
 import ComConLoading from '../../../components/control/loading';
 import ComponentsLayoutBase from '../../../components/layout/base';
@@ -12,9 +11,10 @@ import ComConToolsCopy from '../../../components/tools/copy';
 import './transaction.scss';
 
 const PageTransaction: FC = () => {
+  const history = useHistory();
   const [, transactionId ] = useFormatPath();
   const [infoLoading, setInfoLoading] = useState<boolean>(false);
-  const [transactionInfo, setTransactionInfo] = useState<{ id: string; block: number; fee: number; hash: string; from: string; to: string; remarks: string; time: string; }>(
+  const [transactionInfo, setTransactionInfo ] = useState<{ id: string; block: number; fee: number; hash: string; from: string; to: string; remarks: string; time: string; }>(
     { id: '', block: 0, fee: 0, hash: '', from: '', to: '', remarks: '', time: '' }
   );
   
@@ -24,22 +24,32 @@ const PageTransaction: FC = () => {
   };
 
   useEffect(() => {
+    if (!transactionId) return;
     setInfoLoading(true);
-    const doTimer = timer(1000).subscribe(() => {
-      setTransactionInfo({
-        id: transactionId,
-        block: 10086,
-        fee: 95,
-        hash: 'abffb9e7a0aca6d9c9c315de8fb070c333c7f797d20215cb12cf70a972a7c00f',
-        from: 'shamer',
-        to: 'realer',
-        remarks: 'transaction(to,volume)\n  to: realer\n  volume: 100',
-        time: '2021-04-29 09:22:09'
-      });
-      setInfoLoading(false);
+    const subOption = fetchData('GET', 'tx_detail', { hash: transactionId }).subscribe(data => {
+      if (data.loading === false) setInfoLoading(false);
+      if (data.success) {
+        setTransactionInfo({
+          id: data.data.id,
+          block: data.data.block_id,
+          fee: data.data.fee,
+          hash: transactionId,
+          from: data.data.from,
+          to: data.data.to,
+          remarks: data.data.memo,
+          time: formatTime(new Date(data.data.create_time || null))
+        });
+      }
+      if (data.error) {
+        alertTools.create({
+          message: <I18 text="no-data" />,
+          type: 'warning',
+        });
+        history.goBack();
+      }
     });
-    return () => doTimer.unsubscribe();
-  }, [transactionId]);
+    return () => subOption.unsubscribe();
+  }, [transactionId, history]);
 
 
   return (

@@ -12,6 +12,8 @@ import ComConLink from '../../../components/control/link';
 import { Link } from 'react-router-dom';
 
 import './account.scss';
+import ComConToolsCopy from '../../../components/tools/copy';
+import alertTools from '../../../components/tools/alert';
 
 const PageWalletAccount: FC = () => {
   const goLink = useSafeLink();
@@ -34,6 +36,11 @@ const PageWalletAccount: FC = () => {
   const [allCount, setAllCount] = useState<number>(0);
   const [limit] = useState<number>(10);
   const [loading, setLoading] = useState<boolean>(false);
+  
+  const copy = (str: string) => {
+    ComConToolsCopy(str);
+    alertTools.create({ message: <I18 text="copySuccess" />, type: 'success'});
+  };
 
   const onPageChange = useCallback((num: number) => {
     const searchObj = search || {page: num};
@@ -123,12 +130,12 @@ const PageWalletAccount: FC = () => {
         <h2 className="account_address">
           <ComConSvg className="account_icon_card" xlinkHref="#icon-card" />
           &nbsp;&nbsp;{address}
-          <button className="account_func">
+          <button className="account_func" onClick={() => copy(address)}>
             <ComConSvg xlinkHref="#icon-copy" />
           </button>
-          <button className="account_func">
+          {/* <button className="account_func">
             <ComConSvg xlinkHref="#icon-qr-code" />
-          </button>
+          </button> */}
         </h2>
         {/* info */}
         <div className="account_info_account">

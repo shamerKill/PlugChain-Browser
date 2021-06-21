@@ -10,6 +10,8 @@ import { justifySearch } from '../../../../tools/url';
 import { fetchData } from '../../../../tools/ajax';
 import { formatNumberStr } from '../../../../tools/string';
 import ComConLink from '../../../components/control/link';
+import ComConToolsCopy from '../../../components/tools/copy';
+import alertTools from '../../../components/tools/alert';
 
 const PageChainAccount: FC = () => {
   const replaceLink = useSafeReplaceLink();
@@ -90,6 +92,11 @@ const PageChainAccount: FC = () => {
     });
   }, [address]);
 
+  const copy = (address: string) => {
+    ComConToolsCopy(address);
+    alertTools.create({ message: <I18 text="copySuccess" />, type: 'success'});
+  }
+
   return (
     <ComponentsLayoutBase className="page_chain_account">
       <div className="account_info">
@@ -97,12 +104,12 @@ const PageChainAccount: FC = () => {
         <h2 className="account_address">
           <ComConSvg className="account_icon_card" xlinkHref="#icon-card" />
           <I18 text="address" />&nbsp;:&nbsp;&nbsp;{address}
-          <button className="account_func">
+          <button className="account_func" onClick={() => copy(address)}>
             <ComConSvg xlinkHref="#icon-copy" />
           </button>
-          <button className="account_func">
+          {/* <button className="account_func">
             <ComConSvg xlinkHref="#icon-qr-code" />
-          </button>
+          </button> */}
         </h2>
         {/* info */}
         <div className="account_info_box">

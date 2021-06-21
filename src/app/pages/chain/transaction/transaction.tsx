@@ -2,25 +2,25 @@ import { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { timer } from 'rxjs';
 import I18 from '../../../../i18n/component';
-import useI18 from '../../../../i18n/hooks';
 import { useFormatPath } from '../../../../tools';
 import ComConSvg from '../../../components/control/icon';
 import ComConLoading from '../../../components/control/loading';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import alertTools from '../../../components/tools/alert';
+import ComConToolsCopy from '../../../components/tools/copy';
 
 import './transaction.scss';
 
 const PageTransaction: FC = () => {
   const [, transactionId ] = useFormatPath();
-  const copySuccess = useI18('copySuccess');
   const [infoLoading, setInfoLoading] = useState<boolean>(false);
   const [transactionInfo, setTransactionInfo] = useState<{ id: string; block: number; fee: number; hash: string; from: string; to: string; remarks: string; time: string; }>(
     { id: '', block: 0, fee: 0, hash: '', from: '', to: '', remarks: '', time: '' }
   );
   
   const copy = (str: string) => {
-    alertTools.create({ message: copySuccess + str });
+    ComConToolsCopy(str);
+    alertTools.create({ message: <I18 text="copySuccess" />, type: 'success'});
   };
 
   useEffect(() => {

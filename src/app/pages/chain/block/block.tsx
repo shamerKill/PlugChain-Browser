@@ -1,7 +1,6 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import I18 from '../../../../i18n/component';
-import useI18 from '../../../../i18n/hooks';
 import { formatTime, getOnlyId, useFormatPath, getEnvConfig } from '../../../../tools';
 import { fetchData } from '../../../../tools/ajax';
 import ComConSvg from '../../../components/control/icon';
@@ -10,12 +9,12 @@ import ComConLoading from '../../../components/control/loading';
 import ComConTable, { TypeComConTableContent, TypeComConTableHeader } from '../../../components/control/table.copy';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import alertTools from '../../../components/tools/alert';
+import ComConToolsCopy from '../../../components/tools/copy';
 
 import './blocks.scss';
 
 const PageBlockInfo: FC = () => {
   const [, blockId ] = useFormatPath();
-  const copySuccess = useI18('copySuccess');
   const [tableHeader, setTableHeader] = useState<TypeComConTableHeader>([]);
   const [tableContent, setTableContent] = useState<TypeComConTableContent>([]);
   const [page, setPage] = useState<number>(0);
@@ -28,7 +27,8 @@ const PageBlockInfo: FC = () => {
   );
   
   const copy = (str: string) => {
-    alertTools.create({ message: copySuccess + str });
+    ComConToolsCopy(str);
+    alertTools.create({ message: <I18 text="copySuccess" />, type: 'success'});
   };
 
   const onPageChange = useCallback((num: number) => {

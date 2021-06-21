@@ -22,10 +22,10 @@ const ComConButton: FC<TypeComponentsControlButton & ButtonHTMLAttributes<HTMLBu
   const [timer, setTimer] = useState<number>(0);
   const doClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     if (!doubles) return onClick?.(event);
-    // double click 
+    // double click
     if (timer === 0) return setTimer(new Date().getTime()); 
     else {
-      if (new Date().getTime() - timer < 500) onClick?.(event);
+      if ((new Date().getTime() - timer) < 500) onClick?.(event);
       else setTimer(0);
     }
   };

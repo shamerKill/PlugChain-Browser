@@ -191,5 +191,7 @@
   "apply-error-email": "节点邮箱输入有误",
   "apply-error-describe": "节点介绍输入有误",
   "apply-error-serve": "服务器信息输入有误",
-  "apply-error-avatar": "头像尺寸格式错误"
+  "apply-error-avatar": "头像尺寸格式错误",
+
+  "double-click": "双击"
 }

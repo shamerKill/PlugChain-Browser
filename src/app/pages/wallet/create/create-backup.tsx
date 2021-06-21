@@ -71,8 +71,8 @@ const PageWalletBackup: FC = () => {
         disabled={countTime !== 0}
         className={formatClass(['wallet_backup_button', countTime === 0 && 'wallet_backup_button_success'])}
         onClick={goRoute}>
-        <I18 text="backupSucceeded" />
-        { countTime !== 0 && `(${countTime}s)` }
+        <I18 text="backupSucceeded" />&nbsp;
+        ( { countTime !== 0 ? `${countTime}s`: <I18 text="double-click" /> } )
       </ComConButton>
     </ComponentsLayoutBase>
   );

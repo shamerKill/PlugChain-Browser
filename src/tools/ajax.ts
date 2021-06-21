@@ -17,7 +17,7 @@ type TypeQuery = { [key: string]: any };
 const formatUrl = (url: string, query?: TypeQuery): string => {
   let pathName = '';
   if (/^http(s?):\/\//.test(url)) pathName = url;
-  else pathName = `${getEnvConfig.BASE_URL}/${url}`.replace(/(?<!:)\/{2,}/g, '/');
+  else pathName = `${getEnvConfig.BASE_URL}/${url}`.replace(new RegExp('(?<!:)\\/{2,}', 'g'), '/');
   if (query !== undefined) {
     const queryStr = Object.keys(query).map(key => `${key}=${typeof query[key] === 'object' ? JSON.stringify(query[key]) : query[key]}`);
     pathName += `?${queryStr.join('&')}`;

@@ -192,5 +192,7 @@
   "apply-error-email": "Error input for email",
   "apply-error-describe": "Error input for node's describe",
   "apply-error-serve": "Error input for node's server info",
-  "apply-error-avatar": "Error size for node's avatar"
+  "apply-error-avatar": "Error size for node's avatar",
+
+  "double-click": "double click"
 }

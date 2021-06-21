@@ -40,10 +40,10 @@ export const walletChainReward = (nodeRate: number) => new Promise(resolve => {
       chainAllValue = parseFloat(`${coin.data.supply}`);
       chainAllPledged = parseFloat(`${coin.data.staking}`);
       chainYearAddRate = parseFloat(`${mint.data}`);
-      resolve(computeRate(nodeRate));
+      resolve(computeRate(nodeRate).toFixed(2));
     }
   });
-  else resolve(computeRate(nodeRate));
+  else resolve(computeRate(nodeRate).toFixed(2));
 });
 
 export const walletVerifyAddress = (address: string) => (new RegExp(`${addressPrefix}[\\d|a-z|A-Z]{39}`)).test(address);

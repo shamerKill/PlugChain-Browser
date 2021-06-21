@@ -49,8 +49,8 @@ const PageHome: FC = () => {
   // searchData
   const searchCallback = useCallback(() => {
     if (searchValue === '') return alertTools.create({ message: <I18 text="no-data" />, time: 5000, type: 'error' });
-    if (!Number.isNaN(parseInt(searchValue))) {
-      if (parseInt(searchValue) <= parseInt(chainHeight)) return goLink(`./block/${searchValue}`);
+    if (!Number.isNaN(Number(searchValue))) {
+      if (Number(searchValue) <= Number(chainHeight)) return goLink(`./block/${searchValue}`);
       else return alertTools.create({ message: <I18 text="no-data" />, time: 5000, type: 'error' });
     }
     if (walletVerifyAddress(searchValue)) return goLink(`./account/${searchValue}`);

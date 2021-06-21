@@ -178,6 +178,7 @@
   "apply-node-telegram": "电报 ID",
   "apply-node-twitter": "推特 ID",
   "apply-node-weChat": "微信 ID",
+  "apply-node-facebook": "脸书 ID",
   "apply-title2": "2. 填写描述信息",
   "apply-node-desc": "节点介绍",
   "apply-node-serve": "服务器信息",

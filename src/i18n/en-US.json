@@ -179,6 +179,7 @@
   "apply-node-telegram": "Telegram ID",
   "apply-node-twitter": "Twitter ID",
   "apply-node-weChat": "WeChat ID",
+  "apply-node-facebook": "facebook ID",
   "apply-title2": "2. Fill in the description information",
   "apply-node-desc": "Node Introduction",
   "apply-node-serve": "Server Information",

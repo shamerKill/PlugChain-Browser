@@ -14,7 +14,7 @@ const PageNodeApply: FC = () => {
 
   const telegramId = useI18('apply-node-telegram');
   const twitterId = useI18('apply-node-twitter');
-  const weChatId = useI18('apply-node-weChat');
+  const facebookId = useI18('apply-node-facebook');
 
   const [ nodeAvatar, setNodeAvatar ] = useState('');
   const [ nodeName, setNodeName ] = useState('');
@@ -23,7 +23,7 @@ const PageNodeApply: FC = () => {
   const [ nodeEmail, setNodeEmail ] = useState('');
   const [ nodeTelegram, setNodeTelegram ] = useState('');
   const [ nodeTwitter, setNodeTwitter ] = useState('');
-  const [ nodeWeChat, setNodeWeChat ] = useState('');
+  const [ nodeFacebook, setNodeFacebook ] = useState('');
   const [ nodeDescribe, setNodeDescribe ] = useState('');
   const [ nodeServeInfo, setNodeServeInfo ] = useState('');
   const [ nodeReward, setNodeReward ] = useState('');
@@ -43,7 +43,7 @@ const PageNodeApply: FC = () => {
     setLoading(true);
     const submit = fetchData('POST', 'apply_validator', {
         name: nodeName, node_id: nodeID, web_url: nodeWebsite, email: nodeEmail,
-        telegram: nodeTelegram, twitter: nodeTwitter, wechat: nodeWeChat, des: nodeDescribe,
+        telegram: nodeTelegram, twitter: nodeTwitter, wechat: nodeFacebook, des: nodeDescribe,
         server_info: nodeServeInfo, profit_plan: nodeReward, nodeAvatar: nodeAvatar,
       }).subscribe(({ loading, error, success, message }) => {
         if (!loading) {
@@ -60,7 +60,7 @@ const PageNodeApply: FC = () => {
       });
     return () => submit.unsubscribe();
   }, [
-    nodeName, nodeID, nodeWebsite, nodeTelegram, nodeTwitter, nodeWeChat, nodeDescribe,nodeServeInfo, nodeReward, nodeEmail, goLink, nodeAvatar,
+    nodeName, nodeID, nodeWebsite, nodeTelegram, nodeTwitter, nodeFacebook, nodeDescribe,nodeServeInfo, nodeReward, nodeEmail, goLink, nodeAvatar,
   ]);
 
   const upload: React.ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -171,7 +171,7 @@ const PageNodeApply: FC = () => {
           </div>
         </div>
         <div className="apply_media_item">
-          <img src={require('../../../../assets/images/twitter.png')} alt="telegram" className="apply_media_img" />
+          <img src={require('../../../../assets/images/twitter.png')} alt="twitter" className="apply_media_img" />
           <div className="apply_media_label">
             <p className="apply_media_pre">@</p>
             <input
@@ -184,15 +184,16 @@ const PageNodeApply: FC = () => {
           </div>
         </div>
         <div className="apply_media_item">
-          <img src={require('../../../../assets/images/weChat.png')} alt="telegram" className="apply_media_img" />
+          <img src={require('../../../../assets/images/facebook.png')} alt="facebook" className="apply_media_img" />
           <div className="apply_media_label">
+            <p className="apply_media_pre">@</p>
             <input
               className="apply_media_input"
               type="text"
               disabled={loading}
-              placeholder={weChatId}
-              value={nodeWeChat}
-              onChange={e => setNodeWeChat(e.target.value)} />
+              placeholder={facebookId}
+              value={nodeFacebook}
+              onChange={e => setNodeFacebook(e.target.value)} />
           </div>
         </div>
       </div>

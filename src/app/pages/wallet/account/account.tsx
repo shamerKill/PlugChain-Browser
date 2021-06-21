@@ -134,7 +134,7 @@ const PageWalletAccount: FC = () => {
         <div className="account_info_account">
           <dl className="account_info_dl account_info_important">
             <dd className="account_info_dd">
-              { coinVolume }&nbsp;PLUG
+              { coinVolume }&nbsp;{ getEnvConfig.APP_TOKEN_NAME }
               {/* <span className="account_info_small">≈&nbsp;${marketValue}</span> */}
             </dd>
             <dt className="account_info_dt"><I18 text="extra" /></dt>
@@ -163,15 +163,15 @@ const PageWalletAccount: FC = () => {
         <h2 className="account_title"><I18 text="pledgeMining" /></h2>
         <div className="account_pledge_box">
           <dl className="account_pledge_dl">
-            <dt className="account_pledge_dt">{ pledgingVol }<small className="pledge_unit">PLUG</small></dt>
+            <dt className="account_pledge_dt">{ pledgingVol }<small className="pledge_unit">{ getEnvConfig.APP_TOKEN_NAME }</small></dt>
             <dd className="account_pledge_dd"><I18 text="pledging" /></dd>
           </dl>
           <dl className="account_pledge_dl">
-            <dt className="account_pledge_dt">{ redeemVol }<small className="pledge_unit">PLUG</small></dt>
+            <dt className="account_pledge_dt">{ redeemVol }<small className="pledge_unit">{ getEnvConfig.APP_TOKEN_NAME }</small></dt>
             <dd className="account_pledge_dd"><I18 text="redeeming" /></dd>
           </dl>
           <dl className="account_pledge_dl">
-            <dt className="account_pledge_dt">{ rewardVol }<small className="pledge_unit">PLUG</small></dt>
+            <dt className="account_pledge_dt">{ rewardVol }<small className="pledge_unit">{ getEnvConfig.APP_TOKEN_NAME }</small></dt>
             <dd className="account_pledge_dd"><I18 text="pledgeReward" /></dd>
           </dl>
           <div className="account_pledge_buttons">

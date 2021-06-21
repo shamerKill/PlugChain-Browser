@@ -77,11 +77,11 @@ const PageWalletPledge: FC = () => {
                     </dl>
                     <dl className="pledge_node_dl">
                       <dt className="pledge_node_dt">{node.pledgedVolume}</dt>
-                      <dt className="pledge_node_dd"><I18 text="pledgeVolume" />(PLUG)</dt>
+                      <dt className="pledge_node_dd"><I18 text="pledgeVolume" />({ getEnvConfig.APP_TOKEN_NAME })</dt>
                     </dl>
                     <dl className="pledge_node_dl">
                       <dt className="pledge_node_dt">{node.minVolume}</dt>
-                      <dt className="pledge_node_dd"><I18 text="minPledgeVolume" />(PLUG)</dt>
+                      <dt className="pledge_node_dd"><I18 text="minPledgeVolume" />({ getEnvConfig.APP_TOKEN_NAME })</dt>
                     </dl>
                   </div>
                   <ComConButton className="pledge_node_button" onClick={() => goToChange(node.address)}>选择</ComConButton>

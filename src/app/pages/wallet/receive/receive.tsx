@@ -5,7 +5,7 @@ import useI18 from '../../../../i18n/hooks';
 import ComConButton from '../../../components/control/button';
 import ComConTable, { TypeComConTableContent, TypeComConTableHeader } from '../../../components/control/table.copy';
 import { fetchData } from '../../../../tools/ajax';
-import { formatTime, getOnlyId, sleep, walletVerifyAddress } from '../../../../tools';
+import { formatTime, getEnvConfig, getOnlyId, sleep, walletVerifyAddress } from '../../../../tools';
 import { formatNumberStr } from '../../../../tools/string';
 import { Link } from 'react-router-dom';
 
@@ -102,11 +102,11 @@ const PageWalletReceive: FC = () => {
           <div className="receive_tips">
             <dl className="receive_tip_dl">
               <dt className="receive_tip_dt"><I18 text="receiveWeek" /></dt>
-              <dd className="receive_tip_dd">{ weekMax }&nbsp;PLUG</dd>
+              <dd className="receive_tip_dd">{ weekMax }&nbsp;{ getEnvConfig.APP_TOKEN_NAME }</dd>
             </dl>
             <dl className="receive_tip_dl">
               <dt className="receive_tip_dt"><I18 text="receiveOnce" /></dt>
-              <dd className="receive_tip_dd">{ onceMax }&nbsp;PLUG</dd>
+              <dd className="receive_tip_dd">{ onceMax }&nbsp;{ getEnvConfig.APP_TOKEN_NAME }</dd>
             </dl>
           </div>
           <p className="receive_box_title"><I18 text="address" /></p>
@@ -126,7 +126,7 @@ const PageWalletReceive: FC = () => {
               disabled={receiveLoading}
               value={volume}
               onChange={e => setVolume(e.target.value)} />
-            <p className="receive_box_info">PLUG</p>
+            <p className="receive_box_info">{ getEnvConfig.APP_TOKEN_NAME }</p>
           </div>
           <ComConButton
             loading={receiveLoading}

@@ -2,7 +2,7 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
 import { TokenPledgeRate, DayTransactionVolume } from '../../home/home-components';
-import { changeSeconds, formatClass, walletAmountToToken } from '../../../../tools';
+import { changeSeconds, formatClass, getEnvConfig, walletAmountToToken } from '../../../../tools';
 
 import './network.scss';
 import ComConSvg from '../../../components/control/icon';
@@ -99,7 +99,7 @@ const PageChainNetwork: FC = () => {
           </dl>
           <dl className="chain_info_dl">
             <dt className="chain_info_dt">
-              PLUG&nbsp;<I18 text="price" />
+            { getEnvConfig.APP_TOKEN_NAME }&nbsp;<I18 text="price" />
             </dt>
             <dd className="chain_info_dd">
               { infoData.price }

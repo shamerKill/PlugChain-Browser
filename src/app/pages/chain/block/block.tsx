@@ -2,7 +2,7 @@ import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import I18 from '../../../../i18n/component';
 import useI18 from '../../../../i18n/hooks';
-import { formatTime, getOnlyId, useFormatPath } from '../../../../tools';
+import { formatTime, getOnlyId, useFormatPath, getEnvConfig } from '../../../../tools';
 import { fetchData } from '../../../../tools/ajax';
 import ComConSvg from '../../../components/control/icon';
 import ComConLink from '../../../components/control/link';
@@ -122,7 +122,7 @@ const PageBlockInfo: FC = () => {
           </dl>
           <dl className="block_info_dl">
             <dt className="block_info_dt"><I18 text="feeNumber" /></dt>
-            <dd className="block_info_dd">{blockInfo.fee}PLUG</dd>
+            <dd className="block_info_dd">{blockInfo.fee}{ getEnvConfig.APP_TOKEN_NAME }</dd>
           </dl>
           <dl className="block_info_dl">
             <dt className="block_info_dt"><I18 text="producer" /></dt>

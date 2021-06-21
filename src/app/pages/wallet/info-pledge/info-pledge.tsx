@@ -194,16 +194,17 @@ const PageInfoPledge: FC = () => {
     if (!search) return;
     const pledgeSub = fetchData('GET', 'delegationsByAddress', { address: wallet.address }).subscribe(({ success, data }) => {
       if (success && data && data.length > 0) {
-        data.forEach((node: any) => {
+        data.forEach(async (node: any) => {
           if (node.description.moniker === search.id) {
-            setPledgeNodeInfo({
+            const obj = {
               avatar: multiavatar(node.description.moniker),
               name: node.description.moniker,
               address: node.operator_address,
               pledged: formatNumberStr(`${parseFloat(walletAmountToToken(node.shares || '0'))}`),
-              rewardRate: '0.00%',
+              rewardRate: `${await (walletChainReward(parseFloat(`${node.commission.commission_rates.rate}`)))}%`,
               earned: formatNumberStr(`${parseFloat(walletAmountToToken(node.my_reward || '0'))}`),
-            });
+            };
+            setPledgeNodeInfo(obj);
           }
         });
       }

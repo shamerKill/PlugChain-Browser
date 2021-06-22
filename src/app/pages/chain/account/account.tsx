@@ -83,7 +83,7 @@ const PageChainAccount: FC = () => {
   }, [pathAddress]);
 
   useEffect(() => {
-    if (address === undefined) return;
+    if (!address) return;
     const subOption = fetchData('GET', 'balance', { address, coin: getEnvConfig.APP_TOKEN_NAME }).subscribe(({ success, data, error, message }) => {
       if (success) {
         setCoinVolume(formatNumberStr(`${data.Balance}`));

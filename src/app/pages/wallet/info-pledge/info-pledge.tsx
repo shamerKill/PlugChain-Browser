@@ -3,7 +3,6 @@ import { formatClass, getEnvConfig, getOnlyId, sleep, useFormatSearch, useSafeLi
 import ComConSvg from '../../../components/control/icon';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
-import multiavatar from '@multiavatar/multiavatar/dist/esm';
 import ComConButton from '../../../components/control/button';
 import alertTools from '../../../components/tools/alert';
 import useGetDispatch from '../../../../databases/hook';
@@ -16,6 +15,7 @@ import { Link } from 'react-router-dom';
 import './info-pledge.scss';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { Subscription } from 'rxjs';
+import { NumberTools } from '../../../../tools/number';
 
 type TypePledgeNodeInfo = {
   avatar: any;
@@ -42,6 +42,7 @@ const PageInfoPledge: FC = () => {
   const [pledgeNodeInfo, setPledgeNodeInfo] = useState<TypePledgeNodeInfo>({
     avatar: '', name: '', address: '', pledged: '', rewardRate: '', earned: '',
   });
+  const [balance, setBalance] = useState('');
   const [volume, setVolume] = useState('');
   const [fee, setFee] = useState('');
   const [password, setPassword] = useState('');
@@ -61,6 +62,8 @@ const PageInfoPledge: FC = () => {
     }
     if (!verifyNumber(volume, true)) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
     if (!verifyNumber(fee, true)) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
+    if (new NumberTools(parseFloat(pledgeNodeInfo.pledged)).cut(parseFloat(volume)).get() < 0) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
+    if (new NumberTools(parseFloat(balance)).cut(parseFloat(fee)).get() < 0) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
     if (!verifyPassword(password)) return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
     setExeLoading(true);
     confirmTools.create({
@@ -90,10 +93,12 @@ const PageInfoPledge: FC = () => {
               goLink('/wallet/my-pledge');
             } else if (res.error) {
               alertTools.create({ message: <p><I18 text="exeError" /><br />{res.result}</p>, type: 'error', time: 0 });
+              setBalance(`${new NumberTools(parseFloat(balance)).cut(parseFloat(fee)).get()}`);
             }
           });
         } else if (data.error) {
           setExeLoading(false);
+          setBalance(`${new NumberTools(parseFloat(balance)).cut(parseFloat(fee)).get()}`);
           alertTools.create({ message: <p><I18 text="exeError" /><br />{data.result}</p>, type: 'error', time: 0 });
         }
       });
@@ -104,12 +109,13 @@ const PageInfoPledge: FC = () => {
           alertTools.create({ message: <I18 text="exeSuccess" />, type: 'success' });
           goLink('/wallet/my-pledge');
         } else if (res.error) {
+          setBalance(`${new NumberTools(parseFloat(balance)).cut(parseFloat(fee)).get()}`);
           alertTools.create({ message: <p><I18 text="exeError" /><br />{res.result}</p>, type: 'error', time: 0 });
         }
       });
     }
     return () => subOption.unsubscribe();
-  }, [pledgeNodeInfo, goLink, password, wallet, fee, volume,]);
+  }, [pledgeNodeInfo, goLink, password, wallet, fee, volume, balance]);
 
   const backupReward = () => {
     if (!showPass || showNodes || !showReward) {
@@ -118,6 +124,7 @@ const PageInfoPledge: FC = () => {
       return setShowPass(true);
     }
     if (!verifyNumber(fee, true)) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
+    if (new NumberTools(parseFloat(balance)).cut(parseFloat(fee)).get() < 0) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
     if (!verifyPassword(password)) return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
     setExeLoading(true);
     confirmTools.create({
@@ -141,11 +148,12 @@ const PageInfoPledge: FC = () => {
         alertTools.create({ message: <I18 text="exeSuccess" />, type: 'success' });
         goLink('/wallet/my-pledge');
       } else if (data.error) {
+        setBalance(`${new NumberTools(parseFloat(balance)).cut(parseFloat(fee)).get()}`);
         alertTools.create({ message: <p><I18 text="exeError" /><br />{data.result}</p>, type: 'error', time: 0 });
       }
     });
     return () => subOption.unsubscribe();
-  }, [pledgeNodeInfo, goLink, password, wallet, fee, volume]);
+  }, [pledgeNodeInfo, goLink, password, wallet, fee, volume, balance]);
 
   const changeNodeSelected = (index: number) => {
     setNodeSelected(index);
@@ -160,6 +168,8 @@ const PageInfoPledge: FC = () => {
     if (!nodes?.[nodeSelected]) return alertTools.create({ message: <I18 text="exeError" />, type: 'warning' });
     if (!verifyNumber(volume, true)) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
     if (!verifyNumber(fee, true)) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
+    if (new NumberTools(parseFloat(pledgeNodeInfo.pledged)).cut(parseFloat(volume)).get() < 0) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
+    if (new NumberTools(parseFloat(balance)).cut(parseFloat(fee)).get() < 0) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
     if (!verifyPassword(password)) return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
     setExeLoading(true);
     confirmTools.create({
@@ -183,11 +193,12 @@ const PageInfoPledge: FC = () => {
         alertTools.create({ message: <I18 text="exeSuccess" />, type: 'success' });
         goLink('/wallet/my-pledge');
       } else if (data.error) {
+        setBalance(`${new NumberTools(parseFloat(balance)).cut(parseFloat(fee)).get()}`);
         alertTools.create({ message: <p><I18 text="exeError" /><br />{data.result}</p>, type: 'error', time: 0 });
       }
     });
     return () => subOption.unsubscribe();
-  }, [pledgeNodeInfo, goLink, password, wallet, fee, nodeSelected, nodes, volume]);
+  }, [pledgeNodeInfo, goLink, password, wallet, fee, nodeSelected, nodes, volume, balance]);
 
   useEffect(() => {
     if (!wallet.hasWallet) return goLink('./login');
@@ -197,7 +208,7 @@ const PageInfoPledge: FC = () => {
         data.forEach(async (node: any) => {
           if (node.description.moniker === search.id) {
             const obj = {
-              avatar: multiavatar(node.description.moniker),
+              avatar: node.description.image ? `${getEnvConfig.STATIC_URL}/${node.operator_address}/image.png` : `${getEnvConfig.STATIC_URL}/default/image.png`,
               name: node.description.moniker,
               address: node.operator_address,
               pledged: formatNumberStr(`${parseFloat(walletAmountToToken(node.shares || '0'))}`),
@@ -209,7 +220,17 @@ const PageInfoPledge: FC = () => {
         });
       }
     });
-    return () => pledgeSub.unsubscribe();
+    const feeSub = fetchData('GET', 'tx_fee').subscribe(({success, data}) => {
+      if (success) setFee(data);
+    });
+    const balanceSub = fetchData('GET', 'balance', { address: wallet.address, coin: getEnvConfig.APP_TOKEN_NAME }).subscribe(({ success, data }) => {
+      if (success) setBalance(`${data.Balance}`);
+    });
+    return () => {
+      pledgeSub.unsubscribe();
+      feeSub.unsubscribe();
+      balanceSub.unsubscribe();
+    };
   }, [wallet, goLink, search]);
   useEffect(() => {
     if (!showNodes || nodes) return;
@@ -238,7 +259,7 @@ const PageInfoPledge: FC = () => {
       <div className="info_pledge_inner">
         <div className="header_account">
           <div className="account_user">
-            <div className="account_avatar" dangerouslySetInnerHTML={{__html: pledgeNodeInfo.avatar}}></div>
+            <img className="account_avatar" src={ pledgeNodeInfo.avatar } alt={pledgeNodeInfo.name} />
             <span className="account_name">{ pledgeNodeInfo.name }</span>
           </div>
           <p className="account_address">
@@ -280,7 +301,7 @@ const PageInfoPledge: FC = () => {
                     onClick={() => changeNodeSelected(index)}>
                     <div className="pledge_node_inner">
                       <div className="pledge_node_header">
-                        <div className="node_avatar" dangerouslySetInnerHTML={{__html: node.avatar}}></div>
+                        <img className="node_avatar" src={ node.avatar } alt={node.name} />
                         <Link className="node_name" to={`/wallet/transaction-pledge?id=${node.name}`}>{node.name}</Link>
                       </div>
                       <div className="pledge_node_content">
@@ -330,7 +351,7 @@ const PageInfoPledge: FC = () => {
               <input
                 className="transaction_box_input"
                 type="number"
-                disabled={exeLoading}
+                disabled={true}
                 value={fee}
                 onChange={e => setFee(e.target.value)} />
               <p className="transaction_box_info">{ getEnvConfig.APP_TOKEN_NAME }</p>

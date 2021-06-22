@@ -196,5 +196,8 @@
 
   "double-click": "双击",
   "no-data": "没有数据",
-  "undefined-data": "未知数据"
+  "undefined-data": "未知数据",
+  "status": "状态",
+  "type": "类型",
+  "rawLog": "原始数据"
 }

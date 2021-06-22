@@ -18,8 +18,8 @@ const appTokenName = getEnvConfig.APP_TOKEN_NAME;
 const addressPrefix = getEnvConfig.WALLET_ADDRESS_PREFIX;
 const chainId = getEnvConfig.APP_CHAIN_ID;
 
-const defaultTransGasLimit = '100000';
-const defaultDelegateLimit = '200000';
+const defaultTransGasLimit = '1000000';
+const defaultDelegateLimit = '1000000';
 
 
 let chainAllValue: number;
@@ -138,7 +138,6 @@ export const walletTransfer = ({ wallet, toAddress, volume, gasAll, memo = '', g
       },
     } ];
     const transferFee = walletGetFee('transfer', { allAmount: gasAll, gasLimit: gasLimit });
-    console.log({ wallet, message: transferMessage, fee: transferFee, memo });
     const signRaw = await walletSign({ wallet, message: transferMessage, fee: transferFee, memo });
     fetchData(signRaw);
   })();

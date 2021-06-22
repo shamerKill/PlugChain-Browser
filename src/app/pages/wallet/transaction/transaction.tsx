@@ -12,6 +12,7 @@ import { fetchData } from '../../../../tools/ajax';
 import { formatNumberStr, formatStringNum } from '../../../../tools/string';
 import confirmTools from '../../../components/tools/confirm';
 import alertTools from '../../../components/tools/alert';
+import { NumberTools } from '../../../../tools/number';
 
 const PageWalletTransaction: FC = () => {
   const goLink = useSafeReplaceLink();
@@ -25,8 +26,10 @@ const PageWalletTransaction: FC = () => {
 
   const verifyTransaction = () => {
     if (!walletVerifyAddress(toAddress)) return alertTools.create({ message: <I18 text="addressInputError" />, type: 'warning' });
+    if (toAddress === wallet.address) return alertTools.create({ message: <I18 text="addressInputError" />, type: 'warning' });
     if (!verifyNumber(volume, true)) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
     if (!verifyNumber(fee, true)) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
+    if (new NumberTools(formatStringNum(balance)).cut(parseFloat(volume)).cut(parseFloat(fee)).get() < 0) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
     if (!verifyPassword(password)) return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
     setTransactionLoading(true);
     confirmTools.create({
@@ -51,16 +54,19 @@ const PageWalletTransaction: FC = () => {
         alertTools.create({ message: <I18 text="exeSuccess" />, type: 'success' });
         setToAddress('');
         setVolume('');
-        setFee('');
         setPassword('');
+        setBalance(`${new NumberTools(formatStringNum(balance)).cut(parseFloat(fee)).cut(parseFloat(volume)).get()}`);
       } else if (data.error) {
+        setBalance(`${new NumberTools(formatStringNum(balance)).cut(parseFloat(fee)).get()}`);
         alertTools.create({ message: <I18 text="exeSuccess" />, type: 'success' });
       }
     });
     return () => subOption.unsubscribe();
-  }, [fee, password, volume, toAddress, wallet.encryptionKey]);
+  }, [fee, password, volume, toAddress, wallet.encryptionKey, balance]);
 
-  const transactionAllBalance = () => setVolume(`${formatStringNum(balance)}`);
+  const transactionAllBalance = () => {
+    setVolume(`${new NumberTools(formatStringNum(balance)).cut(parseFloat(fee)).get()}`);
+  };
 
   useEffect(() => {
     if (!wallet.hasWallet) return goLink('./login');
@@ -111,7 +117,7 @@ const PageWalletTransaction: FC = () => {
             <input
               className="transaction_box_input"
               type="number"
-              disabled={transactionLoading}
+              disabled={true}
               value={fee}
               onChange={e => setFee(e.target.value)} />
             <p className="transaction_box_info">{ getEnvConfig.APP_TOKEN_NAME }</p>

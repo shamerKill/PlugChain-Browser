@@ -13,6 +13,7 @@ import { InRootState } from '../../../../@types/redux';
 import { fetchData } from '../../../../tools/ajax';
 import { formatNumberStr, formatStringNum } from '../../../../tools/string';
 import confirmTools from '../../../components/tools/confirm';
+import { NumberTools } from '../../../../tools/number';
 
 type TypeNodeInfo = {
   avatar: string;
@@ -40,6 +41,7 @@ const PageWalletTransactionPledge: FC = () => {
   const verifyPledge = () => {
     if (!verifyNumber(volume)) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
     if (!verifyNumber(fee)) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning'});
+    if (new NumberTools(formatStringNum(balance)).cut(parseFloat(volume)).cut(parseFloat(fee)).get() < 0) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
     if (!verifyPassword(password)) return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning'});
     setPledgeLoading(true);
     confirmTools.create({
@@ -60,19 +62,19 @@ const PageWalletTransactionPledge: FC = () => {
     }
     const subOption = walletDelegate({ wallet: useWallet, validatorAddress: nodeInfo.address, volume: volume, gasAll: fee }, 'delegate').subscribe(data => {
       if (!data.loading) setPledgeLoading(false);
-      console.log(data);
       if (data.success) {
         alertTools.create({ message: <I18 text="exeSuccess" />, type: 'success' });
         goLink('/wallet/my-pledge');
       } else if (data.error) {
+        setBalance(`${new NumberTools(formatStringNum(balance)).cut(parseFloat(fee)).get()}`);
         alertTools.create({ message: <p><I18 text="exeError" /><br />{ data.result }</p>, type: 'error' });
       }
     });
     return () => subOption.unsubscribe();
-  }, [fee, nodeInfo.address, password, volume, wallet.encryptionKey, goLink]);
+  }, [fee, nodeInfo.address, password, volume, wallet.encryptionKey, goLink, balance]);
 
   const pledgeAllBalance = () => {
-    setVolume(`${formatStringNum(balance)}`);
+    setVolume(`${new NumberTools(formatStringNum(balance)).cut(parseFloat(fee)).get()}`);
   };
 
   useEffect(() => {
@@ -80,7 +82,11 @@ const PageWalletTransactionPledge: FC = () => {
     const balanceSub = fetchData('GET', 'balance', { address: wallet.address, coin: getEnvConfig.APP_TOKEN_NAME }).subscribe(({ success, data }) => {
       if (success) setBalance(formatNumberStr(`${data.Balance}`));
     });
+    const feeSub = fetchData('GET', 'tx_fee').subscribe(({success, data}) => {
+      if (success) setFee(data);
+    });
     return () => {
+      feeSub.unsubscribe();
       balanceSub.unsubscribe();
     };
   }, [wallet, goLink]);
@@ -158,7 +164,7 @@ const PageWalletTransactionPledge: FC = () => {
           <input
             className="pledge_box_input"
             type="number"
-            disabled={pledgeLoading}
+            disabled={true}
             value={fee}
             onChange={e => setFee(e.target.value)} />
           <p className="pledge_box_info">{ getEnvConfig.APP_TOKEN_NAME }</p>

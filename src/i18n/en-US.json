@@ -197,5 +197,8 @@
 
   "double-click": "double click",
   "no-data": "No Data",
-  "undefined-data": "undefined data"
+  "undefined-data": "undefined data",
+  "status": "status",
+  "type": "type",
+  "rawLog": "raw logs"
 }

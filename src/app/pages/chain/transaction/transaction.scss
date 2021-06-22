@@ -65,6 +65,12 @@
       white-space: nowrap;
       flex: 1;
       padding: 0 0.5rem;
+      &.transaction_info_green {
+        color: var(--color-primary-green);
+      }
+      &.transaction_info_red {
+        color: var(--color-primary-red);
+      }
     }
     .transaction_info_remarks {
       padding: 0.5rem;

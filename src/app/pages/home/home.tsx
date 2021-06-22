@@ -106,7 +106,7 @@ const PageHome: FC = () => {
       if (coin.success) updateData({
         price: formatNumberStr(`${coin.data.price}`),
         priceRate: parseFloat(`${coin.data.price_drift_ratio}`),
-        markValue: `${coin.data.total_price}`,
+        markValue: parseFloat(`${coin.data.total_price}`).toFixed(2),
         allTokenVolume: formatNumberStr(walletAmountToToken(`${coin.data.supply}`)),
         allPledge: formatNumberStr(walletAmountToToken(`${coin.data.staking}`)),
         pledgeRate: parseFloat(`${coin.data.staking_ratio}`),

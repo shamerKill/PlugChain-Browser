@@ -98,6 +98,9 @@
     }
     .chain_info_dl {
       width: 50%;
+      &:nth-last-child(2), &:nth-last-child(3) {
+        width: 100%;
+      }
     }
     .network_chart_item {
       width: 100%;

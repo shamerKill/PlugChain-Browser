@@ -13,7 +13,14 @@ const ComConLoading: FC<{ visible?: boolean }> = ({ visible }) => {
     }
     return () => sub?.unsubscribe();
   }, [visible]);
-  return <div className={formatClass([visibleValue && 'com-con-loading'])}></div>;
+  return (
+    <div className={formatClass([visibleValue && 'com-con-loading'])}>
+      <div className="com-con-loading-inner">
+        <div className="com-con-loading-shadow"></div>
+        <div className="com-con-loading-shadow"></div>
+      </div>
+    </div>
+  );
 };
 
 export default ComConLoading;

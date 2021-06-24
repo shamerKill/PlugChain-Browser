@@ -46,7 +46,7 @@ export const walletChainReward = (nodeRate: number) => new Promise(resolve => {
   else resolve(computeRate(nodeRate).toFixed(2));
 });
 
-export const walletVerifyAddress = (address: string) => (new RegExp(`${addressPrefix}[\\d|a-z|A-Z]{39}`)).test(address);
+export const walletVerifyAddress = (address: string) => (new RegExp(`^${addressPrefix}[\\d|a-z|A-Z]{39}$`)).test(address);
 
 export const walletVerifyMnemonic = async (mnemonics: string[]) => {
   if (![ 12, 15, 18, 21, 24 ].includes(mnemonics.length)) return false;

@@ -50,11 +50,11 @@ const PageHome: FC = () => {
   const searchCallback = useCallback(() => {
     if (searchValue === '') return alertTools.create({ message: <I18 text="no-data" />, time: 5000, type: 'error' });
     if (!Number.isNaN(Number(searchValue))) {
-      if (Number(searchValue) <= Number(chainHeight)) return goLink(`./block/${searchValue}`);
+      if (Number(searchValue) <= Number(chainHeight)) return goLink(`/block/${searchValue}`);
       else return alertTools.create({ message: <I18 text="no-data" />, time: 5000, type: 'error' });
     }
-    if (walletVerifyAddress(searchValue)) return goLink(`./account/${searchValue}`);
-    if (searchValue.length === 64) return goLink(`./transaction/${searchValue}`);
+    if (walletVerifyAddress(searchValue)) return goLink(`/account/${searchValue}`);
+    if (searchValue.length === 64) return goLink(`/transaction/${searchValue}`);
     alertTools.create({ message: <I18 text="undefined-data" />, time: 5000, type: 'error' });
   }, [searchValue, goLink, chainHeight]);
 
@@ -67,10 +67,10 @@ const PageHome: FC = () => {
         updateData({ blockListTable: blockList.data.slice(0, 10).map((block: any) => ({
           key: getOnlyId(),
           value: [
-            { key: getOnlyId(), value: <ComConLink link={`./block/${block.block_id}`}>{ block.block_id }</ComConLink> },
+            { key: getOnlyId(), value: <ComConLink link={`/block/${block.block_id}`}>{ block.block_id }</ComConLink> },
             { key: getOnlyId(), value: formatTime(block.time) },
-            { key: getOnlyId(), value: <ComConLink link={`./account/${block.address}`} noLink>{ block.address }</ComConLink> },
-            { key: getOnlyId(), value: <ComConLink link={`./block/${block.block_id}`}>{ block.hash }</ComConLink> },
+            { key: getOnlyId(), value: <ComConLink link={`/account/${block.address}`} noLink>{ block.address }</ComConLink> },
+            { key: getOnlyId(), value: <ComConLink link={`/block/${block.block_id}`}>{ block.hash }</ComConLink> },
             { key: getOnlyId(), value: block.tx_num },
             { key: getOnlyId(), value: block.tx_fee },
           ]
@@ -86,11 +86,11 @@ const PageHome: FC = () => {
       if (txsList.status === 200) updateData({ txsListTable: txsList.data.info.slice(0, 10).map((tx: any) => ({
         key: getOnlyId(),
         value: [
-          { key: getOnlyId(), value: <ComConLink link={`./transaction/${tx.hash}`}>{ tx.hash }</ComConLink> },
-          { key: getOnlyId(), value: <ComConLink link={`./block/${tx.block_id}`}>{ tx.block_id }</ComConLink> },
+          { key: getOnlyId(), value: <ComConLink link={`/transaction/${tx.hash}`}>{ tx.hash }</ComConLink> },
+          { key: getOnlyId(), value: <ComConLink link={`/block/${tx.block_id}`}>{ tx.block_id }</ComConLink> },
           { key: getOnlyId(), value: formatTime(new Date(tx.create_time)) },
-          { key: getOnlyId(), value: <ComConLink link={`./account/${tx.from}`}>{ tx.from }</ComConLink> },
-          { key: getOnlyId(), value: <ComConLink link={`./account/${tx.to}`}>{ tx.to }</ComConLink> },
+          { key: getOnlyId(), value: <ComConLink noLink={!walletVerifyAddress(tx.from)} link={`/account/${tx.from}`}>{ tx.from }</ComConLink> },
+          { key: getOnlyId(), value: <ComConLink noLink={!walletVerifyAddress(tx.to)} link={`/account/${tx.to}`}>{ tx.to }</ComConLink> },
           { key: getOnlyId(), value: tx.amount },
           { key: getOnlyId(), value: tx.fee },
         ]

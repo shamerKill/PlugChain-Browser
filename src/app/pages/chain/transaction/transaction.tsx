@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import I18 from '../../../../i18n/component';
-import { fetchData, formatClass, formatTime, useFormatPath } from '../../../../tools';
+import { fetchData, formatClass, formatTime, useFormatPath, walletVerifyAddress } from '../../../../tools';
 import { formatNumberStr } from '../../../../tools/string';
 import ComConSvg from '../../../components/control/icon';
 import ComConLoading from '../../../components/control/loading';
@@ -104,11 +104,23 @@ const PageTransaction: FC = () => {
           </dl>
           <dl className="transaction_info_dl">
             <dt className="transaction_info_dt"><I18 text="from" /></dt>
-            <dd className="transaction_info_dd"><Link to={`/account/${transactionInfo.from}`}>{transactionInfo.from}</Link></dd>
+            <dd className="transaction_info_dd">
+              {
+                walletVerifyAddress(transactionInfo.from)
+                  ? <Link to={`/account/${transactionInfo.from}`}>{transactionInfo.from}</Link>
+                  : transactionInfo.from
+              }
+            </dd>
           </dl>
           <dl className="transaction_info_dl">
             <dt className="transaction_info_dt"><I18 text="to" /></dt>
-            <dd className="transaction_info_dd"><Link to={`/account/${transactionInfo.to}`}>{transactionInfo.to}</Link></dd>
+            <dd className="transaction_info_dd">
+              {
+                walletVerifyAddress(transactionInfo.to)
+                  ? <Link to={`/account/${transactionInfo.to}`}>{transactionInfo.to}</Link>
+                  : transactionInfo.from
+              }
+            </dd>
           </dl>
           <dl className="transaction_info_dl">
             <dt className="transaction_info_dt"><I18 text="remarks" /></dt>

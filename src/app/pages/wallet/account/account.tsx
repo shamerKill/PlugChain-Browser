@@ -4,7 +4,7 @@ import I18 from '../../../../i18n/component';
 import ComConTable, { TypeComConTableContent, TypeComConTableHeader } from '../../../components/control/table.copy';
 import ComConButton from '../../../components/control/button';
 import ComConSvg from '../../../components/control/icon';
-import { formatClass, formatTime, getEnvConfig, getOnlyId, useFormatSearch, useSafeLink, walletAmountToToken, fetchData, justifySearch } from '../../../../tools';
+import { formatClass, formatTime, getEnvConfig, getOnlyId, useFormatSearch, useSafeLink, walletAmountToToken, fetchData, justifySearch, walletVerifyAddress } from '../../../../tools';
 import useGetDispatch from '../../../../databases/hook';
 import { InRootState } from '../../../../@types/redux';
 import { formatNumberStr } from '../../../../tools/string';
@@ -67,8 +67,8 @@ const PageWalletAccount: FC = () => {
               { key: getOnlyId(), value: <ComConLink link={`../transaction/${tx.hash}`}>{ tx.hash }</ComConLink> },
               { key: getOnlyId(), value: <ComConLink link={`../block/${tx.block_id}`}>{ tx.block_id }</ComConLink> },
               { key: getOnlyId(), value: formatTime(new Date(tx.create_time)) },
-              { key: getOnlyId(), value: <ComConLink noLink={txTypeOutput} link={`../account/${tx.from}`}>{ tx.from }</ComConLink> },
-              { key: getOnlyId(), value: <ComConLink noLink={!txTypeOutput} link={`../account/${tx.to}`}>{ tx.to }</ComConLink> },
+              { key: getOnlyId(), value: <ComConLink noLink={txTypeOutput || !walletVerifyAddress(tx.from)} link={`/account/${tx.from}`}>{ tx.from }</ComConLink> },
+              { key: getOnlyId(), value: <ComConLink noLink={!txTypeOutput || !walletVerifyAddress(tx.to)} link={`/account/${tx.to}`}>{ tx.to }</ComConLink> },
               { key: getOnlyId(), value: tx.amount },
               { key: getOnlyId(), value: tx.fee },
             ]

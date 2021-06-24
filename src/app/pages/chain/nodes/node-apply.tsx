@@ -35,6 +35,9 @@ const PageNodeApply: FC = () => {
     if (nodeID === '') return alertTools.create({ message: <I18 text="apply-error-ID" />, type: 'warning'});
     if (!verifyEmail(nodeEmail)) return alertTools.create({ message: <I18 text="apply-error-email" />, type: 'warning'});
     if (nodeDescribe === '') return alertTools.create({ message: <I18 text="apply-error-describe" />, type: 'warning'});
+    if (nodeTelegram === '') return alertTools.create({ message: <I18 text="apply-error-media" />, type: 'warning'});
+    if (nodeTwitter === '') return alertTools.create({ message: <I18 text="apply-error-media" />, type: 'warning'});
+    if (nodeFacebook === '') return alertTools.create({ message: <I18 text="apply-error-media" />, type: 'warning'});
     if (nodeServeInfo === '') return alertTools.create({ message: <I18 text="apply-error-serve" />, type: 'warning'});
     submitInfo();
   };
@@ -158,6 +161,7 @@ const PageNodeApply: FC = () => {
       <h4 className="apply_title_more"><I18 text="apply-node-media" /></h4>
       <div className="apply_content_media">
         <div className="apply_media_item">
+          <p className="apply_form_label_important">*</p>
           <img src={require('../../../../assets/images/telegram.png')} alt="telegram" className="apply_media_img" />
           <div className="apply_media_label">
             <p className="apply_media_pre">@</p>
@@ -171,6 +175,7 @@ const PageNodeApply: FC = () => {
           </div>
         </div>
         <div className="apply_media_item">
+          <p className="apply_form_label_important">*</p>
           <img src={require('../../../../assets/images/twitter.png')} alt="twitter" className="apply_media_img" />
           <div className="apply_media_label">
             <p className="apply_media_pre">@</p>
@@ -184,6 +189,7 @@ const PageNodeApply: FC = () => {
           </div>
         </div>
         <div className="apply_media_item">
+          <p className="apply_form_label_important">*</p>
           <img src={require('../../../../assets/images/facebook.png')} alt="facebook" className="apply_media_img" />
           <div className="apply_media_label">
             <p className="apply_media_pre">@</p>
@@ -210,7 +216,11 @@ const PageNodeApply: FC = () => {
         </textarea>
         <h5 className="apply_form_title">
           <span className="apply_form_label_important">*</span><I18 text="apply-node-serve" />
-          <a className="apply_form_label_link a_link" href="https://github.com/oracleNetworkProtocol/plugchain/tree/main/docs/tutorial">
+          <a
+            className="apply_form_label_link a_link"
+            href="https://github.com/oracleNetworkProtocol/plugchain/tree/main/docs/tutorial"
+            target="_blank"
+            rel="noreferrer">
             <I18 text="apply-node-serve-link" />
           </a>
         </h5>

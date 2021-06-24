@@ -4,7 +4,7 @@ import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
 
 import './account.scss';
-import { formatTime, getEnvConfig, getOnlyId, useFormatPath, useFormatSearch, useSafeReplaceLink } from '../../../../tools';
+import { formatTime, getEnvConfig, getOnlyId, useFormatPath, useFormatSearch, useSafeReplaceLink, walletVerifyAddress } from '../../../../tools';
 import ComConSvg from '../../../components/control/icon';
 import { justifySearch } from '../../../../tools/url';
 import { fetchData } from '../../../../tools/ajax';
@@ -66,8 +66,8 @@ const PageChainAccount: FC = () => {
               { key: getOnlyId(), value: <ComConLink link={`../transaction/${tx.hash}`}>{ tx.hash }</ComConLink> },
               { key: getOnlyId(), value: <ComConLink link={`../block/${tx.block_id}`}>{ tx.block_id }</ComConLink> },
               { key: getOnlyId(), value: formatTime(new Date(tx.create_time)) },
-              { key: getOnlyId(), value: <ComConLink noLink={txTypeOutput} link={`../account/${tx.from}`}>{ tx.from }</ComConLink> },
-              { key: getOnlyId(), value: <ComConLink noLink={!txTypeOutput} link={`../account/${tx.to}`}>{ tx.to }</ComConLink> },
+              { key: getOnlyId(), value: <ComConLink noLink={txTypeOutput || !walletVerifyAddress(tx.from)} link={`/account/${tx.from}`}>{ tx.from }</ComConLink> },
+              { key: getOnlyId(), value: <ComConLink noLink={!txTypeOutput || !walletVerifyAddress(tx.from)} link={`/account/${tx.to}`}>{ tx.to }</ComConLink> },
               { key: getOnlyId(), value: tx.amount },
               { key: getOnlyId(), value: tx.fee },
             ]

@@ -126,6 +126,7 @@
   "pledgePageTip4": "质押之后可以『 转让质押 』一天仅能转1次,一个月最多7次。",
   "pledgePageTip5": "质押PLUG给验证节点可以随时赎回，但赎回质押需要等待21天。",
   "selectJoin": "选择参与",
+  "select": "选择",
   "willProfit": "预计年化收益率",
   "minPledgeVolume": "最小数量",
   "pledgeVolume": "已质押数",
@@ -192,6 +193,7 @@
   "apply-error-email": "节点邮箱输入有误",
   "apply-error-describe": "节点介绍输入有误",
   "apply-error-serve": "服务器信息输入有误",
+  "apply-error-media": "社交媒体信息输入有误",
   "apply-error-avatar": "头像尺寸格式错误",
 
   "double-click": "双击",

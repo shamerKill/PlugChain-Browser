@@ -1,7 +1,7 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import I18 from '../../../../i18n/component';
-import { formatSearch, formatTime, getOnlyId, useSafeLink } from '../../../../tools';
+import { formatSearch, formatTime, getOnlyId, useSafeLink, walletVerifyAddress } from '../../../../tools';
 import { fetchData } from '../../../../tools/ajax';
 import { justifySearch } from '../../../../tools/url';
 import ComConLink from '../../../components/control/link';
@@ -51,8 +51,8 @@ const PageBlocksList: FC = () => {
             { key: getOnlyId(), value: <ComConLink link={`./transaction/${tx.hash}`}>{ tx.hash }</ComConLink> },
             { key: getOnlyId(), value: <ComConLink link={`./block/${tx.block_id}`}>{ tx.block_id }</ComConLink> },
             { key: getOnlyId(), value: formatTime(new Date(tx.create_time)) },
-            { key: getOnlyId(), value: <ComConLink link={`./account/${tx.from}`}>{ tx.from }</ComConLink> },
-            { key: getOnlyId(), value: <ComConLink link={`./account/${tx.to}`}>{ tx.to }</ComConLink> },
+            { key: getOnlyId(), value: <ComConLink noLink={!walletVerifyAddress(tx.from)} link={`/account/${tx.from}`}>{ tx.from }</ComConLink> },
+            { key: getOnlyId(), value: <ComConLink noLink={!walletVerifyAddress(tx.to)} link={`/account/${tx.to}`}>{ tx.to }</ComConLink> },
             { key: getOnlyId(), value: tx.amount },
             { key: getOnlyId(), value: tx.fee },
           ]

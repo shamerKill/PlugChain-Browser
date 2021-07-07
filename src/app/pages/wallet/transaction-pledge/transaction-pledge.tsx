@@ -101,7 +101,7 @@ const PageWalletTransactionPledge: FC = () => {
           name: data.description.moniker,
           rate: `${await (walletChainReward(parseFloat(`${data.commission.commission_rates.rate}`)))}%`,
           pledgedVolume: formatNumberStr(walletAmountToToken(`${parseFloat(data.delegator_shares)}`)),
-          minVolume: formatNumberStr(`${parseFloat(data.min_self_delegation)}`),
+          minVolume: formatNumberStr(walletAmountToToken(`${parseFloat(data.min_self_delegation)}`)),
           address: data.operator_address,
           toCut: `${(data.commission.commission_rates.rate * 100).toFixed(2)}%`,
         };

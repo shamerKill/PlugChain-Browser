@@ -36,7 +36,7 @@ const PageWalletPledge: FC = () => {
             name: node.description.moniker,
             rate: `${await (walletChainReward(parseFloat(`${node.commission.commission_rates.rate}`)))}%`,
             pledgedVolume: formatNumberStr(walletAmountToToken(`${parseFloat(node.delegator_shares)}`)),
-            minVolume: formatNumberStr(`${parseFloat(node.min_self_delegation)}`),
+            minVolume: formatNumberStr(walletAmountToToken(`${parseFloat(node.min_self_delegation)}`)),
             address: node.operator_address,
           };
           resultArr.push(obj);

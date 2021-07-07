@@ -13,7 +13,7 @@ export const formatNumberStr = (input: string|number): string => {
   return result;
 };
 
-export const formatStringNum = (input: string): number => parseFloat(input.replace(',', ''));
+export const formatStringNum = (input: string): number => parseFloat(input.replace(new RegExp(',', 'g'), ''));
 
 export const toHex = (data: Uint8Array) => {
   let out = '';

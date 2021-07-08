@@ -302,7 +302,7 @@ const PageInfoPledge: FC = () => {
                     <div className="pledge_node_inner">
                       <div className="pledge_node_header">
                         <img className="node_avatar" src={ node.avatar } alt={node.name} />
-                        <Link className="node_name" to={`/wallet/transaction-pledge?id=${node.name}`}>{node.name}</Link>
+                        <Link className="node_name" to={`/wallet/transaction-pledge?id=${node.address}`}>{node.name}</Link>
                       </div>
                       <div className="pledge_node_content">
                         <div className="pledge_node_info">

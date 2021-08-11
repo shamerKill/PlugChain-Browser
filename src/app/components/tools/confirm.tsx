@@ -25,8 +25,14 @@ const ComToolConfirm: FC<TypeConfirmArg> = ({message, close, buttons}) => {
   const [closeIng, setCloseIng] = useState<boolean>(false);
   useEffect(() => {
     if (closeIng) {
-      const timerClose = setTimeout(() => close?.(), 300);
-      return () => clearTimeout(timerClose);
+      const timerClose = setTimeout(() => {
+        setCloseIng(false);
+        close?.();
+      }, 300);
+      return () => {
+        setCloseIng(false);
+        clearTimeout(timerClose)
+      };
     }
   }, [closeIng, close]);
   return (

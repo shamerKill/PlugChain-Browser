@@ -5,7 +5,9 @@
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "build": "npm run build-prod && npm run build-test",
+    "build-prod": "node scripts/build-prod.js",
+    "build-test": "node scripts/build-test.js",
     "test": "node scripts/test.js",
     "lint": "eslint ./src",
     "test:jest": "jest ./src"

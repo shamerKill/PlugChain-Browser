@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import I18 from '../../../i18n/component';
 import { useLanguageHook } from '../../../services/config.services';
-import { formatClass, useSafeLink } from '../../../tools';
+import { formatClass, getEnvConfig, useSafeLink } from '../../../tools';
 import ComConLogo from '../control/logo';
 import ComConButton from '../control/button';
 import ComConSelector from '../control/selector';
@@ -13,6 +13,7 @@ import useGetDispatch from '../../../databases/hook';
 import { InRootState } from '../../../@types/redux';
 
 const ComLayHeader: FC<{ headerBg: boolean }> = ({ headerBg }) => {
+  const webConfig = getEnvConfig;
   const goLink = useSafeLink();
   const [language, setLanguage] = useLanguageHook();
   const [wallet] = useGetDispatch<InRootState['wallet']>('wallet');
@@ -49,7 +50,7 @@ const ComLayHeader: FC<{ headerBg: boolean }> = ({ headerBg }) => {
             <li className={formatClass(['layout-header-menu-list'])}><Link to="/"><I18 text="home" /></Link></li>
             <li className={formatClass(['layout-header-menu-list'])}><Link to="/"><I18 text="blockChain" /></Link></li>
             {
-              wallet.hasWallet && <li className={formatClass(['layout-header-menu-list'])}><Link to="/wallet/receive"><ComConSvg xlinkHref="#icon-water" /></Link></li>
+              wallet.hasWallet && webConfig.DEPLOY_TYPE === 'test' && <li className={formatClass(['layout-header-menu-list'])}><Link to="/wallet/receive"><ComConSvg xlinkHref="#icon-water" /></Link></li>
             }
           </ul>
           <ComConButton onClick={buttonWalletSignIn}>

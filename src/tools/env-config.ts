@@ -5,7 +5,7 @@ interface InEnvConfig {
   [key: string]: any;
 }
 
-const getEnvConfig = ((): InEnvConfig => {
+const getEnvConfig = (): InEnvConfig => {
   const mode = process.env.NODE_ENV;
   const modeConfig = {
     TEST: mode === 'test',
@@ -15,19 +15,20 @@ const getEnvConfig = ((): InEnvConfig => {
 
   try {
     const base = require('../.env/base.env.json');
-    const production = require('../.env/production.env.json');
-    const development = require('../.env/development.env.json');
-    const test = require('../.env/test.env.json');
     let config = base ? { ...base, ...modeConfig } : modeConfig;
+    const deployType = config.DEPLOY_TYPE || 'test';
 
-    if (mode === 'production') config = { ...config, ...production };
-    else if (mode === 'development') config = { ...config, ...development};
-    else if (mode === 'test') config = { ...config, ...test };
+    if (mode === 'production' && deployType === 'production') config = { ...config, ...require('../.env/deploy-prod.env.json') };
+    if (mode === 'production' && deployType === 'test') config = { ...config, ...require('../.env/deploy-test.env.json') };
+    if (mode === 'development' && deployType === 'production') config = { ...config, ...require('../.env/dev-prod.env.json')};
+    if (mode === 'test' && deployType === 'production') config = { ...config, ...require('../.env/test-prod.env.json')};
+    if (mode === 'development' && deployType === 'test') config = { ...config, ...require('../.env/dev-test.env.json') };
+    if (mode === 'test' && deployType === 'test') config = { ...config, ...require('../.env/test-test.env.json') };
 
     return config;
   } catch (err) {
     return modeConfig;
   }
-})();
+};
 
-export default getEnvConfig;
+export default getEnvConfig();

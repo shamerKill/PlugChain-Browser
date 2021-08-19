@@ -7,12 +7,13 @@ import ComConTable, { TypeComConTableContent, TypeComConTableHeader } from '../.
 import { fetchData } from '../../../../tools/ajax';
 import { formatTime, getEnvConfig, getOnlyId, sleep, walletVerifyAddress } from '../../../../tools';
 import { formatNumberStr } from '../../../../tools/string';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import './receive.scss';
 import alertTools from '../../../components/tools/alert';
 
 const PageWalletReceive: FC = () => {
+  const history = useHistory();
   const [address, setAddress] = useState('');
   const [volume, setVolume] = useState('');
   const [weekMax, setWeekMax] = useState('');
@@ -93,6 +94,10 @@ const PageWalletReceive: FC = () => {
     });
     return () => subOption.unsubscribe();
   }, [page, limit]);
+
+  useEffect(() => {
+    if (getEnvConfig.DEPLOY_TYPE !== 'test') history.goBack();
+  }, [history]);
 
   return (
     <ComponentsLayoutBase className="page_wallet_receive">

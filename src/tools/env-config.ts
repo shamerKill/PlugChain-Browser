@@ -7,16 +7,17 @@ interface InEnvConfig {
 
 const getEnvConfig = (): InEnvConfig => {
   const mode = process.env.NODE_ENV;
+  const deployType = process.env.DEPLOY_TYPE || 'test';
   const modeConfig = {
     TEST: mode === 'test',
     PRODUCTION: mode === 'production',
     DEVELOPMENT: mode === 'development',
+    deployType: process.env.DEPLOY_TYPE,
   };
 
   try {
     const base = require('../.env/base.env.json');
     let config = base ? { ...base, ...modeConfig } : modeConfig;
-    const deployType = config.DEPLOY_TYPE || 'test';
 
     if (mode === 'production' && deployType === 'production') config = { ...config, ...require('../.env/deploy-prod.env.json') };
     if (mode === 'production' && deployType === 'test') config = { ...config, ...require('../.env/deploy-test.env.json') };

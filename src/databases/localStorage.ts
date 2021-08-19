@@ -1,8 +1,12 @@
 import { getEnvConfig } from '../tools';
 import { InRootState } from '../@types/redux';
 
-const local = localStorage.getItem(getEnvConfig.SAVE_DATABASE_NAME);
-
+let local: string|null = '';
+try {
+  local = localStorage.getItem(getEnvConfig.SAVE_DATABASE_NAME);
+} catch (err) {
+  console.error('err');
+}
 let localOutput: InRootState | {[key: string]: any} = {};
 if (local) localOutput = JSON.parse(local);
 else localOutput = {};

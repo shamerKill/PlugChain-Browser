@@ -8,6 +8,7 @@ import ComConLogo, { TypeComponentsControlLogo } from '../control/logo';
 
 const links = [
   { link: 'http://www.plugchain.info/', src: require('../../../assets/logo/chain-full-light.png') },
+  { link: 'http://www.onp.world/', src: require('../../../assets/logo/protocol-full-light.png') },
 ];
 
 const ComLayFooter: FC = () => {

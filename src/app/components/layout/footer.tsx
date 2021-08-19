@@ -1,24 +1,24 @@
-import { FC, MouseEvent, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import I18 from '../../../i18n/component';
 import { useLanguageHook } from '../../../services/config.services';
 import { formatClass, getOnlyId } from '../../../tools';
 import ComConLogo, { TypeComponentsControlLogo } from '../control/logo';
-import alertTools from '../tools/alert';
+// import alertTools from '../tools/alert';
 
 const links = [
-  { link: '/', src: require('../../../assets/logo/protocol-full-light.png') },
+  { link: 'http://www.plugchain.info/', src: require('../../../assets/logo/chain-full-light.png') },
 ];
 
 const ComLayFooter: FC = () => {
   const [friendsLink, setFriendsLink] = useState<TypeComponentsControlLogo[]>([]);
   const [, changeLanguage] = useLanguageHook();
 
-  const noOpenData = (e: MouseEvent<HTMLAnchorElement>) => {
-    alertTools.create({ message: <I18 text="noOpen" />, type: 'warning' });
-    e.preventDefault();
-    return false;
-  };
+  // const noOpenData = (e: MouseEvent<HTMLAnchorElement>) => {
+  //   alertTools.create({ message: <I18 text="noOpen" />, type: 'warning' });
+  //   e.preventDefault();
+  //   return false;
+  // };
   
   useEffect(() => {
     setFriendsLink(links);
@@ -53,7 +53,7 @@ const ComLayFooter: FC = () => {
               </dt>
               <dd>
                 <p className={formatClass(['layout-footer-list-item'])}>
-                  <Link to="/" onClick={noOpenData}><I18 text="footerList1-1" /></Link>
+                  <a href="https://oraclenetworkprotocol.github.io/plugchain/cn/api/swagger-api.html"><I18 text="footerList1-1" /></a>
                 </p>
                 <p className={formatClass(['layout-footer-list-item'])}>
                   <a href="https://github.com/oracleNetworkProtocol/plugchain">Github</a>
@@ -75,18 +75,18 @@ const ComLayFooter: FC = () => {
                 <I18 text="footerList2Title" />
               </dt>
               <dd>
-                <p className={formatClass(['layout-footer-list-item'])}>
+                {/* <p className={formatClass(['layout-footer-list-item'])}>
                   <Link to="/" onClick={noOpenData}><I18 text="footerList2-1" /></Link>
-                </p>
+                </p> */}
                 <p className={formatClass(['layout-footer-list-item'])}>
                   <a href="https://etherscan.io/"><I18 text="footerList2-2" /></a>
                 </p>
                 {/* <p className={formatClass(['layout-footer-list-item'])}>
                   <Link to="/" onClick={noOpenData}><I18 text="footerList2-3" /></Link>
                 </p> */}
-                <p className={formatClass(['layout-footer-list-item'])}>
+                {/* <p className={formatClass(['layout-footer-list-item'])}>
                   <Link to="/" onClick={noOpenData}><I18 text="footerListMore" /></Link>
-                </p>
+                </p> */}
               </dd>
             </dl>
           </div>

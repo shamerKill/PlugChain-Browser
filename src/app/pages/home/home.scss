@@ -156,9 +156,9 @@
       }
       .chain_market {
         .chain_info_dl {
-          width: 50%;
+          width: 100%;
           padding: 1rem 0;
-          &:nth-child(2)::after, &:nth-child(3)::after, &:nth-child(4)::after {
+          &:nth-child(1)::after, &:nth-child(2)::after, &:nth-child(3)::after, &:nth-child(4)::after {
             display: none;
           }
           &:nth-child(3), &:nth-child(4) {

@@ -67,7 +67,7 @@ const PageMyPledge: FC = () => {
                   <div className="pledge_node_header">
                     <img className="node_avatar" src={node.avatar} alt={node.name} />
                     <Link className="node_name" to={`/wallet/transaction-pledge?id=${node.address}`}>{node.name}</Link>
-                    <ComConButton contrast className="node_detail" onClick={() => goToDetail(node.name)}><I18 text="detail" /></ComConButton>
+                    <ComConButton contrast className="node_detail" onClick={() => goToDetail(node.address)}><I18 text="detail" /></ComConButton>
                   </div>
                   <div className="pledge_node_content">
                     <div className="pledge_node_info">

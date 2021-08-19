@@ -206,7 +206,7 @@ const PageInfoPledge: FC = () => {
     const pledgeSub = fetchData('GET', 'delegationsByAddress', { address: wallet.address }).subscribe(({ success, data }) => {
       if (success && data && data.length > 0) {
         data.forEach(async (node: any) => {
-          if (node.description.moniker === search.id) {
+          if (node.operator_address === search.id) {
             const obj = {
               avatar: node.description.image ? `${getEnvConfig.STATIC_URL}/${node.operator_address}/image.png` : `${getEnvConfig.STATIC_URL}/default/image.png`,
               name: node.description.moniker,
@@ -248,7 +248,7 @@ const PageInfoPledge: FC = () => {
           };
           resultArr.push(obj);
           if (resultArr.length === data.mininum.length) {
-            setNodes(resultArr.filter(node => node.name !== search?.id));
+            setNodes(resultArr.filter(node => node.address !== search?.id));
           }
         });
       }

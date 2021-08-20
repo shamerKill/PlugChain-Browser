@@ -96,7 +96,7 @@ const PageWalletReceive: FC = () => {
   }, [page, limit]);
 
   useEffect(() => {
-    if (getEnvConfig.DEPLOY_TYPE !== 'test') history.goBack();
+    if (getEnvConfig.deployType !== 'test') history.goBack();
   }, [history]);
 
   return (

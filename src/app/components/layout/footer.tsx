@@ -6,11 +6,6 @@ import { formatClass, getOnlyId } from '../../../tools';
 import ComConLogo, { TypeComponentsControlLogo } from '../control/logo';
 // import alertTools from '../tools/alert';
 
-const links = [
-  { link: 'http://www.plugchain.info/', src: require('../../../assets/logo/chain-full-light.png') },
-  { link: 'http://www.onp.world/', src: require('../../../assets/logo/protocol-full-light.png') },
-];
-
 const ComLayFooter: FC = () => {
   const [friendsLink, setFriendsLink] = useState<TypeComponentsControlLogo[]>([]);
   const [, changeLanguage] = useLanguageHook();
@@ -22,7 +17,10 @@ const ComLayFooter: FC = () => {
   // };
   
   useEffect(() => {
-    setFriendsLink(links);
+    setFriendsLink([
+      { link: 'http://www.plugchain.info/', src: require('../../../assets/logo/chain-full-light.png') },
+      { link: 'http://www.onp.world/', src: require('../../../assets/logo/protocol-full-light.png') },
+    ]);
   }, []);
   
   return (

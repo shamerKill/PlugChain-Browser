@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "start": "node scripts/start.js",
+    "start": "node scripts/start-test.js",
+    "start-prod": "node scripts/start-prod.js",
     "build": "npm run build-prod && npm run build-test",
     "build-prod": "node scripts/build-prod.js",
     "build-test": "node scripts/build-test.js",

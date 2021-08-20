@@ -50,7 +50,7 @@ const ComLayHeader: FC<{ headerBg: boolean }> = ({ headerBg }) => {
             <li className={formatClass(['layout-header-menu-list'])}><Link to="/"><I18 text="home" /></Link></li>
             <li className={formatClass(['layout-header-menu-list'])}><Link to="/"><I18 text="blockChain" /></Link></li>
             {
-              wallet.hasWallet && webConfig.DEPLOY_TYPE === 'test' && <li className={formatClass(['layout-header-menu-list'])}><Link to="/wallet/receive"><ComConSvg xlinkHref="#icon-water" /></Link></li>
+              wallet.hasWallet && webConfig.deployType === 'test' && <li className={formatClass(['layout-header-menu-list'])}><Link to="/wallet/receive"><ComConSvg xlinkHref="#icon-water" /></Link></li>
             }
           </ul>
           <ComConButton onClick={buttonWalletSignIn}>

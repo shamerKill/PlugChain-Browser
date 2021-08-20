@@ -201,5 +201,11 @@
   "undefined-data": "未知数据",
   "status": "状态",
   "type": "类型",
-  "rawLog": "原始数据"
+  "rawLog": "原始数据",
+
+	"exportAccount": "导出钱包",
+  "exportAccountWarning": "警告：为了保护您的钱包安全，请妥善保管文件，不要在公共机器上进行导出操作！！！",
+  "accountPassword": "钱包密码",
+  "exportFile": "导出文件",
+  "onlyShow": "仅显示(不导出)"
 }

@@ -1,10 +1,10 @@
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
 import ComConTable, { TypeComConTableContent, TypeComConTableHeader } from '../../../components/control/table.copy';
 import ComConButton from '../../../components/control/button';
 import ComConSvg from '../../../components/control/icon';
-import { formatClass, formatTime, getEnvConfig, getOnlyId, useFormatSearch, useSafeLink, walletAmountToToken, fetchData, justifySearch, walletVerifyAddress } from '../../../../tools';
+import { formatClass, formatTime, getEnvConfig, getOnlyId, useFormatSearch, useSafeLink, walletAmountToToken, fetchData, justifySearch, walletVerifyAddress, walletDecode } from '../../../../tools';
 import useGetDispatch from '../../../../databases/hook';
 import { InRootState } from '../../../../@types/redux';
 import { formatNumberStr } from '../../../../tools/string';
@@ -14,8 +14,13 @@ import { Link } from 'react-router-dom';
 import './account.scss';
 import ComConToolsCopy from '../../../components/tools/copy';
 import alertTools from '../../../components/tools/alert';
+import confirmTools from '../../../components/tools/confirm';
+import useI18 from '../../../../i18n/hooks';
+
 
 const PageWalletAccount: FC = () => {
+  const accountPassword = useRef<string>();
+  const clearAccountPassword = useRef<any>();
   const goLink = useSafeLink();
   const search = useFormatSearch<{ page: string }>();
   const [wallet] = useGetDispatch<InRootState['wallet']>('wallet');
@@ -36,6 +41,12 @@ const PageWalletAccount: FC = () => {
   const [allCount, setAllCount] = useState<number>(0);
   const [limit] = useState<number>(10);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const accountPasswordTip = useI18('accountPassword');
+
+  const changeValue = (value: string) => {
+    accountPassword.current = value;
+  }
   
   const copy = (str: string) => {
     ComConToolsCopy(str);
@@ -48,6 +59,63 @@ const PageWalletAccount: FC = () => {
     goLink(`?${justifySearch(searchObj)}`);
     setPage(num);
   }, [search, goLink]);
+
+  const ComPassAlert: FC = () => {
+    const [accountPass, setAccountPass] = useState('');
+    const changeAccountPass = (value: string) => {
+      setAccountPass(value);
+      changeValue(value);
+    };
+    clearAccountPassword.current = () => changeAccountPass('');
+    return (
+      <div className="export-alert">
+        <p className="export-alert-title"><I18 text="exportAccount" /></p>
+        <p className="export-alert-desc"><I18 text="exportAccountWarning" /></p>
+        <input value={accountPass} onChange={e => changeAccountPass(e.target.value)} className="export-alert-input" type="password" placeholder={accountPasswordTip} />
+      </div>
+    );
+  };
+  const onChangeShowExport = () => {
+    const close = confirmTools.create({
+      message: '',
+      Message: ComPassAlert,
+      buttons: [
+        {
+          text:  <I18 text="exportFile" />,
+          onClick: () => {
+            if (!accountPassword.current) return;
+            walletDecode(wallet.encryptionKey, accountPassword.current)
+              .then(data => {
+                var element = document.createElement('a');
+                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data.mnemonic));
+                element.setAttribute('download', wallet.address);
+                element.style.display = 'none';
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+                alertTools.create({ message: <I18 text="success" />, type: 'success' });
+              })
+              .catch(err => alertTools.create({ message: <I18 text="passwordError" />, type: 'error' }))
+              .finally(close);
+            clearAccountPassword.current();
+          }
+        },
+        {
+          text: <I18 text="onlyShow" />,
+          onClick: () => {
+            if (!accountPassword.current) return;
+            walletDecode(wallet.encryptionKey, accountPassword.current)
+              .then(data => {
+                setTimeout(() => confirmTools.create({ message: data.mnemonic }), 300);
+              })
+              .catch(err => alertTools.create({ message: <I18 text="passwordError" />, type: 'error' }))
+              .finally(close);
+            clearAccountPassword.current();
+          }
+        }
+      ],
+    });
+  }
 
   useEffect(() => {
     if (!page || !address || !limit) return;
@@ -126,6 +194,7 @@ const PageWalletAccount: FC = () => {
         <h2 className="account_info_title">
           <I18 text="myAssets" />
           <Link className="account_info_reset" to="./reset"><I18 text="resetAccount"/></Link>
+          <span className="account_info_export" onClick={() => onChangeShowExport()}><I18 text="exportAccount"/></span>
         </h2>
         <h2 className="account_address">
           <ComConSvg className="account_icon_card" xlinkHref="#icon-card" />

@@ -15,6 +15,16 @@
       opacity: var(--opacity-level-1);
       color: var(--color-primary-text-contrast);
       text-decoration: underline;
+      cursor: pointer;
+    }
+    .account_info_export {
+      float: right;
+      font-size: 0.5em;
+      opacity: var(--opacity-level-1);
+      color: var(--color-primary-text-contrast);
+      text-decoration: underline;
+      margin-right: 20px;
+      cursor: pointer;
     }
   }
   .account_address {
@@ -161,5 +171,24 @@
     padding: 1rem;
     font-size: (16/12)+rem;
     border-bottom: 1px solid var(--color-primary-background);
+  }
+}
+
+.export-alert {
+  .export-alert-title {
+    text-align: center;
+    padding-bottom: 1rem;
+  }
+  .export-alert-input {
+    width: 100%;
+    display: block;
+    height: 3rem;
+    padding: 0 0.5rem;
+    border: 1px dashed var(--color-primary-border);
+  }
+  .export-alert-desc {
+    max-width: 20rem;
+    color: var(--color-primary-red);
+    padding-bottom: 10px;
   }
 }

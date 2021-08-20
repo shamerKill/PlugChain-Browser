@@ -47,6 +47,7 @@ const PageWalletReset: FC = () => {
         encryptionKey: saveWalletKey
       }
     });
+    setResetLoading(false);
     alertTools.create({ message: <I18 text="success" />, type: 'success' });
   };
 

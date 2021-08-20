@@ -27,6 +27,7 @@ const PageWalletPledge: FC = () => {
   };
 
   useEffect(() => {
+    let canDo = true;
     fetchData('GET', '/validators').subscribe(({ success, data }) => {
       if (success) {
         const resultArr: typeof nodes = [];
@@ -41,11 +42,14 @@ const PageWalletPledge: FC = () => {
           };
           resultArr.push(obj);
           if (resultArr.length === data.mininum.length) {
-            setNodes(resultArr);
+            if (canDo) setNodes(resultArr);
           }
         });
       }
     });
+    return () => {
+      canDo = false;
+    }
   }, []);
 
   return (

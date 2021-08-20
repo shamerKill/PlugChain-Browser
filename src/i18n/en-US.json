@@ -202,5 +202,11 @@
 	"undefined-data": "Undefined Data",
 	"status": "Status",
 	"type": "Type",
-	"rawLog": "Raw Logs"
+	"rawLog": "Raw Logs",
+
+	"exportAccount": "Export Wallet",
+  "exportAccountWarning": "Warning! In order to protect your crypto assets, do not expose your private keys or key phrase in the public!!!",
+  "accountPassword": "Wallet Password",
+  "exportFile": "Export File",
+  "onlyShow": "Only Show(no export)"
 }

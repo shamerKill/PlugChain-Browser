@@ -13,15 +13,16 @@ const confirmTools: {
 
 export default confirmTools;
 
-type TypeConfirmButton = React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> | {text: string; onClick?: () => void;};
+type TypeConfirmButton = React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> | {text: string | ReactElement; onClick?: () => void;};
 type TypeConfirmArg = {
   message: ReactElement | string;
+  Message?: FC;
   success?: () => void;
   close?: () => void;
   buttons?: TypeConfirmButton[];
 };
 
-const ComToolConfirm: FC<TypeConfirmArg> = ({message, close, buttons}) => {
+const ComToolConfirm: FC<TypeConfirmArg> = ({message, close, buttons, Message}) => {
   const [closeIng, setCloseIng] = useState<boolean>(false);
   useEffect(() => {
     if (closeIng) {
@@ -41,7 +42,8 @@ const ComToolConfirm: FC<TypeConfirmArg> = ({message, close, buttons}) => {
       closeIng && 'com-con-tool-confirm-close',
     ])}>
       <button className="com-tool-alert-close" onClick={() => setCloseIng(true)}><ComConSvg xlinkHref="#icon-close" /></button>
-      <div className="com-tool-confirm-message">{message}</div>
+      { !Message && <div className="com-tool-confirm-message">{message}</div> }
+      { Message && <div className="com-tool-confirm-message"><Message /></div> }
       <div className="com-tool-confirm-buttons">
         {
           buttons?.map(button => button)
@@ -75,7 +77,7 @@ export const ComToolConfirmBox: FC = () => {
       ];
     } else if ((buttonsGet[0] as any)?.text) {
       buttonsGet = buttonsGet.map((item: any) => {
-        return <button className="com-confirm-success" key={getOnlyId()} onClick={item.onClick}>{ item.text }</button>
+        return <button className="com-confirm-other" key={getOnlyId()} onClick={item.onClick}>{ item.text }</button>
       })
     }
     setConfirmInfo({ ...arg, close: () => close(false), buttons: buttonsGet });

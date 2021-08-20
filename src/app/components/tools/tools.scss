@@ -145,6 +145,16 @@
         background: var(--color-primary);
         color: var(--color-primary-text-contrast);
       }
+      .com-confirm-other {
+        flex: 1;
+        padding: 0.6rem 0;
+        font-size: 1.2rem;
+        min-width: 8rem;
+        cursor: pointer;
+        border: 1px solid var(--color-primary-border);
+        color: var(--color-primary-text-contrast);
+        background: var(--color-primary);
+      }
     }
   }
 }

@@ -62,8 +62,8 @@ const PageInfoPledge: FC = () => {
     }
     if (!verifyNumber(volume, true)) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
     if (!verifyNumber(fee, true)) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
-    if (new NumberTools(parseFloat(pledgeNodeInfo.pledged)).cut(parseFloat(volume)).get() < 0) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
-    if (new NumberTools(parseFloat(balance)).cut(parseFloat(fee)).get() < 0) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
+    if (new NumberTools(formatStringNum(pledgeNodeInfo.pledged)).cut(formatStringNum(volume)).get() < 0) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
+    if (new NumberTools(formatStringNum(balance)).cut(formatStringNum(fee)).get() < 0) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
     if (!verifyPassword(password)) return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
     setExeLoading(true);
     confirmTools.create({
@@ -93,12 +93,12 @@ const PageInfoPledge: FC = () => {
               goLink('/wallet/my-pledge');
             } else if (res.error) {
               alertTools.create({ message: <p><I18 text="exeError" /><br />{res.result}</p>, type: 'error', time: 0 });
-              setBalance(`${new NumberTools(parseFloat(balance)).cut(parseFloat(fee)).get()}`);
+              setBalance(`${new NumberTools(formatStringNum(balance)).cut(formatStringNum(fee)).get()}`);
             }
           });
         } else if (data.error) {
           setExeLoading(false);
-          setBalance(`${new NumberTools(parseFloat(balance)).cut(parseFloat(fee)).get()}`);
+          setBalance(`${new NumberTools(formatStringNum(balance)).cut(formatStringNum(fee)).get()}`);
           alertTools.create({ message: <p><I18 text="exeError" /><br />{data.result}</p>, type: 'error', time: 0 });
         }
       });
@@ -109,7 +109,7 @@ const PageInfoPledge: FC = () => {
           alertTools.create({ message: <I18 text="exeSuccess" />, type: 'success' });
           goLink('/wallet/my-pledge');
         } else if (res.error) {
-          setBalance(`${new NumberTools(parseFloat(balance)).cut(parseFloat(fee)).get()}`);
+          setBalance(`${new NumberTools(formatStringNum(balance)).cut(formatStringNum(fee)).get()}`);
           alertTools.create({ message: <p><I18 text="exeError" /><br />{res.result}</p>, type: 'error', time: 0 });
         }
       });

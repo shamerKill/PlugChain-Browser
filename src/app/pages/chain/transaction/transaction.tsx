@@ -43,7 +43,7 @@ const PageTransaction: FC = () => {
           from: data.data.from,
           to: data.data.to,
           remarks: data.data.memo,
-          time: formatTime(new Date(data.data.create_time || null)),
+          time: formatTime(data.data.create_time),
           amount: formatNumberStr(data.data.amount),
           type: data.data.type,
           status: data.data.code === 0,

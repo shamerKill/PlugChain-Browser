@@ -47,7 +47,7 @@ const PageWalletReceive: FC = () => {
           key: getOnlyId(),
           value: [
             { key: getOnlyId(), value: walletVerifyAddress(address) ? <Link to={`/account/${address}`}>{ address }</Link> : address },
-            { key: getOnlyId(), value: formatTime(new Date()) },
+            { key: getOnlyId(), value: formatTime('') },
             { key: getOnlyId(), value: formatNumberStr(volume) },
           ]
         }, ...state ].slice(0, limit)));
@@ -86,7 +86,7 @@ const PageWalletReceive: FC = () => {
           key: getOnlyId(),
           value: [
             { key: getOnlyId(), value: walletVerifyAddress(log.Address) ? <Link to={`/account/${log.Address}`}>{ log.Address }</Link>: log.Address },
-            { key: getOnlyId(), value: formatTime(new Date(log.CreateTime)) },
+            { key: getOnlyId(), value: formatTime(log.CreateTime) },
             { key: getOnlyId(), value: formatNumberStr(log.Amount) },
           ]
         })));

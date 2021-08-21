@@ -134,7 +134,7 @@ const PageWalletAccount: FC = () => {
               { key: getOnlyId(), value: <span className={txTypeClass}>{txTypeEle}</span> },
               { key: getOnlyId(), value: <ComConLink link={`../transaction/${tx.hash}`}>{ tx.hash }</ComConLink> },
               { key: getOnlyId(), value: <ComConLink link={`../block/${tx.block_id}`}>{ tx.block_id }</ComConLink> },
-              { key: getOnlyId(), value: formatTime(new Date(tx.create_time)) },
+              { key: getOnlyId(), value: formatTime(tx.create_time) },
               { key: getOnlyId(), value: <ComConLink noLink={txTypeOutput || !walletVerifyAddress(tx.from)} link={`/account/${tx.from}`}>{ tx.from }</ComConLink> },
               { key: getOnlyId(), value: <ComConLink noLink={!txTypeOutput || !walletVerifyAddress(tx.to)} link={`/account/${tx.to}`}>{ tx.to }</ComConLink> },
               { key: getOnlyId(), value: tx.amount },

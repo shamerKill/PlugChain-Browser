@@ -4,8 +4,10 @@ export const changeSeconds = (num: number) => num * 1000;
 
 export const sleep = (time: number) => new Promise(resolve => timer(changeSeconds(time)).subscribe(resolve));
 
-export const formatTime = (time: Date, format = 'YY-MM-DD hh:mm:ss'): string => {
-  const date = new Date(time);
+export const formatTime = (time: string, format = 'YY-MM-DD hh:mm:ss'): string => {
+  let date = new Date();
+  if (!isNaN(new Date(time).getDate())) date = new Date(time);
+  else date = new Date((time || '').replace(new RegExp('-', 'g'), '/'));
   const year = date.getFullYear(),
     month = date.getMonth() + 1,
     day = date.getDate(),

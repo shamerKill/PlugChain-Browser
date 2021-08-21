@@ -18,7 +18,7 @@ export const DayTransactionVolume: FC = () => {
   useEffect(() => {
     const subOption = timer(0, changeSeconds(5)).pipe(switchMap(() => fetchData('GET', '/kline'))).subscribe(data => {
       if (data.success) setData(data.data.map((item: any) => ({
-        time: formatTime(new Date(item.time), 'hh:mm:ss'),
+        time: formatTime(item.time, 'hh:mm:ss'),
         volume: `${item.tx_num || 0}`
       })));
     });

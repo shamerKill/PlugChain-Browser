@@ -8,7 +8,7 @@ import alertTools from '../../../components/tools/alert';
 import useGetDispatch from '../../../../databases/hook';
 import { InRootState } from '../../../../@types/redux';
 import { fetchData } from '../../../../tools/ajax';
-import { formatNumberStr } from '../../../../tools/string';
+import { formatNumberStr, formatStringNum } from '../../../../tools/string';
 import confirmTools from '../../../components/tools/confirm';
 import { Link } from 'react-router-dom';
 
@@ -124,7 +124,7 @@ const PageInfoPledge: FC = () => {
       return setShowPass(true);
     }
     if (!verifyNumber(fee, true)) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
-    if (new NumberTools(parseFloat(balance)).cut(parseFloat(fee)).get() < 0) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
+    if (new NumberTools(formatStringNum(balance)).cut(formatStringNum(fee)).get() < 0) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
     if (!verifyPassword(password)) return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
     setExeLoading(true);
     confirmTools.create({
@@ -168,8 +168,8 @@ const PageInfoPledge: FC = () => {
     if (!nodes?.[nodeSelected]) return alertTools.create({ message: <I18 text="exeError" />, type: 'warning' });
     if (!verifyNumber(volume, true)) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
     if (!verifyNumber(fee, true)) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
-    if (new NumberTools(parseFloat(pledgeNodeInfo.pledged)).cut(parseFloat(volume)).get() < 0) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
-    if (new NumberTools(parseFloat(balance)).cut(parseFloat(fee)).get() < 0) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
+    if (new NumberTools(formatStringNum(pledgeNodeInfo.pledged)).cut(formatStringNum(volume)).get() < 0) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
+    if (new NumberTools(formatStringNum(balance)).cut(formatStringNum(fee)).get() < 0) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
     if (!verifyPassword(password)) return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
     setExeLoading(true);
     confirmTools.create({

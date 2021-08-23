@@ -32,10 +32,12 @@ const PageMyPledge: FC = () => {
 
   useEffect(() => {
     if (!wallet.hasWallet) return goLink('./login');
-    const pledgeSub = fetchData('GET', 'delegationsByAddress', { address: wallet.address }).subscribe(({ success, data }) => {
+    let canDo = true;
+    const pledgeSub = fetchData('GET', 'delegationsByAddress', { address: wallet.address }).subscribe(async ({ success, data }) => {
       if (success && data && data.length > 0) {
         const resultArr: typeof nodes = [];
-        data.forEach(async (node: any) => {
+        for (let i = 0; i < data.length; i++) {
+          const node = data[i];
           const obj = {
             avatar: node.description.image ? `${getEnvConfig.STATIC_URL}/${node.operator_address}/image.png` : `${getEnvConfig.STATIC_URL}/default/image.png`,
             name: node.description.moniker,
@@ -45,14 +47,17 @@ const PageMyPledge: FC = () => {
             address: node.operator_address,
           };
           resultArr.push(obj);
-          if (resultArr.length === data.length) {
-            setLoaded(true);
-            setNodes(resultArr);
-          }
-        });
+        }
+        if (canDo) {
+          setLoaded(true);
+          setNodes(resultArr);
+        }
       }
     });
-    return () => pledgeSub.unsubscribe();
+    return () => {
+      canDo = false;
+      pledgeSub.unsubscribe();
+    }
   }, [wallet, goLink]);
 
   return (

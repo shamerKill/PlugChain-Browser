@@ -16,6 +16,7 @@ type TypeNodesInfo = {
   pledgedVolume: string;
   minVolume: string;
   address: string;
+  // type: number; // 0 success / 1 failed / 2 abandon
 };
 
 const PageWalletPledge: FC = () => {
@@ -28,10 +29,11 @@ const PageWalletPledge: FC = () => {
 
   useEffect(() => {
     let canDo = true;
-    fetchData('GET', '/validators').subscribe(({ success, data }) => {
+    fetchData('GET', '/validators').subscribe(async ({ success, data }) => {
       if (success) {
         const resultArr: typeof nodes = [];
-        data.mininum.forEach(async (node: any) => {
+        for (let i = 0 ; i< data.mininum.length ; i++) {
+          const node = data.mininum[i];
           const obj = {
             avatar: node.description.image ? `${getEnvConfig.STATIC_URL}/${node.operator_address}/image.png` : `${getEnvConfig.STATIC_URL}/default/image.png`,
             name: node.description.moniker,
@@ -41,10 +43,8 @@ const PageWalletPledge: FC = () => {
             address: node.operator_address,
           };
           resultArr.push(obj);
-          if (resultArr.length === data.mininum.length) {
-            if (canDo) setNodes(resultArr);
-          }
-        });
+        }
+        if (canDo) setNodes(resultArr);
       }
     });
     return () => {

@@ -234,10 +234,11 @@ const PageInfoPledge: FC = () => {
   }, [wallet, goLink, search]);
   useEffect(() => {
     if (!showNodes || nodes) return;
-    fetchData('GET', '/validators').subscribe(({ success, data }) => {
+    fetchData('GET', '/validators').subscribe(async ({ success, data }) => {
       if (success) {
         const resultArr: TypeNodesInfo[] = [];
-        data.mininum.forEach(async (node: any) => {
+        for (let i = 0; i < data.length; i++) {
+          const node = data[i];
           const obj = {
             avatar: node.description.image ? `${getEnvConfig.STATIC_URL}/${node.operator_address}/image.png` : `${getEnvConfig.STATIC_URL}/default/image.png`,
             name: node.description.moniker,
@@ -247,10 +248,8 @@ const PageInfoPledge: FC = () => {
             address: node.operator_address,
           };
           resultArr.push(obj);
-          if (resultArr.length === data.mininum.length) {
-            setNodes(resultArr.filter(node => node.address !== search?.id));
-          }
-        });
+        }
+        setNodes(resultArr.filter(node => node.address !== search?.id));
       }
     });
   }, [nodes, showNodes, search]);

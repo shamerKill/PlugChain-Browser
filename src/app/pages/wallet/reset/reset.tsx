@@ -11,11 +11,13 @@ import useGetDispatch from '../../../../databases/hook';
 import { InRootState } from '../../../../@types/redux';
 import { changeWallet } from '../../../../databases/store/wallet';
 import confirmTools from '../../../components/tools/confirm';
+import { useHistory } from 'react-router-dom';
 
 const PageWalletReset: FC = () => {
   const [, setWallet] = useGetDispatch<InRootState['wallet']>('wallet');
   const textAreaPlaceholder = useI18('inputWordPlaceholder');
   const goLink = useSafeLink();
+  const history = useHistory();
   const [backupWord, setBackupWord] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -49,6 +51,7 @@ const PageWalletReset: FC = () => {
     });
     setResetLoading(false);
     alertTools.create({ message: <I18 text="success" />, type: 'success' });
+    history.goBack();
   };
 
   const delAccount = () => {

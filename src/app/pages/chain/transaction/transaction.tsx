@@ -68,7 +68,7 @@ const PageTransaction: FC = () => {
         <I18 text="transactionId" />&nbsp;
         <span className="transaction_page_title_link">
           {transactionId}
-          <button className="transaction_page_copy" onClick={() => copy(transactionInfo.id)}>
+          <button className="transaction_page_copy" onClick={() => copy(transactionInfo.hash)}>
             <ComConSvg xlinkHref="#icon-copy" />
           </button>
         </span>

@@ -8,6 +8,7 @@ html {
   --color-primary-error: #cb2430;
   --color-primary-info: #f4f5f8;
   --color-primary-green: #00b464;
+  --color-primary-yellow: #e6b923;
   --color-primary-red: #cb2430;
   --color-primary-gray: #bdc1ca;
   --color-primary-border: #e8ebf2;
@@ -17,7 +18,7 @@ html {
   --opacity-level-3: 0.1;
   --background-image-contrast: linear-gradient(#082e42, #081326);
   --background-box-shadow: 0 0 1rem 0.1rem rgba(244, 245, 248, 0.6);
-  --primary-box-shadow: 0 0 1rem 0.1rem rgba(29, 163, 144, 0.3);
+  --primary-box-shadow: 0 0 1rem 0.1rem var(--color-primary);
   --color-alert-background-error: #fff2f0;
   --color-alert-border-error: #ffccc7;
   --color-alert-background-warning: #fffbe6;

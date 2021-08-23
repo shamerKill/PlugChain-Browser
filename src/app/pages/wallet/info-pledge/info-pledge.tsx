@@ -24,6 +24,7 @@ type TypePledgeNodeInfo = {
   pledged: string;
   rewardRate: string;
   earned: string;
+  type: number; // 0 invalid / 1 off-line / 2 backing / 3 running
 };
 
 type TypeNodesInfo = {
@@ -33,6 +34,7 @@ type TypeNodesInfo = {
   pledgedVolume: string;
   minVolume: string;
   address: string;
+  type: number; // 0 invalid / 1 off-line / 2 backing / 3 running
 };
 
 const PageInfoPledge: FC = () => {
@@ -40,7 +42,7 @@ const PageInfoPledge: FC = () => {
   const goLink = useSafeLink();
   const [wallet] = useGetDispatch<InRootState['wallet']>('wallet');
   const [pledgeNodeInfo, setPledgeNodeInfo] = useState<TypePledgeNodeInfo>({
-    avatar: '', name: '', address: '', pledged: '', rewardRate: '', earned: '',
+    avatar: '', name: '', address: '', pledged: '', rewardRate: '', earned: '', type: 3,
   });
   const [balance, setBalance] = useState('');
   const [volume, setVolume] = useState('');
@@ -166,6 +168,19 @@ const PageInfoPledge: FC = () => {
       return;
     }
     if (!nodes?.[nodeSelected]) return alertTools.create({ message: <I18 text="exeError" />, type: 'warning' });
+    if (nodes?.[nodeSelected].type === 3) rePledgeTokenVerify();
+    else confirmTools.create({
+      message: (
+        <>
+          <h2 className="node-tip-title"><I18 text="nodeWarningTipTitle" /></h2>
+          <p className="node-tip-message">{ nodes?.[nodeSelected].type === 1 ? <I18 text="nodeWarningTipMessage1" /> : <I18 text="nodeWarningTipMessage2" /> }</p>
+        </>
+      ),
+      success: () => setTimeout(() => rePledgeTokenVerify(), 200),
+      close: () => {}
+    });
+  }
+  const rePledgeTokenVerify = () => {
     if (!verifyNumber(volume, true)) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
     if (!verifyNumber(fee, true)) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
     if (new NumberTools(formatStringNum(pledgeNodeInfo.pledged)).cut(formatStringNum(volume)).get() < 0) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
@@ -177,7 +192,7 @@ const PageInfoPledge: FC = () => {
       success: submitRePledgeToken,
       close: () => setExeLoading(false),
     });
-  }
+  };
   const submitRePledgeToken = useCallback(async () => {
     await sleep(0.1);
     let useWallet
@@ -211,10 +226,21 @@ const PageInfoPledge: FC = () => {
               avatar: node.description.image ? `${getEnvConfig.STATIC_URL}/${node.operator_address}/image.png` : `${getEnvConfig.STATIC_URL}/default/image.png`,
               name: node.description.moniker,
               address: node.operator_address,
-              pledged: formatNumberStr(`${parseFloat(walletAmountToToken(node.shares || '0'))}`),
+              pledged: formatNumberStr(`${parseFloat(walletAmountToToken(node.token || '0'))}`),
               rewardRate: `${await (walletChainReward(parseFloat(`${node.commission.commission_rates.rate}`)))}%`,
               earned: formatNumberStr(`${parseFloat(walletAmountToToken(node.my_reward || '0'))}`),
+              type: 3,
             };
+            switch(node.status) {
+              case 'BOND_STATUS_UNSPECIFIED':
+                obj.type = 0; break;
+              case 'BOND_STATUS_UNBONDED':
+                obj.type = 1; break;
+              case 'BOND_STATUS_UNBONDING':
+                obj.type = 2; break;
+              case 'BOND_STATUS_BONDED':
+                obj.type = 3; break;
+            }
             setPledgeNodeInfo(obj);
           }
         });
@@ -237,29 +263,55 @@ const PageInfoPledge: FC = () => {
     fetchData('GET', '/validators').subscribe(async ({ success, data }) => {
       if (success) {
         const resultArr: TypeNodesInfo[] = [];
-        for (let i = 0; i < data.length; i++) {
-          const node = data[i];
+        for (let i = 0; i < data.mininum.length; i++) {
+          const node = data.mininum[i];
           const obj = {
             avatar: node.description.image ? `${getEnvConfig.STATIC_URL}/${node.operator_address}/image.png` : `${getEnvConfig.STATIC_URL}/default/image.png`,
             name: node.description.moniker,
             rate: `${await (walletChainReward(parseFloat(`${node.commission.commission_rates.rate}`)))}%`,
-            pledgedVolume: formatNumberStr(walletAmountToToken(`${parseFloat(node.delegator_shares)}`)),
+            pledgedVolume: formatNumberStr(walletAmountToToken(`${parseFloat(node.tokens)}`)),
             minVolume: formatNumberStr(walletAmountToToken(`${parseFloat(node.min_self_delegation)}`)),
             address: node.operator_address,
+            type: 3,
           };
+          switch(node.status) {
+            case 'BOND_STATUS_UNSPECIFIED':
+              obj.type = 0; break;
+            case 'BOND_STATUS_UNBONDED':
+              obj.type = 1; break;
+            case 'BOND_STATUS_UNBONDING':
+              obj.type = 2; break;
+            case 'BOND_STATUS_BONDED':
+              obj.type = 3; break;
+          }
           resultArr.push(obj);
         }
         setNodes(resultArr.filter(node => node.address !== search?.id));
       }
     });
   }, [nodes, showNodes, search]);
+  useEffect(() => {
+    if (nodes?.length) {
+      for (let i = 0; i < nodes.length; i++) {
+        if (nodes[i].type === 3) {
+          setNodeSelected(i);
+          break;
+        }
+      }
+    }
+  }, [nodes]);
   return (
     <ComponentsLayoutBase className="page_info_pledge">
       <div className="info_pledge_inner">
         <div className="header_account">
           <div className="account_user">
             <img className="account_avatar" src={ pledgeNodeInfo.avatar } alt={pledgeNodeInfo.name} />
-            <span className="account_name">{ pledgeNodeInfo.name }</span>
+            <span className="account_name">
+              { pledgeNodeInfo.name }
+              { pledgeNodeInfo.type === 0 && (<i className="account_node_mark account_node_error"><I18 text="nodeInvalid" /></i>) }
+              { pledgeNodeInfo.type === 1 && (<i className="account_node_mark account_node_warning"><I18 text="nodeOffLine" /></i>) }
+              { pledgeNodeInfo.type === 2 && (<i className="account_node_mark account_node_warning"><I18 text="nodeJailed" /></i>) }
+            </span>
           </div>
           <p className="account_address">
             <ComConSvg className="account_address_icon" xlinkHref="#icon-card" />
@@ -299,6 +351,10 @@ const PageInfoPledge: FC = () => {
                     key={getOnlyId()}
                     onClick={() => changeNodeSelected(index)}>
                     <div className="pledge_node_inner">
+                      { node.type === 0 && (<div className="pledge_node_mark pledge_node_error"><I18 text="nodeInvalid" /></div>) }
+                      { node.type === 1 && (<div className="pledge_node_mark pledge_node_warning"><I18 text="nodeOffLine" /></div>) }
+                      { node.type === 2 && (<div className="pledge_node_mark pledge_node_warning"><I18 text="nodeJailed" /></div>) }
+                      { node.type === 3 && (<div className="pledge_node_mark"><I18 text="nodeRunning" /></div>) }
                       <div className="pledge_node_header">
                         <img className="node_avatar" src={ node.avatar } alt={node.name} />
                         <Link className="node_name" to={`/wallet/transaction-pledge?id=${node.address}`}>{node.name}</Link>

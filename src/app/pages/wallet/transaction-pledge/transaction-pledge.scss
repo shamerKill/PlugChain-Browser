@@ -29,6 +29,20 @@
       padding-left: 1rem;
       font-size: (14/12)+rem;
       text-decoration: underline;
+      .account_node_mark {
+        color: var(--color-primary-text-contrast);
+        margin-left: 1rem;
+        padding: 0 0.2em;
+        display: inline-block;
+        text-decoration: none;
+        border-radius: 3px;
+        &.account_node_warning {
+          background-color: var(--color-primary-gray);
+        }
+        &.account_node_error {
+          background-color: var(--color-primary-error);
+        }
+      }
     }
     .account_address {
       opacity: var(--opacity-level-2);
@@ -168,4 +182,11 @@
       }
     }
   }
+}
+
+
+.node-tip-title {
+  font-size: 1.2rem;
+  padding-bottom: 0.5rem;
+  color: var(--color-primary-yellow);
 }

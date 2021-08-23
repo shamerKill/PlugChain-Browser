@@ -23,6 +23,28 @@
     border: 1px solid var(--color-primary-border);
     padding: 1rem;
     border-radius: 0.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .pledge_node_mark {
+    position: absolute;
+    top: 0.4rem;
+    right: -8rem;
+    background-color: var(--color-primary);
+    color: var(--color-primary-text-contrast);
+    width: 50%;
+    font-size: 0.8rem;
+    line-height: 2em;
+    text-align: center;
+    transform: rotateZ(45deg) scale(0.6);
+    user-select: none;
+    z-index: 2;
+    &.pledge_node_warning {
+      background-color: var(--color-primary-gray);
+    }
+    &.pledge_node_error {
+      background-color: var(--color-primary-error);
+    }
   }
   .pledge_node_header {
     display: flex;

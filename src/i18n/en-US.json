@@ -209,5 +209,10 @@
   "accountPassword": "Wallet Password",
   "exportFile": "Export File",
   "onlyShow": "Only Show(no export)",
-	"transactionOfNumber": "Transaction Of Number"
+	"transactionOfNumber": "Transaction Of Number",
+
+  "nodeInvalid": "invalid",
+  "nodeOffLine": "offline",
+  "nodeJailed": "jailing",
+  "nodeRunning": "running"
 }

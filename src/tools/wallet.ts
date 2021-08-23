@@ -175,6 +175,11 @@ type: 'delegate'|'unDelegate'|'reDelegate'|'withdrawRewards' = 'delegate') => {
         validatorAddress: validatorAddress,
       });
     } else {
+      console.log({
+        delegatorAddress: account.address,
+        validatorAddress: validatorAddress,
+        amount: { amount: inputVolume, denom: appTokenName },
+      });
       typeUrl = '/cosmos.staking.v1beta1.MsgDelegate';
       value = MsgDelegate.fromPartial({
         delegatorAddress: account.address,

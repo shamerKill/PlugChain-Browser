@@ -29,6 +29,20 @@
       padding-left: 1rem;
       font-size: (14/12)+rem;
       text-decoration: underline;
+      .account_node_mark {
+        color: var(--color-primary-text-contrast);
+        margin-left: 1rem;
+        padding: 0 0.2em;
+        display: inline-block;
+        text-decoration: none;
+        border-radius: 3px;
+        &.account_node_warning {
+          background-color: var(--color-primary-gray);
+        }
+        &.account_node_error {
+          background-color: var(--color-primary-error);
+        }
+      }
     }
     .account_address {
       opacity: var(--opacity-level-2);
@@ -167,7 +181,6 @@
       .pledge_node_inner {
         border-color: var(--color-primary);
         box-shadow: var(--primary-box-shadow);
-        background: none;
         &::before {
           content: '';
           position: absolute;
@@ -185,6 +198,30 @@
       background-color: var(--color-primary-background);
       padding: 1rem;
       border-radius: 0.5rem;
+      background: none;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      border: 1px solid var(--color-primary-border);
+    }
+    .pledge_node_mark {
+      position: absolute;
+      top: 1.4rem;
+      right: -7rem;
+      background-color: var(--color-primary);
+      color: var(--color-primary-text-contrast);
+      width: 50%;
+      font-size: 0.8rem;
+      line-height: 2em;
+      text-align: center;
+      transform: rotateZ(45deg);
+      user-select: none;
+      &.pledge_node_warning {
+        background-color: var(--color-primary-gray);
+      }
+      &.pledge_node_error {
+        background-color: var(--color-primary-error);
+      }
     }
     .pledge_node_header {
       display: flex;
@@ -250,4 +287,11 @@
       }
     }
   }
+}
+
+
+.node-tip-title {
+  font-size: 1.2rem;
+  padding-bottom: 0.5rem;
+  color: var(--color-primary-yellow);
 }

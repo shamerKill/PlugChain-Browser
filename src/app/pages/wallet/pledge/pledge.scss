@@ -47,6 +47,27 @@
     background-color: var(--color-primary-background-contrast);
     padding: 1rem;
     border-radius: 0.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .pledge_node_mark {
+    position: absolute;
+    top: 1.4rem;
+    right: -7rem;
+    background-color: var(--color-primary);
+    color: var(--color-primary-text-contrast);
+    width: 50%;
+    font-size: 0.8rem;
+    line-height: 2em;
+    text-align: center;
+    transform: rotateZ(45deg);
+    user-select: none;
+    &.pledge_node_warning {
+      background-color: var(--color-primary-gray);
+    }
+    &.pledge_node_error {
+      background-color: var(--color-primary-error);
+    }
   }
   .pledge_node_header {
     display: flex;
@@ -108,4 +129,10 @@
       width: 100%;
     }
   }
+}
+
+.node-tip-title {
+  font-size: 1.2rem;
+  padding-bottom: 0.5rem;
+  color: var(--color-primary-yellow);
 }

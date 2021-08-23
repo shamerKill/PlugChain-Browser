@@ -18,6 +18,7 @@ type TypeNodesInfo = {
   rate: string;
   pledgedVolume: string;
   address: string;
+  type: number; // 0 invalid / 1 off-line / 2 backing / 3 running
 };
 
 const PageMyPledge: FC = () => {
@@ -42,10 +43,21 @@ const PageMyPledge: FC = () => {
             avatar: node.description.image ? `${getEnvConfig.STATIC_URL}/${node.operator_address}/image.png` : `${getEnvConfig.STATIC_URL}/default/image.png`,
             name: node.description.moniker,
             rate: `${await (walletChainReward(parseFloat(`${node.commission.commission_rates.rate}`)))}%`,
-            pledgedVolume: formatNumberStr(walletAmountToToken(`${parseFloat(node.delegator_shares)}`)),
+            pledgedVolume: formatNumberStr(walletAmountToToken(`${parseFloat(node.token)}`)),
             minVolume: formatNumberStr(walletAmountToToken(`${parseFloat(node.min_self_delegation)}`)),
             address: node.operator_address,
+            type: 3,
           };
+          switch(node.status) {
+            case 'BOND_STATUS_UNSPECIFIED':
+              obj.type = 0; break;
+            case 'BOND_STATUS_UNBONDED':
+              obj.type = 1; break;
+            case 'BOND_STATUS_UNBONDING':
+              obj.type = 2; break;
+            case 'BOND_STATUS_BONDED':
+              obj.type = 3; break;
+          }
           resultArr.push(obj);
         }
         if (canDo) {
@@ -69,6 +81,10 @@ const PageMyPledge: FC = () => {
             nodes.map(node => (
               <div className="pledge_node" key={getOnlyId()}>
                 <div className="pledge_node_inner">
+                  { node.type === 0 && (<div className="pledge_node_mark pledge_node_error"><I18 text="nodeInvalid" /></div>) }
+                  { node.type === 1 && (<div className="pledge_node_mark pledge_node_warning"><I18 text="nodeOffLine" /></div>) }
+                  { node.type === 2 && (<div className="pledge_node_mark pledge_node_warning"><I18 text="nodeJailed" /></div>) }
+                  { node.type === 3 && (<div className="pledge_node_mark"><I18 text="nodeRunning" /></div>) }
                   <div className="pledge_node_header">
                     <img className="node_avatar" src={node.avatar} alt={node.name} />
                     <Link className="node_name" to={`/wallet/transaction-pledge?id=${node.address}`}>{node.name}</Link>

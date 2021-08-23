@@ -208,5 +208,14 @@
   "accountPassword": "钱包密码",
   "exportFile": "导出文件",
   "onlyShow": "仅显示(不导出)",
-  "transactionOfNumber": "交易数量"
+  "transactionOfNumber": "交易数量",
+
+  "nodeInvalid": "已失效",
+  "nodeOffLine": "离线中",
+  "nodeJailed": "监禁中",
+  "nodeRunning": "运行中",
+  "nodeWarningTipTitle": "异常节点提醒",
+  "nodeWarningTipMessage0": "当前验证者已失效，无法操作",
+  "nodeWarningTipMessage1": "当前验证者状态处于离线中，是否仍要操作？",
+  "nodeWarningTipMessage2": "当前验证者状态处于监禁中，是否仍要操作？"
 }

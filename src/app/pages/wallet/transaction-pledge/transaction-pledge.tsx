@@ -23,6 +23,7 @@ type TypeNodeInfo = {
   minVolume: string;
   pledgedVolume: string;
   toCut: string;
+  type: number; // 0 invalid / 1 off-line / 2 backing / 3 running
 };
 
 const PageWalletTransactionPledge: FC = () => {
@@ -30,7 +31,7 @@ const PageWalletTransactionPledge: FC = () => {
   const [wallet] = useGetDispatch<InRootState['wallet']>('wallet');
   const nodeSearch = useFormatSearch<{id: string}>();
   const [nodeInfo, setNodeInfo] = useState<TypeNodeInfo>({
-    avatar: '', name: '', address: '', rate: '', minVolume: '', pledgedVolume: '', toCut: '',
+    avatar: '', name: '', address: '', rate: '', minVolume: '', pledgedVolume: '', toCut: '', type: 3,
   });
   const [balance, setBalance] = useState('');
   const [volume, setVolume] = useState('');
@@ -39,6 +40,20 @@ const PageWalletTransactionPledge: FC = () => {
   const [pledgeLoading ,setPledgeLoading] = useState(false);
 
   const verifyPledge = () => {
+    if (nodeInfo.type === 3) verifyPledgeForm();
+    else confirmTools.create({
+      message: (
+        <>
+          <h2 className="node-tip-title"><I18 text="nodeWarningTipTitle" /></h2>
+          <p className="node-tip-message">{ nodeInfo.type === 1 ? <I18 text="nodeWarningTipMessage1" /> : <I18 text="nodeWarningTipMessage2" /> }</p>
+        </>
+      ),
+      success: () => setTimeout(() => verifyPledgeForm(), 200),
+      close: () => {}
+    });
+  };
+
+  const verifyPledgeForm = () => {
     if (!verifyNumber(volume)) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
     if (!verifyNumber(fee)) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning'});
     if (new NumberTools(formatStringNum(balance)).cut(parseFloat(volume)).cut(parseFloat(fee)).get() < 0) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
@@ -100,11 +115,22 @@ const PageWalletTransactionPledge: FC = () => {
           avatar: data.description.image ? `${getEnvConfig.STATIC_URL}/${data.operator_address}/image.png` : `${getEnvConfig.STATIC_URL}/default/image.png`,
           name: data.description.moniker,
           rate: `${await (walletChainReward(parseFloat(`${data.commission.commission_rates.rate}`)))}%`,
-          pledgedVolume: formatNumberStr(walletAmountToToken(`${parseFloat(data.delegator_shares)}`)),
+          pledgedVolume: formatNumberStr(walletAmountToToken(`${parseFloat(data.tokens)}`)),
           minVolume: formatNumberStr(walletAmountToToken(`${parseFloat(data.min_self_delegation)}`)),
           address: data.operator_address,
           toCut: `${(data.commission.commission_rates.rate * 100).toFixed(2)}%`,
+          type: 3,
         };
+        switch(data.status) {
+          case 'BOND_STATUS_UNSPECIFIED':
+            obj.type = 0; break;
+          case 'BOND_STATUS_UNBONDED':
+            obj.type = 1; break;
+          case 'BOND_STATUS_UNBONDING':
+            obj.type = 2; break;
+          case 'BOND_STATUS_BONDED':
+            obj.type = 3; break;
+        }
         setNodeInfo(obj);
       }
     });
@@ -117,7 +143,12 @@ const PageWalletTransactionPledge: FC = () => {
         <div className="header_account">
           <div className="account_user">
             <img className="account_avatar" alt={nodeInfo.name} src={nodeInfo.avatar} />
-            <span className="account_name">{ nodeInfo.name }</span>
+            <span className="account_name">
+              { nodeInfo.name }
+              { nodeInfo.type === 0 && (<i className="account_node_mark account_node_error"><I18 text="nodeInvalid" /></i>) }
+              { nodeInfo.type === 1 && (<i className="account_node_mark account_node_warning"><I18 text="nodeOffLine" /></i>) }
+              { nodeInfo.type === 2 && (<i className="account_node_mark account_node_warning"><I18 text="nodeJailed" /></i>) }
+            </span>
           </div>
           <p className="account_address">
             <ComConSvg className="account_address_icon" xlinkHref="#icon-card" />

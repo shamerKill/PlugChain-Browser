@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { formatClass, getEnvConfig, getOnlyId, sleep, useFormatSearch, useSafeLink, verifyNumber, verifyPassword, walletAmountToToken, walletChainReward, walletDecode, walletDelegate } from '../../../../tools';
+import { formatClass, getEnvConfig, sleep, useFormatSearch, useSafeLink, verifyNumber, verifyPassword, walletAmountToToken, walletChainReward, walletDecode, walletDelegate } from '../../../../tools';
 import ComConSvg from '../../../components/control/icon';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
@@ -36,6 +36,7 @@ type TypeNodesInfo = {
   address: string;
   type: number; // 0 invalid / 1 off-line / 2 backing / 3 running
 };
+
 
 const PageInfoPledge: FC = () => {
   const search = useFormatSearch<{id: string}>();
@@ -127,6 +128,7 @@ const PageInfoPledge: FC = () => {
     }
     if (!verifyNumber(fee, true)) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
     if (new NumberTools(formatStringNum(balance)).cut(formatStringNum(fee)).get() < 0) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
+    if (new NumberTools(formatStringNum(pledgeNodeInfo.earned)).get() <= 0) return alertTools.create({ message: <I18 text="noHadWithdraw" />, type: 'warning' });
     if (!verifyPassword(password)) return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
     setExeLoading(true);
     confirmTools.create({
@@ -181,10 +183,12 @@ const PageInfoPledge: FC = () => {
     });
   }
   const rePledgeTokenVerify = () => {
+    if (!nodes?.[nodeSelected]) return;
     if (!verifyNumber(volume, true)) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
     if (!verifyNumber(fee, true)) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
     if (new NumberTools(formatStringNum(pledgeNodeInfo.pledged)).cut(formatStringNum(volume)).get() < 0) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
     if (new NumberTools(formatStringNum(balance)).cut(formatStringNum(fee)).get() < 0) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
+    if (new NumberTools(formatStringNum(volume)).cut(formatStringNum(nodes?.[nodeSelected].minVolume)).get() < 0) return alertTools.create({ message: <I18 text="volumeInputMinError" />, type: 'warning' });
     if (!verifyPassword(password)) return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
     setExeLoading(true);
     confirmTools.create({
@@ -348,7 +352,7 @@ const PageInfoPledge: FC = () => {
                 nodes?.map((node, index) => (
                   <div
                     className={formatClass(['pledge_node', nodeSelected === index && 'pledge_node_selected'])}
-                    key={getOnlyId()}
+                    key={index}
                     onClick={() => changeNodeSelected(index)}>
                     <div className="pledge_node_inner">
                       { node.type === 0 && (<div className="pledge_node_mark pledge_node_error"><I18 text="nodeInvalid" /></div>) }

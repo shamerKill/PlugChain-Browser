@@ -6,6 +6,7 @@ import './control.scss';
 export type TypeComponentsControlLogo = {
   link: string;
   src: string;
+  id?: string;
   target?: string;
   className?: string;
   alt?: string;

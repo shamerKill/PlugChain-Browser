@@ -4,7 +4,7 @@ import I18 from '../../../i18n/component';
 import ComConLoading from './loading';
 
 export type TypeComConTableHeader = {key: string, value: (string|ReactElement)}[];
-export type TypeComConTableContent = { key: string, value: {key: string, value: (string|ReactElement)}[] }[];
+export type TypeComConTableContent = { key: string, value: {key: string, value: (string|ReactElement)}[], error?: boolean }[];
 
 const ComConTable: FC<{
   header: TypeComConTableHeader;
@@ -99,7 +99,7 @@ const ComConTable: FC<{
             <tbody className={formatClass(['control-tbody'])}>
               {
                 content.map((row) => (
-                  <tr className={formatClass(['control-tr'])} key={row.key}>
+                  <tr className={formatClass(['control-tr', row.error && 'control-tr-error'])} key={row.key}>
                     {
                       row.value.map(col => (
                         <td className={formatClass(['control-td'])} key={col.key}>{ col.value }</td>

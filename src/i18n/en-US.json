@@ -93,7 +93,7 @@
 	"outputVolume": "Sending Amount",
 	"inputVolume": "Amount Received",
 	"myAssets": "My Assets",
-	"transaction": "Transferred",
+	"transaction": "Transfer",
 	"toAddress": "To Address",
 	"transactionNumber": "Transfer Quantity",
 	"canTransactionNumber": "Transferable Quantity",
@@ -218,5 +218,14 @@
   "nodeWarningTipTitle": "Abnormal Node Alert!",
   "nodeWarningTipMessage0": "The Authenticator Node has failed and cannot operate.",
   "nodeWarningTipMessage1": "The Verifier Node is offline, do you still want to proceed?",
-  "nodeWarningTipMessage2": "The verifier Node is jailing, do you still want to proceed?"
+  "nodeWarningTipMessage2": "The verifier Node is jailing, do you still want to proceed?",
+
+  "undelegate": "UnStake",
+  "redelegate": "Transfer Staked",
+  "withdraw": "Redeem Interests",
+  "delegate": "Staked",
+  "transfer": "Transfer",
+
+  "volumeInputMinError": "Staking volume is lower then the minimum volume",
+  "noHadWithdraw": "Don't Have Interests"
 }

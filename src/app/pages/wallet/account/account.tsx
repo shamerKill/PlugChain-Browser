@@ -125,13 +125,15 @@ const PageWalletAccount: FC = () => {
         setLoading(false);
         setAllCount(parseInt(data.TxNum));
         setTableContent(data.Txs.map((tx: any) => {
+          let txError = tx.code !== 0;
           const txTypeOutput = tx.from === address ? true : false;
           const txTypeClass = formatClass(['account_transaction_type', `transaction_${txTypeOutput ? 'output' : 'input'}`]);
           const txTypeEle = <I18 text={txTypeOutput ? 'output' : 'input'} />
           return {
             key: getOnlyId(),
+            error: txError,
             value: [
-              { key: getOnlyId(), value: <span className={txTypeClass}>{txTypeEle}</span> },
+              { key: getOnlyId(), value: <span className={txTypeClass}>{txTypeEle}{txError && <i className="account_transaction_error"><I18 text="exeError" /></i>}</span> },
               { key: getOnlyId(), value: <ComConLink link={`../transaction/${tx.hash}`}>{ tx.hash }</ComConLink> },
               { key: getOnlyId(), value: <ComConLink link={`../block/${tx.block_id}`}>{ tx.block_id }</ComConLink> },
               { key: getOnlyId(), value: formatTime(tx.create_time) },

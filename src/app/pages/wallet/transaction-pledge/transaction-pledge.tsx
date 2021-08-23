@@ -57,6 +57,7 @@ const PageWalletTransactionPledge: FC = () => {
     if (!verifyNumber(volume, true)) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
     if (!verifyNumber(fee, true)) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning'});
     if (new NumberTools(formatStringNum(balance)).cut(formatStringNum(volume)).cut(formatStringNum(fee)).get() < 0) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
+    if (new NumberTools(formatStringNum(volume)).cut(formatStringNum(nodeInfo.minVolume)).get() < 0) return alertTools.create({ message: <I18 text="volumeInputMinError" />, type: 'warning' });
     if (!verifyPassword(password)) return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning'});
     setPledgeLoading(true);
     confirmTools.create({

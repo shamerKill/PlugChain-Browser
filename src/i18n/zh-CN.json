@@ -23,7 +23,7 @@
 
   "searchPlaceholder": "搜索地址、交易、区块高度",
   "newBlockHeight": "最新区块",
-  "transactionVolume": "交易次数",
+  "transactionVolume": "交易笔数",
   "pendingBlockVolume": "未确认区块",
   "newBlockTransaction": "最新块内交易数量",
   "price": "价格",
@@ -217,5 +217,14 @@
   "nodeWarningTipTitle": "异常节点提醒",
   "nodeWarningTipMessage0": "当前验证者已失效，无法操作",
   "nodeWarningTipMessage1": "当前验证者状态处于离线中，是否仍要操作？",
-  "nodeWarningTipMessage2": "当前验证者状态处于监禁中，是否仍要操作？"
+  "nodeWarningTipMessage2": "当前验证者状态处于监禁中，是否仍要操作？",
+
+  "undelegate": "取消质押",
+  "redelegate": "转让质押",
+  "withdraw": "提取收益",
+  "delegate": "质押",
+  "transfer": "转账",
+
+  "volumeInputMinError": "质押数量低于最低数量",
+  "noHadWithdraw": "暂无收益"
 }

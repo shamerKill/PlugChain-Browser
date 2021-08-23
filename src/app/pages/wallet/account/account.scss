@@ -165,6 +165,12 @@
           background: var(--color-primary-gray);
         }
       }
+      .account_transaction_error {
+        color: var(--color-primary-red);
+        transform: scale(0.8);
+        display: inline-block;
+        transform-origin: center center;
+      }
     }
   }
   .account_title {

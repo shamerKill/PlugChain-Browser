@@ -86,6 +86,9 @@
     }
   }
   .control-tbody {
+    .control-tr-error {
+      background: var(--color-alert-background-error);
+    }
     .control-td {
       border-bottom: 1px solid var(--color-primary-background);
       white-space: nowrap;

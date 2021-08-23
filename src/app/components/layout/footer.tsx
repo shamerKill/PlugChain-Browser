@@ -18,8 +18,8 @@ const ComLayFooter: FC = () => {
   
   useEffect(() => {
     setFriendsLink([
-      { link: 'http://www.plugchain.info/', src: require('../../../assets/logo/chain-full-light.png') },
-      { link: 'http://www.onp.world/', src: require('../../../assets/logo/protocol-full-light.png') },
+      { link: 'http://www.plugchain.info/', src: require('../../../assets/logo/chain-full-light.png'), id: getOnlyId() },
+      { link: 'http://www.onp.world/', src: require('../../../assets/logo/protocol-full-light.png'), id: getOnlyId() },
     ]);
   }, []);
   
@@ -97,7 +97,7 @@ const ComLayFooter: FC = () => {
             {
               friendsLink.map(item => (
                 <ComConLogo
-                  key={getOnlyId()}
+                  key={item.id}
                   className={formatClass(['layout-friends-img'])}
                   {...item} />
               ))

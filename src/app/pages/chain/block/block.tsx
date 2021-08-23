@@ -37,7 +37,7 @@ const PageBlockInfo: FC = () => {
 
   useEffect(() => {
     setTableHeader(
-      [ 'hash', 'blockHeight', 'time', 'from', 'to', 'transactionVolume', 'feeNumber' ]
+      [ 'hash', 'blockHeight', 'time', 'from', 'to', 'transactionOfNumber', 'feeNumber' ]
         .map(text => ({ key: getOnlyId(), value: <I18 text={text} /> }))
     );
     onPageChange(1);
@@ -49,18 +49,22 @@ const PageBlockInfo: FC = () => {
     const subOption = fetchData('GET', 'block_txs', { height: blockId, page, limit }).subscribe(({success, data}) => {
       if (success) {
         setLoading(false);
-        setTableContent(data.Txs?.slice(0, 10).map((tx: any) => ({
-          key: getOnlyId(),
-          value: [
-            { key: getOnlyId(), value: <ComConLink link={`../transaction/${tx.hash}`}>{ tx.hash }</ComConLink> },
-            { key: getOnlyId(), value: <ComConLink link={`../block/${tx.block_id}`}>{ tx.block_id }</ComConLink> },
-            { key: getOnlyId(), value: formatTime(tx.create_time) },
-            { key: getOnlyId(), value: <ComConLink noLink={!walletVerifyAddress(tx.from)} link={`/account/${tx.from}`}>{ tx.from }</ComConLink> },
-            { key: getOnlyId(), value: <ComConLink noLink={!walletVerifyAddress(tx.to)} link={`/account/${tx.to}`}>{ tx.to }</ComConLink> },
-            { key: getOnlyId(), value: tx.amount },
-            { key: getOnlyId(), value: tx.fee },
-          ]
-        })));
+        setTableContent(data.Txs?.slice(0, 10).map((tx: any) => {
+          let txError = tx.code !== 0;
+          return {
+            key: getOnlyId(),
+            error: txError,
+            value: [
+              { key: getOnlyId(), value: <ComConLink link={`../transaction/${tx.hash}`}>{ tx.hash }</ComConLink> },
+              { key: getOnlyId(), value: <ComConLink link={`../block/${tx.block_id}`}>{ tx.block_id }</ComConLink> },
+              { key: getOnlyId(), value: formatTime(tx.create_time) },
+              { key: getOnlyId(), value: <ComConLink noLink={!walletVerifyAddress(tx.from)} link={`/account/${tx.from}`}>{ tx.from }</ComConLink> },
+              { key: getOnlyId(), value: <ComConLink noLink={!walletVerifyAddress(tx.to)} link={`/account/${tx.to}`}>{ tx.to }</ComConLink> },
+              { key: getOnlyId(), value: tx.amount },
+              { key: getOnlyId(), value: tx.fee },
+            ]
+          };
+        }));
         setAllCount(parseInt(data.TxNum));
       }
     });

@@ -46,7 +46,7 @@
     }
     .block_info_dt {
       opacity: var(--opacity-level-2);
-      width: 10%;
+      min-width: 10%;
       padding-left: 1%;
       white-space: nowrap;
     }

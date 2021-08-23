@@ -35,7 +35,7 @@ const PageTransaction: FC = () => {
     const subOption = fetchData('GET', 'tx_detail', { hash: transactionId }).subscribe(data => {
       if (data.loading === false) setInfoLoading(false);
       if (data.success) {
-        setTransactionInfo({
+        const obj = {
           id: data.data.id,
           block: data.data.block_id,
           fee: data.data.fee,
@@ -48,7 +48,22 @@ const PageTransaction: FC = () => {
           type: data.data.type,
           status: data.data.code === 0,
           rawLog: data.data.raw_log,
-        });
+        };
+        switch(obj.type) {
+          case 'undelegate':
+            obj.type = <I18 text="undelegate" />; break;
+          case 'withdraw':
+            obj.type = <I18 text="withdraw" />; break;
+          case 'redelegate':
+            obj.type = <I18 text="redelegate" />; break;
+          case 'delegate':
+            obj.type = <I18 text="delegate" />; break;
+          case 'transfer':
+            obj.type = <I18 text="transfer" />; break;
+          default:
+            break;
+        }
+        setTransactionInfo(obj);
       }
       if (data.error) {
         alertTools.create({
@@ -118,7 +133,7 @@ const PageTransaction: FC = () => {
               {
                 walletVerifyAddress(transactionInfo.to)
                   ? <Link to={`/account/${transactionInfo.to}`}>{transactionInfo.to}</Link>
-                  : transactionInfo.from
+                  : transactionInfo.to
               }
             </dd>
           </dl>

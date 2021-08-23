@@ -50,9 +50,9 @@ const PageBlocksList: FC = () => {
     // block List
     const maxHeight = blockHeight - (page - 1) * limit;
     const minHeight = blockHeight - page * limit;
-    setLoading(true);
-    const getBlockList = fetchData('GET', '/blockchain', { minHeight: minHeight, maxHeight: maxHeight }).subscribe(({ success, data: blockList }) => {
-      setLoading(false);
+    const getBlockList = fetchData('GET', '/blockchain', { minHeight: minHeight, maxHeight: maxHeight }).subscribe(({ success, data: blockList, loading }) => {
+      if (loading === false) setLoading(false);
+      else setLoading(true);
       if (success) {
         setTableContent(blockList.map((block: any) => ({
           key: getOnlyId(),

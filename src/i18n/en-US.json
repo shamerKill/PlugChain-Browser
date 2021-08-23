@@ -214,5 +214,9 @@
   "nodeInvalid": "invalid",
   "nodeOffLine": "offline",
   "nodeJailed": "jailing",
-  "nodeRunning": "running"
+  "nodeRunning": "running",
+  "nodeWarningTipTitle": "Abnormal Node Alert!",
+  "nodeWarningTipMessage0": "The Authenticator Node has failed and cannot operate.",
+  "nodeWarningTipMessage1": "The Verifier Node is offline, do you still want to proceed?",
+  "nodeWarningTipMessage2": "The verifier Node is jailing, do you still want to proceed?"
 }

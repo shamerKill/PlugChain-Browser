@@ -29,7 +29,7 @@ const PageWalletTransaction: FC = () => {
     if (toAddress === wallet.address) return alertTools.create({ message: <I18 text="addressInputError" />, type: 'warning' });
     if (!verifyNumber(volume, true)) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
     if (!verifyNumber(fee, true)) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
-    if (new NumberTools(formatStringNum(balance)).cut(parseFloat(volume)).cut(parseFloat(fee)).get() < 0) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
+    if (new NumberTools(formatStringNum(balance)).cut(formatStringNum(volume)).cut(formatStringNum(fee)).get() < 0) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
     if (!verifyPassword(password)) return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
     setTransactionLoading(true);
     confirmTools.create({
@@ -55,9 +55,9 @@ const PageWalletTransaction: FC = () => {
         setToAddress('');
         setVolume('');
         setPassword('');
-        setBalance(`${new NumberTools(formatStringNum(balance)).cut(parseFloat(fee)).cut(parseFloat(volume)).get()}`);
+        setBalance(`${new NumberTools(formatStringNum(balance)).cut(formatStringNum(fee)).cut(formatStringNum(volume)).get()}`);
       } else if (data.error) {
-        setBalance(`${new NumberTools(formatStringNum(balance)).cut(parseFloat(fee)).get()}`);
+        setBalance(`${new NumberTools(formatStringNum(balance)).cut(formatStringNum(fee)).get()}`);
         alertTools.create({ message: <I18 text="exeSuccess" />, type: 'success' });
       }
     });
@@ -65,7 +65,7 @@ const PageWalletTransaction: FC = () => {
   }, [fee, password, volume, toAddress, wallet.encryptionKey, balance]);
 
   const transactionAllBalance = () => {
-    setVolume(`${new NumberTools(formatStringNum(balance)).cut(parseFloat(fee)).get()}`);
+    setVolume(`${new NumberTools(formatStringNum(balance)).cut(formatStringNum(fee)).get()}`);
   };
 
   useEffect(() => {

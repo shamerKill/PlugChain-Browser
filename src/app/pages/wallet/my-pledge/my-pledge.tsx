@@ -58,7 +58,7 @@ const PageMyPledge: FC = () => {
             case 'BOND_STATUS_BONDED':
               obj.type = 3; break;
           }
-          resultArr.push(obj);
+          if (obj.pledgedVolume !== '0') resultArr.push(obj);
         }
         if (canDo) {
           setLoaded(true);

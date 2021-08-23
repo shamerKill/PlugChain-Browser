@@ -169,7 +169,7 @@ export const HomeNewsInfo: FC<{observerData: BehaviorSubject<TypePageHomeData>}>
       key: getOnlyId(),
       value: <I18 text={text} />
     })));
-    setTransTableHeader([ 'hash', 'blockHeight', 'time', 'from', 'to', 'transactionVolume', 'feeNumber' ].map(text => ({
+    setTransTableHeader([ 'hash', 'blockHeight', 'time', 'from', 'to', 'transactionOfNumber', 'feeNumber' ].map(text => ({
       key: getOnlyId(),
       value: <I18 text={text} />
     })));

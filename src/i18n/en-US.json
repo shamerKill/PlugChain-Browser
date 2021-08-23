@@ -208,5 +208,6 @@
   "exportAccountWarning": "Warning! In order to protect your crypto assets, do not expose your private keys or key phrase in the public!!!",
   "accountPassword": "Wallet Password",
   "exportFile": "Export File",
-  "onlyShow": "Only Show(no export)"
+  "onlyShow": "Only Show(no export)",
+	"transactionOfNumber": "Transaction Of Number"
 }

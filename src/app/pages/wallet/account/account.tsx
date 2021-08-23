@@ -182,7 +182,7 @@ const PageWalletAccount: FC = () => {
 
   useEffect(() => {
     setTableHeader(
-      [ '', 'ID', 'blockHeight', 'time', 'from', 'to', 'transactionVolume', 'feeNumber' ]
+      [ '', 'ID', 'blockHeight', 'time', 'from', 'to', 'transactionOfNumber', 'feeNumber' ]
         .map(text => ({ key: getOnlyId(), value: <I18 text={text} /> }))
     );
   }, []);

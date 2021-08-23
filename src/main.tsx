@@ -14,5 +14,13 @@ import 'default-passive-events';
   );
 })();
 
-
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js').then(registration => {
+      console.log('SW registered: ', 'ok');
+    }).catch(registrationError => {
+      console.log('SW registration failed: ', registrationError);
+    });
+  });
+}
 // reportWebVitals(undefined);

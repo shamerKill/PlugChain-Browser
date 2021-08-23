@@ -7,19 +7,35 @@
 you need create the `.env` directory to src directory, and some files to `.env`
 - `base.env.json`
   - ```json
-    SAVE_DATABASE_NAME: " *** " // localStorage's name
-    WALLET_RPC_BASE: " https://*** " // rpc with wallet
+    WALLET_ADDRESS_PREFIX: " *** " // prefix's name
     ```
   
-- `development.env.json`
+- `deploy-prod.env.json`
   - ```json
     BASE_URL: " http://*** " // URI for fetch use with development's mode
     ```
-- `production.env.json`
+
+- `deploy-test.env.json`
   - ```json
     BASE_URL: " https://*** " // URI for fetch use with production's mode
     ```
-- `test.env.json`
+
+- `dev-prod.env.json`
+  - ```json
+    BASE_URL: " https://*** " // URI for fetch use with test's mode
+    ```
+
+- `dev-test.env.json`
+  - ```json
+    BASE_URL: " https://*** " // URI for fetch use with test's mode
+    ```
+
+- `test-prod.env.json`
+  - ```json
+    BASE_URL: " https://*** " // URI for fetch use with test's mode
+    ```
+
+- `test-test.env.json`
   - ```json
     BASE_URL: " https://*** " // URI for fetch use with test's mode
     ```

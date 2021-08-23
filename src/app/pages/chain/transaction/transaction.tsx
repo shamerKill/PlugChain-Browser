@@ -95,7 +95,7 @@ const PageTransaction: FC = () => {
             <dd className="transaction_info_dd">{transactionInfo.fee ? transactionInfo.fee : ''}</dd>
           </dl>
           <dl className="transaction_info_dl">
-            <dt className="transaction_info_dt"><I18 text="transactionVolume" /></dt>
+            <dt className="transaction_info_dt"><I18 text="transactionOfNumber" /></dt>
             <dd className="transaction_info_dd">{transactionInfo.amount ? transactionInfo.amount : ''}</dd>
           </dl>
           <dl className="transaction_info_dl">

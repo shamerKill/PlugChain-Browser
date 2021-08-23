@@ -23,7 +23,7 @@
 
   "searchPlaceholder": "搜索地址、交易、区块高度",
   "newBlockHeight": "最新区块",
-  "transactionVolume": "交易数",
+  "transactionVolume": "交易次数",
   "pendingBlockVolume": "未确认区块",
   "newBlockTransaction": "最新块内交易数量",
   "price": "价格",
@@ -207,5 +207,6 @@
   "exportAccountWarning": "警告：为了保护您的钱包安全，请妥善保管文件，不要在公共机器上进行导出操作！！！",
   "accountPassword": "钱包密码",
   "exportFile": "导出文件",
-  "onlyShow": "仅显示(不导出)"
+  "onlyShow": "仅显示(不导出)",
+  "transactionOfNumber": "交易数量"
 }

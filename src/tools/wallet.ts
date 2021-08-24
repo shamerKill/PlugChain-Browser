@@ -49,7 +49,7 @@ export const walletChainReward = (nodeRate: number) => new Promise(resolve => {
 
 export const walletVerifyAddress = (address: string) => {
   if (walletVerifyUserAdd(address)) return `/account/${address}`;
-  else if (walletVerifyVerAdd(address)) return `/wallet/transaction-pledge?id=${address}`;
+  else if (walletVerifyVerAdd(address)) return ''/**`/wallet/transaction-pledge?id=${address}` */;
   else return '';
 };
 export const walletVerifyUserAdd = (address: string) => (new RegExp(`^${addressPrefix}[\\d|a-z|A-Z]{39}$`)).test(address);

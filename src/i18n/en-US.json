@@ -43,8 +43,9 @@
 	"feeNumber": "Fee",
 	"ID": "ID",
 	"time": "Time",
-	"from": "From",
-	"to": "To",
+	"from": "Caller",
+	"source": "Source Node",
+	"to": "Recipient",
 	"more": "More",
 	"hash": "Hash",
 	"input": "input",
@@ -227,5 +228,7 @@
   "transfer": "Transfer",
 
   "volumeInputMinError": "Staking volume is lower then the minimum volume",
-  "noHadWithdraw": "Don't Have Interests"
+  "noHadWithdraw": "Don't Have Interests",
+  "rePledgingLocking": "Transfer Staked Locking",
+  "rePledgingLockingTip": "While current staking is still in progress, the verifier node cannot transfer staked tokens"
 }

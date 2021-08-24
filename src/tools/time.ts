@@ -8,6 +8,7 @@ export const formatTime = (time: string, format = 'YY-MM-DD hh:mm:ss'): string =
   let date = new Date();
   if (!isNaN(new Date(time).getDate())) date = new Date(time);
   else date = new Date((time || '').replace(new RegExp('-', 'g'), '/'));
+  if (isNaN(date.getTime())) date = new Date();
   const year = date.getFullYear(),
     month = date.getMonth() + 1,
     day = date.getDate(),

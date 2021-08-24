@@ -46,7 +46,7 @@ const PageChainAccount: FC = () => {
 
   useEffect(() => {
     setTableHeader(
-      [ 'hash', 'blockHeight', 'time', 'from', 'to', 'transactionVolume', 'feeNumber' ]
+      [ 'hash', 'blockHeight', 'time', 'from', 'to', 'type', 'transactionVolume', 'feeNumber' ]
         .map(text => ({ key: getOnlyId(), value: <I18 text={text} /> }))
     );
   }, []);
@@ -59,15 +59,33 @@ const PageChainAccount: FC = () => {
         setLoading(false);
         setAllCount(parseInt(data.TxNum));
         setTableContent(data.Txs.map((tx: any) => {
+          let txError = tx.code !== 0;
           const txTypeOutput = tx.from === address ? true : false;
+          let type = tx.type;
+          switch (type) {
+            case 'undelegate':
+              type = <I18 text="undelegate" />; break;
+            case 'withdraw':
+              type = <I18 text="withdraw" />; break;
+            case 'redelegate':
+              type = <I18 text="redelegate" />; break;
+            case 'delegate':
+              type = <I18 text="delegate" />; break;
+            case 'transfer':
+              type = <I18 text="transfer" />; break;
+            default:
+              break;
+          }
           return {
             key: getOnlyId(),
+            error: txError,
             value: [
               { key: getOnlyId(), value: <ComConLink link={`../transaction/${tx.hash}`}>{ tx.hash }</ComConLink> },
               { key: getOnlyId(), value: <ComConLink link={`../block/${tx.block_id}`}>{ tx.block_id }</ComConLink> },
               { key: getOnlyId(), value: formatTime(tx.create_time) },
-              { key: getOnlyId(), value: <ComConLink noLink={txTypeOutput || !walletVerifyAddress(tx.from)} link={`/account/${tx.from}`}>{ tx.from }</ComConLink> },
-              { key: getOnlyId(), value: <ComConLink noLink={!txTypeOutput || !walletVerifyAddress(tx.from)} link={`/account/${tx.to}`}>{ tx.to }</ComConLink> },
+              { key: getOnlyId(), value: <ComConLink noLink={txTypeOutput} link={walletVerifyAddress(tx.from)}>{ tx.from }</ComConLink> },
+              { key: getOnlyId(), value: <ComConLink noLink={!txTypeOutput} link={walletVerifyAddress(tx.to)}>{ tx.to }</ComConLink> },
+              { key: getOnlyId(), value: type },
               { key: getOnlyId(), value: tx.amount },
               { key: getOnlyId(), value: tx.fee },
             ]

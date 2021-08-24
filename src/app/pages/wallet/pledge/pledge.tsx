@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import ComponentsLayoutBase from '../../../components/layout/base';
 import I18 from '../../../../i18n/component';
-import { getEnvConfig, getOnlyId, useSafeLink, walletAmountToToken, walletChainReward } from '../../../../tools';
+import { getEnvConfig, useSafeLink, walletAmountToToken, walletChainReward } from '../../../../tools';
 import ComConButton from '../../../components/control/button';
 import { fetchData } from '../../../../tools/ajax';
 import { formatNumberStr } from '../../../../tools/string';
@@ -89,8 +89,8 @@ const PageWalletPledge: FC = () => {
       <h1 className="pledge_title"><I18 text="selectJoin" /></h1>
       <div className="pledge_nodes">
         {
-          nodes.map(node => (
-            <div className="pledge_node" key={getOnlyId()}>
+          nodes.map((node, index) => (
+            <div className="pledge_node" key={index}>
               <div className="pledge_node_inner">
                 { node.type === 0 && (<div className="pledge_node_mark pledge_node_error"><I18 text="nodeInvalid" /></div>) }
                 { node.type === 1 && (<div className="pledge_node_mark pledge_node_warning"><I18 text="nodeOffLine" /></div>) }

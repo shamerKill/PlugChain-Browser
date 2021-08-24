@@ -18,6 +18,7 @@ type TypeNodesInfo = {
   rate: string;
   pledgedVolume: string;
   address: string;
+  redeeming: string;
   type: number; // 0 invalid / 1 off-line / 2 backing / 3 running
 };
 
@@ -46,6 +47,7 @@ const PageMyPledge: FC = () => {
             pledgedVolume: formatNumberStr(walletAmountToToken(`${parseFloat(node.token)}`)),
             minVolume: formatNumberStr(walletAmountToToken(`${parseFloat(node.min_self_delegation)}`)),
             address: node.operator_address,
+            redeeming: formatNumberStr(walletAmountToToken(`${parseFloat(node.unbond_entries_token)}`)),
             type: 3,
           };
           switch(node.status) {
@@ -58,7 +60,7 @@ const PageMyPledge: FC = () => {
             case 'BOND_STATUS_BONDED':
               obj.type = 3; break;
           }
-          if (obj.pledgedVolume !== '0') resultArr.push(obj);
+          resultArr.push(obj);
         }
         if (canDo) {
           setLoaded(true);
@@ -88,13 +90,19 @@ const PageMyPledge: FC = () => {
                   <div className="pledge_node_header">
                     <img className="node_avatar" src={node.avatar} alt={node.name} />
                     <Link className="node_name" to={`/wallet/transaction-pledge?id=${node.address}`}>{node.name}</Link>
-                    <ComConButton contrast className="node_detail" onClick={() => goToDetail(node.address)}><I18 text="detail" /></ComConButton>
+                    {
+                      node.pledgedVolume !== '0' && <ComConButton contrast className="node_detail" onClick={() => goToDetail(node.address)}><I18 text="detail" /></ComConButton>
+                    }
                   </div>
                   <div className="pledge_node_content">
                     <div className="pledge_node_info">
                       <dl className="pledge_node_dl">
                         <dt className="pledge_node_dt">{node.rate}</dt>
                         <dt className="pledge_node_dd"><I18 text="willProfit" /></dt>
+                      </dl>
+                      <dl className="pledge_node_dl">
+                        <dt className="pledge_node_dt">{node.redeeming}</dt>
+                        <dt className="pledge_node_dd"><I18 text="redeeming" /></dt>
                       </dl>
                       <dl className="pledge_node_dl">
                         <dt className="pledge_node_dt">{node.pledgedVolume}</dt>

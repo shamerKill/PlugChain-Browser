@@ -1,7 +1,7 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import I18 from '../../../../i18n/component';
-import { formatTime, getOnlyId, useFormatPath, getEnvConfig, walletVerifyAddress } from '../../../../tools';
+import { formatTime, getOnlyId, useFormatPath, walletVerifyAddress } from '../../../../tools';
 import { fetchData } from '../../../../tools/ajax';
 import ComConSvg from '../../../components/control/icon';
 import ComConLink from '../../../components/control/link';
@@ -58,8 +58,8 @@ const PageBlockInfo: FC = () => {
               { key: getOnlyId(), value: <ComConLink link={`../transaction/${tx.hash}`}>{ tx.hash }</ComConLink> },
               { key: getOnlyId(), value: <ComConLink link={`../block/${tx.block_id}`}>{ tx.block_id }</ComConLink> },
               { key: getOnlyId(), value: formatTime(tx.create_time) },
-              { key: getOnlyId(), value: <ComConLink noLink={!walletVerifyAddress(tx.from)} link={`/account/${tx.from}`}>{ tx.from }</ComConLink> },
-              { key: getOnlyId(), value: <ComConLink noLink={!walletVerifyAddress(tx.to)} link={`/account/${tx.to}`}>{ tx.to }</ComConLink> },
+              { key: getOnlyId(), value: <ComConLink link={walletVerifyAddress(tx.from)}>{ tx.from }</ComConLink> },
+              { key: getOnlyId(), value: <ComConLink link={walletVerifyAddress(tx.to)}>{ tx.to }</ComConLink> },
               { key: getOnlyId(), value: tx.amount },
               { key: getOnlyId(), value: tx.fee },
             ]
@@ -124,13 +124,13 @@ const PageBlockInfo: FC = () => {
             <dt className="block_info_dt"><I18 text="transactionVolume" /></dt>
             <dd className="block_info_dd">{blockInfo.tranVol}</dd>
           </dl>
-          <dl className="block_info_dl">
+          {/* <dl className="block_info_dl">
             <dt className="block_info_dt"><I18 text="feeNumber" /></dt>
             <dd className="block_info_dd">{blockInfo.fee}{ getEnvConfig.APP_TOKEN_NAME }</dd>
-          </dl>
+          </dl> */}
           <dl className="block_info_dl">
             <dt className="block_info_dt"><I18 text="producer" /></dt>
-            <dd className="block_info_dd">{blockInfo.producer}</dd>
+            <dd className="block_info_dd"><ComConLink link={walletVerifyAddress(blockInfo.producer)}>{ blockInfo.producer }</ComConLink></dd>
           </dl>
           <dl className="block_info_dl">
             <dt className="block_info_dt"><I18 text="rootHashTree" /></dt>

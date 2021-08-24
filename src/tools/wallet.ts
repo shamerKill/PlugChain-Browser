@@ -11,6 +11,7 @@ import getEnvConfig from './env-config';
 import { randomNumber } from './random-num';
 import { toHex } from './string';
 import { BehaviorSubject, Subscription, timer, zip } from 'rxjs';
+import { take as RxTake } from 'rxjs/operators';
 import { changeSeconds } from './time';
 
 const rpcURI = getEnvConfig.WALLET_RPC_BASE;
@@ -18,8 +19,8 @@ const appTokenName = getEnvConfig.APP_TOKEN_NAME;
 const addressPrefix = getEnvConfig.WALLET_ADDRESS_PREFIX;
 const chainId = getEnvConfig.APP_CHAIN_ID;
 
-const defaultTransGasLimit = '1000000';
-const defaultDelegateLimit = '1000000';
+const defaultTransGasLimit = '200000';
+const defaultDelegateLimit = '400000';
 
 
 let chainAllValue: number;
@@ -46,7 +47,13 @@ export const walletChainReward = (nodeRate: number) => new Promise(resolve => {
   else resolve(computeRate(nodeRate).toFixed(2));
 });
 
-export const walletVerifyAddress = (address: string) => (new RegExp(`^${addressPrefix}[\\d|a-z|A-Z]{39}$`)).test(address);
+export const walletVerifyAddress = (address: string) => {
+  if (walletVerifyUserAdd(address)) return `/account/${address}`;
+  else if (walletVerifyVerAdd(address)) return `/wallet/transaction-pledge?id=${address}`;
+  else return '';
+};
+export const walletVerifyUserAdd = (address: string) => (new RegExp(`^${addressPrefix}[\\d|a-z|A-Z]{39}$`)).test(address);
+export const walletVerifyVerAdd = (address: string) => (new RegExp(`^${addressPrefix}valoper[\\d|a-z|A-Z]{39}$`)).test(address);
 
 export const walletVerifyMnemonic = async (mnemonics: string[]) => {
   if (![ 12, 15, 18, 21, 24 ].includes(mnemonics.length)) return false;
@@ -246,11 +253,16 @@ const walletFetchObserve = () => {
     });
     let watchLoading: Subscription|null = null;
     const resultSubscription = resultObserver.subscribe(({ loading, result, success, error }) => {
-      if (loading && result && result.code === 0 && result.hash) watchLoading = timer(0, changeSeconds(3)).subscribe(() => {
+      if (loading && result && result.code === 0 && result.hash) watchLoading = timer(0, changeSeconds(3)).pipe(RxTake(15)).subscribe(lengthTimer => {
         walletFetch('tx_search', { query: `tx.hash='${result.hash}'`, page: '1', prove: false }).subscribe(search => {
           if (search.success && search.data.total_count !== '0') {
             if (search.data.txs?.[0]?.tx_result?.code !== 0) resultObserver.next({error: true, result: search.data.txs?.[0]?.tx_result?.log, loading: false, success: false});
             else resultObserver.next({error: false, result: search.data.txs, loading: false, success: true});
+            watchLoading?.unsubscribe();
+            resultSubscription.unsubscribe();
+          }
+          if (!search.loading && lengthTimer === 14) {
+            resultObserver.next({error: true, result: '', loading: false, success: false});
             watchLoading?.unsubscribe();
             resultSubscription.unsubscribe();
           }

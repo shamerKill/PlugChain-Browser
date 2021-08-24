@@ -175,55 +175,61 @@ const PageWalletTransactionPledge: FC = () => {
           </dl>
         </div>
       </div>
-      <div className="pledge_content">
-        <p className="pledge_box_title"><I18 text="pledgeNumber" /></p>
-        <div className="pledge_box_label">
-          <input
-            className="pledge_box_input"
-            type="number"
-            disabled={pledgeLoading}
-            value={volume}
-            onChange={e => setVolume(e.target.value)} />
-          <p className="pledge_box_info">{ getEnvConfig.APP_TOKEN_NAME }</p>
-        </div>
-        <p className="pledge_box_tip">
-          <I18 text="canTransactionNumber" />
-          <span className="pledge_tip_primary">{balance}{ getEnvConfig.APP_TOKEN_NAME }</span>
-          <button className="pledge_tip_button" onClick={pledgeAllBalance}><I18 text="allTransaction" /></button>
-        </p>
-        <p className="pledge_box_title"><I18 text="feeNumber" /></p>
-        <div className="pledge_box_label">
-          <input
-            className="pledge_box_input"
-            type="number"
-            disabled={true}
-            value={fee}
-            onChange={e => setFee(e.target.value)} />
-          <p className="pledge_box_info">{ getEnvConfig.APP_TOKEN_NAME }</p>
-        </div>
-        <p className="pledge_box_title"><I18 text="password" /></p>
-        <form>
+      {
+        wallet.hasWallet && (
+        <>
+          <div className="pledge_content">
+          <p className="pledge_box_title"><I18 text="pledgeNumber" /></p>
           <div className="pledge_box_label">
             <input
               className="pledge_box_input"
-              type="password"
+              type="number"
               disabled={pledgeLoading}
-              value={password}
-              onChange={e => setPassword(e.target.value)} />
-            <Link className="pledge_box_forget" to="./reset"><I18 text="forgetPassword" /></Link>
+              value={volume}
+              onChange={e => setVolume(e.target.value)} />
+            <p className="pledge_box_info">{ getEnvConfig.APP_TOKEN_NAME }</p>
           </div>
-        </form>
-        <ComConButton
-          loading={pledgeLoading}
-          onClick={verifyPledge}
-          className="pledge_confirm_button">
-          <I18 text="confirm" />
-        </ComConButton>
-      </div>
-      <div className="pledge_footer">
-        <div className="pledge_footer_item"><span className="pledge_footer_span"><I18 text="pledgeMoreTip1" /></span></div>
-        <div className="pledge_footer_item"><span className="pledge_footer_span"><I18 text="pledgeMoreTip2" /></span></div>
-      </div>
+          <p className="pledge_box_tip">
+            <I18 text="canTransactionNumber" />
+            <span className="pledge_tip_primary">{balance}{ getEnvConfig.APP_TOKEN_NAME }</span>
+            <button className="pledge_tip_button" onClick={pledgeAllBalance}><I18 text="allTransaction" /></button>
+          </p>
+          <p className="pledge_box_title"><I18 text="feeNumber" /></p>
+          <div className="pledge_box_label">
+            <input
+              className="pledge_box_input"
+              type="number"
+              disabled={true}
+              value={fee}
+              onChange={e => setFee(e.target.value)} />
+            <p className="pledge_box_info">{ getEnvConfig.APP_TOKEN_NAME }</p>
+          </div>
+          <p className="pledge_box_title"><I18 text="password" /></p>
+          <form>
+            <div className="pledge_box_label">
+              <input
+                className="pledge_box_input"
+                type="password"
+                disabled={pledgeLoading}
+                value={password}
+                onChange={e => setPassword(e.target.value)} />
+              <Link className="pledge_box_forget" to="./reset"><I18 text="forgetPassword" /></Link>
+            </div>
+          </form>
+          <ComConButton
+            loading={pledgeLoading}
+            onClick={verifyPledge}
+            className="pledge_confirm_button">
+            <I18 text="confirm" />
+          </ComConButton>
+        </div>
+          <div className="pledge_footer">
+            <div className="pledge_footer_item"><span className="pledge_footer_span"><I18 text="pledgeMoreTip1" /></span></div>
+            <div className="pledge_footer_item"><span className="pledge_footer_span"><I18 text="pledgeMoreTip2" /></span></div>
+          </div>
+        </>
+        )
+      }
     </ComponentsLayoutBase>
   );
 };

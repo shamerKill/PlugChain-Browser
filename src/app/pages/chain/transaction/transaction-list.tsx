@@ -54,8 +54,8 @@ const PageBlocksList: FC = () => {
               { key: getOnlyId(), value: <ComConLink link={`./transaction/${tx.hash}`}>{ tx.hash }</ComConLink> },
               { key: getOnlyId(), value: <ComConLink link={`./block/${tx.block_id}`}>{ tx.block_id }</ComConLink> },
               { key: getOnlyId(), value: formatTime(tx.create_time) },
-              { key: getOnlyId(), value: <ComConLink noLink={!walletVerifyAddress(tx.from)} link={`/account/${tx.from}`}>{ tx.from }</ComConLink> },
-              { key: getOnlyId(), value: <ComConLink noLink={!walletVerifyAddress(tx.to)} link={`/account/${tx.to}`}>{ tx.to }</ComConLink> },
+              { key: getOnlyId(), value: <ComConLink link={walletVerifyAddress(tx.from)}>{ tx.from }</ComConLink> },
+              { key: getOnlyId(), value: <ComConLink link={walletVerifyAddress(tx.to)}>{ tx.to }</ComConLink> },
               { key: getOnlyId(), value: tx.amount },
               { key: getOnlyId(), value: tx.fee },
             ]

@@ -49,7 +49,7 @@ const ComConTable: FC<{
     let nowIndex = Math.floor(maxShowLength / 2);
     const moveLen = page - nowIndex - 1;
     // verify left
-    if (moveLen <= 0) nowIndex += moveLen;
+    if (moveLen <= 0 || maxShowLength === 4) nowIndex += moveLen;
     else if (moveLen === 1) result.push(itemButton(1));
     else result.push(<>{itemButton(1)}{moreItem}</>);
     // add item

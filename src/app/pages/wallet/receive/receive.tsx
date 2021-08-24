@@ -46,7 +46,7 @@ const PageWalletReceive: FC = () => {
         setTableContent(state => ([ {
           key: getOnlyId(),
           value: [
-            { key: getOnlyId(), value: walletVerifyAddress(address) ? <Link to={`/account/${address}`}>{ address }</Link> : address },
+            { key: getOnlyId(), value: <Link to={walletVerifyAddress(address)}>{ address }</Link> },
             { key: getOnlyId(), value: formatTime('') },
             { key: getOnlyId(), value: formatNumberStr(volume) },
           ]
@@ -85,7 +85,7 @@ const PageWalletReceive: FC = () => {
         setTableContent(data.info.map((log: any) => ({
           key: getOnlyId(),
           value: [
-            { key: getOnlyId(), value: walletVerifyAddress(log.Address) ? <Link to={`/account/${log.Address}`}>{ log.Address }</Link>: log.Address },
+            { key: getOnlyId(), value: <Link to={walletVerifyAddress(log.Address)}>{ log.Address }</Link> },
             { key: getOnlyId(), value: formatTime(log.CreateTime) },
             { key: getOnlyId(), value: formatNumberStr(log.Amount) },
           ]

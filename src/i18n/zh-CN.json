@@ -43,8 +43,9 @@
   "feeNumber": "手续费",
   "ID": "ID",
   "time": "时间",
-  "from": "从",
-  "to": "到",
+  "from": "发起者",
+	"source": "源节点",
+  "to": "接收者",
   "more": "更多",
   "hash": "哈希",
   "input": "接收",
@@ -138,7 +139,7 @@
   "pledgeNumber": "质押数量",
   "redeemAll": "赎回质押",
   "redeemRewards": "赎回收益",
-  "changePledge": "转账质押",
+  "changePledge": "转让质押",
   "earned": "已收益",
   "changePledgeNode": "选择质押节点",
   "confirmTransfer": "确认转让",
@@ -226,5 +227,7 @@
   "transfer": "转账",
 
   "volumeInputMinError": "质押数量低于最低数量",
-  "noHadWithdraw": "暂无收益"
+  "noHadWithdraw": "暂无收益",
+  "rePledgingLocking": "转让质押锁定中",
+  "rePledgingLockingTip": "当前锁定完成前，该验证者节点无法进行转让质押"
 }

@@ -20,6 +20,7 @@ const PageTransaction: FC = () => {
     hash: string; from: string; to: string;
     remarks: string; time: string; amount: string;
     type: string; status: boolean, rawLog: string;
+    sourceNode?: string;
   }>(
     { id: '', block: 0, fee: 0, hash: '', from: '', to: '', remarks: '', time: '', amount: '', type: '', status: true, rawLog: '' }
   );
@@ -48,6 +49,7 @@ const PageTransaction: FC = () => {
           type: data.data.type,
           status: data.data.code === 0,
           rawLog: data.data.raw_log,
+          sourceNode: data.data.src_validator,
         };
         switch(obj.type) {
           case 'undelegate':
@@ -103,7 +105,7 @@ const PageTransaction: FC = () => {
           </dl>
           <dl className="transaction_info_dl">
             <dt className="transaction_info_dt"><I18 text="blockId" /></dt>
-            <dd className="transaction_info_dd"><Link to="/">{transactionInfo.block ? transactionInfo.block : ''}</Link></dd>
+            <dd className="transaction_info_dd"><Link to={`/block/${transactionInfo.block}`}>{transactionInfo.block ? transactionInfo.block : ''}</Link></dd>
           </dl>
           <dl className="transaction_info_dl">
             <dt className="transaction_info_dt"><I18 text="feeNumber" /></dt>
@@ -120,21 +122,23 @@ const PageTransaction: FC = () => {
           <dl className="transaction_info_dl">
             <dt className="transaction_info_dt"><I18 text="from" /></dt>
             <dd className="transaction_info_dd">
-              {
-                walletVerifyAddress(transactionInfo.from)
-                  ? <Link to={`/account/${transactionInfo.from}`}>{transactionInfo.from}</Link>
-                  : transactionInfo.from
-              }
+              <Link to={walletVerifyAddress(transactionInfo.from)}>{transactionInfo.from}</Link>
             </dd>
           </dl>
+          {
+            transactionInfo.sourceNode && (
+              <dl className="transaction_info_dl">
+                <dt className="transaction_info_dt"><I18 text="source" /></dt>
+                <dd className="transaction_info_dd">
+                  <Link to={walletVerifyAddress(transactionInfo.sourceNode)}>{transactionInfo.sourceNode}</Link>
+                </dd>
+              </dl>
+            )
+          }
           <dl className="transaction_info_dl">
             <dt className="transaction_info_dt"><I18 text="to" /></dt>
             <dd className="transaction_info_dd">
-              {
-                walletVerifyAddress(transactionInfo.to)
-                  ? <Link to={`/account/${transactionInfo.to}`}>{transactionInfo.to}</Link>
-                  : transactionInfo.to
-              }
+              <Link to={walletVerifyAddress(transactionInfo.to)}>{transactionInfo.to}</Link>
             </dd>
           </dl>
           <dl className="transaction_info_dl">

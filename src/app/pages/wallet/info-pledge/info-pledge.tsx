@@ -24,6 +24,8 @@ type TypePledgeNodeInfo = {
   pledged: string;
   rewardRate: string;
   earned: string;
+  rePledging: string;
+  redeeming: string;
   type: number; // 0 invalid / 1 off-line / 2 backing / 3 running
 };
 
@@ -43,7 +45,7 @@ const PageInfoPledge: FC = () => {
   const goLink = useSafeLink();
   const [wallet] = useGetDispatch<InRootState['wallet']>('wallet');
   const [pledgeNodeInfo, setPledgeNodeInfo] = useState<TypePledgeNodeInfo>({
-    avatar: '', name: '', address: '', pledged: '', rewardRate: '', earned: '', type: 3,
+    avatar: '', name: '', address: '', pledged: '', rewardRate: '', earned: '', redeeming: '0', rePledging: '0', type: 3,
   });
   const [balance, setBalance] = useState('');
   const [volume, setVolume] = useState('');
@@ -233,6 +235,8 @@ const PageInfoPledge: FC = () => {
               pledged: formatNumberStr(`${parseFloat(walletAmountToToken(node.token || '0'))}`),
               rewardRate: `${await (walletChainReward(parseFloat(`${node.commission.commission_rates.rate}`)))}%`,
               earned: formatNumberStr(`${parseFloat(walletAmountToToken(node.my_reward || '0'))}`),
+              redeeming: formatNumberStr(walletAmountToToken(node.unbond_entries_token)),
+              rePledging: formatNumberStr(walletAmountToToken(node.redelegator_entries_token)),
               type: 3,
             };
             switch(node.status) {
@@ -342,6 +346,34 @@ const PageInfoPledge: FC = () => {
               <dd className="info_item_dd"><I18 text="earned" /></dd>
             </dl>
           </div>
+          {
+            pledgeNodeInfo.redeeming !== '0' && <div className="info_item_box">
+              <dl className="info_item_dl">
+                <dt className="info_item_dt">{ pledgeNodeInfo.redeeming }&nbsp;<small className="info_item_small">{ getEnvConfig.APP_TOKEN_NAME }</small></dt>
+                <dd className="info_item_dd"><I18 text="redeeming" /></dd>
+              </dl>
+            </div>
+          }
+          {
+            pledgeNodeInfo.rePledging !== '0' && <div className="info_item_box">
+              <dl className="info_item_dl">
+                <dt className="info_item_dt">{ pledgeNodeInfo.rePledging }&nbsp;<small className="info_item_small">{ getEnvConfig.APP_TOKEN_NAME }</small></dt>
+                <dd className="info_item_dd">
+                  <I18 text="rePledgingLocking" />
+                  <span className="info_item_dd_tip">
+                    ?
+                    <i className="info_item_dd_tip_info"><I18 text="rePledgingLockingTip" /></i>
+                  </span>
+                </dd>
+              </dl>
+            </div>
+          }
+          <div className="info_item_box">
+            <dl className="info_item_dl">
+              <dt className="info_item_dt">{ balance }&nbsp;<small className="info_item_small">{ getEnvConfig.APP_TOKEN_NAME }</small></dt>
+              <dd className="info_item_dd"><I18 text="extra" /></dd>
+            </dl>
+          </div>
         </div>
         {/* nodes */}
         { showNodes && (
@@ -447,15 +479,19 @@ const PageInfoPledge: FC = () => {
             <ComConSvg className="info_button_icon" xlinkHref="#icon-transfer" />
             <I18 text="redeemRewards" />
           </ComConButton>
-          <ComConButton
-            className="info_button"
-            disabled={exeLoading}
-            loading={exeLoading}
-            onClick={() => rePledgeToken()}
-            contrast>
-            <ComConSvg className="info_button_icon" xlinkHref="#icon-transfer" />
-            <I18 text="changePledge" />
-          </ComConButton>
+          {
+            pledgeNodeInfo.rePledging === '0' && (
+              <ComConButton
+                className="info_button"
+                disabled={exeLoading}
+                loading={exeLoading}
+                onClick={() => rePledgeToken()}
+                contrast>
+                <ComConSvg className="info_button_icon" xlinkHref="#icon-transfer" />
+                <I18 text="changePledge" />
+              </ComConButton>
+            )
+          }
         </div>
       </div>
     </ComponentsLayoutBase>

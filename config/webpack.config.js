@@ -585,7 +585,7 @@ module.exports = function (webpackEnv) {
             : undefined
         )
       ),
-      new WorkboxPlugin.GenerateSW({
+      isEnvProduction && new WorkboxPlugin.GenerateSW({
         clientsClaim: true,
         skipWaiting: true,
       }),

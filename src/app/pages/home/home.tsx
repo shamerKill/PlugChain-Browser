@@ -13,7 +13,7 @@ import { switchMap } from 'rxjs/operators';
 import { changeSeconds, formatTime } from '../../../tools/time';
 import ComConLink from '../../components/control/link';
 import { TypeComConTableContent } from '../../components/control/table.copy';
-import { getOnlyId, useSafeLink, walletAmountToToken, walletVerifyAddress } from '../../../tools';
+import { getOnlyId, useSafeLink, walletAmountToToken, walletVerifyAddress, walletVerifyUserAdd, walletVerifyVerAdd } from '../../../tools';
 import { formatNumberStr } from '../../../tools/string';
 
 export type TypePageHomeData = {
@@ -53,7 +53,8 @@ const PageHome: FC = () => {
       if (Number(searchValue) <= Number(chainHeight)) return goLink(`/block/${searchValue}`);
       else return alertTools.create({ message: <I18 text="no-data" />, time: 5000, type: 'error' });
     }
-    if (walletVerifyAddress(searchValue)) return goLink(`/account/${searchValue}`);
+    if (walletVerifyUserAdd(searchValue)) return goLink(walletVerifyAddress(searchValue));
+    if (walletVerifyVerAdd(searchValue)) return goLink(walletVerifyAddress(searchValue));
     if (searchValue.length === 64) return goLink(`/transaction/${searchValue}`);
     alertTools.create({ message: <I18 text="undefined-data" />, time: 5000, type: 'error' });
   }, [searchValue, goLink, chainHeight]);
@@ -69,10 +70,10 @@ const PageHome: FC = () => {
           value: [
             { key: getOnlyId(), value: <ComConLink link={`/block/${block.block_id}`}>{ block.block_id }</ComConLink> },
             { key: getOnlyId(), value: formatTime(block.time) },
-            { key: getOnlyId(), value: <ComConLink link={`/account/${block.address}`} noLink>{ block.address }</ComConLink> },
+            { key: getOnlyId(), value: <ComConLink link={walletVerifyAddress(block.address)}>{ block.address }</ComConLink> },
             { key: getOnlyId(), value: <ComConLink link={`/block/${block.block_id}`}>{ block.hash }</ComConLink> },
             { key: getOnlyId(), value: block.tx_num },
-            { key: getOnlyId(), value: block.tx_fee },
+            // { key: getOnlyId(), value: block.tx_fee },
           ]
         })), blockHeight: blockList.data[0].block_id });
         setChainHeight(blockList.data[0].block_id);
@@ -92,8 +93,8 @@ const PageHome: FC = () => {
             { key: getOnlyId(), value: <ComConLink link={`/transaction/${tx.hash}`}>{ tx.hash }</ComConLink> },
             { key: getOnlyId(), value: <ComConLink link={`/block/${tx.block_id}`}>{ tx.block_id }</ComConLink> },
             { key: getOnlyId(), value: formatTime(tx.create_time) },
-            { key: getOnlyId(), value: <ComConLink noLink={!walletVerifyAddress(tx.from)} link={`/account/${tx.from}`}>{ tx.from }</ComConLink> },
-            { key: getOnlyId(), value: <ComConLink noLink={!walletVerifyAddress(tx.to)} link={`/account/${tx.to}`}>{ tx.to }</ComConLink> },
+            { key: getOnlyId(), value: <ComConLink link={walletVerifyAddress(tx.from)}>{ tx.from }</ComConLink> },
+            { key: getOnlyId(), value: <ComConLink link={walletVerifyAddress(tx.to)}>{ tx.to }</ComConLink> },
             { key: getOnlyId(), value: tx.amount },
             { key: getOnlyId(), value: tx.fee },
           ]

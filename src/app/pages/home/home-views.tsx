@@ -165,7 +165,7 @@ export const HomeNewsInfo: FC<{observerData: BehaviorSubject<TypePageHomeData>}>
 
   // get tables header
   useEffect(() => {
-    setBlockTableHeader([ 'blockHeight', 'blockTimeStamp', 'producer', 'blockId', 'transactionVolume', 'feeNumber' ].map(text => ({
+    setBlockTableHeader([ 'blockHeight', 'blockTimeStamp', 'producer', 'blockId', 'transactionVolume'/**, 'feeNumber' */ ].map(text => ({
       key: getOnlyId(),
       value: <I18 text={text} />
     })));

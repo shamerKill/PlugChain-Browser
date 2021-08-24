@@ -22,7 +22,7 @@ const PageBlocksList: FC = () => {
 
   useEffect(() => {
     setTableHeader(
-      [ 'blockHeight', 'blockTimeStamp', 'producer', 'blockId', 'transactionVolume', 'feeNumber' ]
+      [ 'blockHeight', 'blockTimeStamp', 'producer', 'blockId', 'transactionVolume', /**'feeNumber' */ ]
         .map(text => ({ key: getOnlyId(), value: <I18 text={text} /> }))
     );
   }, []);
@@ -62,7 +62,7 @@ const PageBlocksList: FC = () => {
             { key: getOnlyId(), value: <ComConLink link={`/account/${block.address}`} noLink>{ block.address }</ComConLink> },
             { key: getOnlyId(), value: <ComConLink link={`/block/${block.block_id}`}>{ block.hash }</ComConLink> },
             { key: getOnlyId(), value: block.tx_num },
-            { key: getOnlyId(), value: block.tx_fee },
+            // { key: getOnlyId(), value: block.tx_fee },
           ]
         })));
       }

@@ -5,7 +5,7 @@ import ComConButton from '../../../components/control/button';
 
 import './transaction.scss';
 import { Link } from 'react-router-dom';
-import { getEnvConfig, sleep, useSafeReplaceLink, verifyNumber, verifyPassword, walletDecode, walletTransfer, walletVerifyAddress } from '../../../../tools';
+import { getEnvConfig, sleep, useSafeReplaceLink, verifyNumber, verifyPassword, walletDecode, walletTransfer, walletVerifyUserAdd } from '../../../../tools';
 import useGetDispatch from '../../../../databases/hook';
 import { InRootState } from '../../../../@types/redux';
 import { fetchData } from '../../../../tools/ajax';
@@ -25,7 +25,7 @@ const PageWalletTransaction: FC = () => {
   const [transactionLoading ,setTransactionLoading] = useState(false);
 
   const verifyTransaction = () => {
-    if (!walletVerifyAddress(toAddress)) return alertTools.create({ message: <I18 text="addressInputError" />, type: 'warning' });
+    if (!walletVerifyUserAdd(toAddress)) return alertTools.create({ message: <I18 text="addressInputError" />, type: 'warning' });
     if (toAddress === wallet.address) return alertTools.create({ message: <I18 text="addressInputError" />, type: 'warning' });
     if (!verifyNumber(volume, true)) return alertTools.create({ message: <I18 text="volumeInputError" />, type: 'warning' });
     if (!verifyNumber(fee, true)) return alertTools.create({ message: <I18 text="feeInputError" />, type: 'warning' });
@@ -58,7 +58,7 @@ const PageWalletTransaction: FC = () => {
         setBalance(`${new NumberTools(formatStringNum(balance)).cut(formatStringNum(fee)).cut(formatStringNum(volume)).get()}`);
       } else if (data.error) {
         setBalance(`${new NumberTools(formatStringNum(balance)).cut(formatStringNum(fee)).get()}`);
-        alertTools.create({ message: <I18 text="exeSuccess" />, type: 'success' });
+        alertTools.create({ message: <p><I18 text="exeError" /><br />{data.result}</p>, type: 'error' });
       }
     });
     return () => subOption.unsubscribe();

@@ -46,7 +46,7 @@ const PageChainAccount: FC = () => {
 
   useEffect(() => {
     setTableHeader(
-      [ 'hash', 'blockHeight', 'time', 'from', 'to', 'type', 'transactionVolume', 'feeNumber' ]
+      [ 'hash', 'blockHeight', 'time', 'from', 'to', 'type', 'transactionOfNumber', 'feeNumber' ]
         .map(text => ({ key: getOnlyId(), value: <I18 text={text} /> }))
     );
   }, []);

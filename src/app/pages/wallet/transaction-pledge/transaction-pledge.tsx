@@ -29,7 +29,7 @@ type TypeNodeInfo = {
 const PageWalletTransactionPledge: FC = () => {
   const goLink = useSafeLink();
   const [wallet] = useGetDispatch<InRootState['wallet']>('wallet');
-  const nodeSearch = useFormatSearch<{id: string}>();
+  const nodeSearch = useFormatSearch<{id: string, link: string}>();
   const [nodeInfo, setNodeInfo] = useState<TypeNodeInfo>({
     avatar: '', name: '', address: '', rate: '', minVolume: '', pledgedVolume: '', toCut: '', type: 3,
   });
@@ -38,6 +38,8 @@ const PageWalletTransactionPledge: FC = () => {
   const [fee, setFee] = useState('');
   const [password, setPassword] = useState('');
   const [pledgeLoading ,setPledgeLoading] = useState(false);
+  const [showStaking, setShowStaking] = useState(false);
+
 
   const verifyPledge = () => {
     if (nodeInfo.type === 3) verifyPledgeForm();
@@ -138,6 +140,11 @@ const PageWalletTransactionPledge: FC = () => {
     return () => nodeInfoSub.unsubscribe();
   }, [nodeSearch, goLink]);
 
+  useEffect(() => {
+    if (nodeSearch?.link !== 'true') setShowStaking(true);
+    else setShowStaking(false);
+  }, [nodeSearch]);
+
   return (
     <ComponentsLayoutBase className="page_transaction_pledge">
       <div className="pledge_header">
@@ -176,7 +183,7 @@ const PageWalletTransactionPledge: FC = () => {
         </div>
       </div>
       {
-        wallet.hasWallet && (
+        wallet.hasWallet && showStaking && (
         <>
           <div className="pledge_content">
           <p className="pledge_box_title"><I18 text="pledgeNumber" /></p>
@@ -228,6 +235,15 @@ const PageWalletTransactionPledge: FC = () => {
             <div className="pledge_footer_item"><span className="pledge_footer_span"><I18 text="pledgeMoreTip2" /></span></div>
           </div>
         </>
+        )
+      }
+      {
+        wallet.hasWallet && !showStaking && (
+          <ComConButton
+            onClick={() => setShowStaking(true)}
+            className="pledge_confirm_button pledge_step_button">
+            <I18 text="delegate" />
+          </ComConButton>
         )
       }
     </ComponentsLayoutBase>

@@ -20,65 +20,6 @@ const ComConTable: FC<{
 }> = ({
   header, content, tableClass, boxClass, allCount, page, limit, onPageChange, showTools, loading,
 }) => {
-  // max items length of page's list
-  const showMaxPages = 5;
-  // length of pages
-  const [allPage, setAllPage] = useState<number>();
-  const [pagesList, setPagesList] = useState<ReactElement[]>([]);
-  const [goToPage, setGoToPage] = useState('');
-
-  const itemButton = useCallback((num: number, className?: string) => (
-    <button className={formatClass(['control-table-options', className])} onClick={() => onPageChange?.(num)}>{ num }</button>
-  ), [onPageChange]);
-  const moreItem = useMemo(() => <div className={formatClass(['control-table-more'])}>...</div>, []);
-
-  const customGoToPage = useCallback((input: string) => {
-    const value = parseFloat(input);
-    if (Number.isNaN(value)) return;
-    if (!allPage) return;
-    if (value > 0 && value <= allPage) onPageChange?.(value);
-  }, [onPageChange, allPage]);
-  
-  useEffect(() => {
-    if (allCount && limit) setAllPage(Math.ceil(allCount / limit));
-  }, [limit, allCount]);
-  useEffect(() => {
-    if (page === undefined || allPage === undefined) return;
-    const result: typeof pagesList = [];
-    const maxShowLength = allPage > showMaxPages ? showMaxPages : allPage;
-    let nowIndex = Math.floor(maxShowLength / 2);
-    const moveLen = page - nowIndex - 1;
-    // verify left
-    if (moveLen <= 0 || maxShowLength === 4) nowIndex += moveLen;
-    else if (moveLen === 1) result.push(itemButton(1));
-    else result.push(<>{itemButton(1)}{moreItem}</>);
-    // add item
-    const showItemArr: typeof pagesList = [];
-    for (let i = 0; i < maxShowLength; i++) {
-      let ele: ReactElement;
-      if (i === nowIndex) ele = itemButton(page, 'control-table-selected');
-      else {
-        let otherPage = page + i - nowIndex;
-        if (otherPage > allPage) {
-          otherPage = page - (otherPage - allPage) - nowIndex;
-          ele = itemButton(otherPage);
-          showItemArr.unshift(ele);
-          continue;
-        } else {
-          ele = itemButton(otherPage);
-        }
-      }
-      showItemArr.push(ele);
-    }
-    showItemArr.forEach(item => result.push(item));
-    // verify right
-    if ((maxShowLength + page - nowIndex) === allPage) result.push(itemButton(allPage));
-    else if ((maxShowLength + page - nowIndex) < allPage) result.push(<>{moreItem}{itemButton(allPage)}</>);
-    setPagesList(result);
-  }, [allPage, page, itemButton, moreItem]);
-  useEffect(() => {
-    setGoToPage('');
-  }, [page]);
   
   return (
     <div className={formatClass(['control-table-box', boxClass])}>
@@ -113,7 +54,86 @@ const ComConTable: FC<{
         </table>
       </div>
       {/* tools */}
-      <div className={formatClass(['control-table-tools', showTools && 'control-table-tools-show'])}>
+      <TablePageTools {...{allCount, page, limit, onPageChange, showTools}} />
+      {/* loading */}
+      <ComConLoading visible={loading} />
+    </div>
+  );
+};
+
+
+export const TablePageTools: FC<{
+  showTools?: boolean;
+  allCount?: number;
+  page?: number;
+  limit?: number;
+  loading?: boolean;
+  onPageChange?: (num: number) => void;
+}> = ({
+  allCount, page, limit, onPageChange, showTools
+}) => {
+  // max items length of page's list
+  const showMaxPages = 5;
+  // length of pages
+  const [allPage, setAllPage] = useState<number>();
+  const [pagesList, setPagesList] = useState<ReactElement[]>([]);
+  const [goToPage, setGoToPage] = useState('');
+
+  useEffect(() => {
+    if (allCount && limit) setAllPage(Math.ceil(allCount / limit));
+  }, [limit, allCount]);
+  useEffect(() => {
+    setGoToPage(`${page}`);
+  }, [page]);
+  const itemButton = useCallback((num: number, className?: string) => (
+    <button className={formatClass(['control-table-options', className])} onClick={() => onPageChange?.(num)}>{ num }</button>
+  ), [onPageChange]);
+  const moreItem = useMemo(() => <div className={formatClass(['control-table-more'])}>...</div>, []);
+
+  const customGoToPage = useCallback((input: string) => {
+    const value = parseFloat(input);
+    if (Number.isNaN(value)) return;
+    if (!allPage) return;
+    if (value > 0 && value <= allPage) onPageChange?.(value);
+  }, [onPageChange, allPage]);
+
+  useEffect(() => {
+    if (page === undefined || allPage === undefined) return;
+    const result: typeof pagesList = [];
+    const maxShowLength = allPage > showMaxPages ? showMaxPages : allPage;
+    let nowIndex = Math.floor(maxShowLength / 2);
+    const moveLen = page - nowIndex - 1;
+    // verify left
+    if (moveLen <= 0 || maxShowLength === 4) nowIndex += moveLen;
+    else if (moveLen === 1) result.push(itemButton(1));
+    else result.push(<>{itemButton(1)}{moreItem}</>);
+    // add item
+    const showItemArr: typeof pagesList = [];
+    for (let i = 0; i < maxShowLength; i++) {
+      let ele: ReactElement;
+      if (i === nowIndex) ele = itemButton(page, 'control-table-selected');
+      else {
+        let otherPage = page + i - nowIndex;
+        if (otherPage > allPage) {
+          otherPage = page - (otherPage - allPage) - nowIndex;
+          ele = itemButton(otherPage);
+          showItemArr.unshift(ele);
+          continue;
+        } else {
+          ele = itemButton(otherPage);
+        }
+      }
+      showItemArr.push(ele);
+    }
+    showItemArr.forEach(item => result.push(item));
+    // verify right
+    if ((maxShowLength + page - nowIndex) === allPage) result.push(itemButton(allPage));
+    else if ((maxShowLength + page - nowIndex) < allPage) result.push(<>{moreItem}{itemButton(allPage)}</>);
+    setPagesList(result);
+  }, [allPage, page, itemButton, moreItem]);
+
+  return (
+    <div className={formatClass(['control-table-tools', showTools && 'control-table-tools-show'])}>
         {/* click */}
         {
           useMemo(() => pagesList.length ? (
@@ -141,9 +161,6 @@ const ComConTable: FC<{
           ) : (<></>), [pagesList, goToPage, customGoToPage])
         }
       </div>
-      {/* loading */}
-      <ComConLoading visible={loading} />
-    </div>
   );
 };
 

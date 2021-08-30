@@ -81,6 +81,7 @@
   "block": "块",
   "transactionList": "交易列表",
   "blockInfo": "区块信息",
+  "transferInfo": "交易信息",
   "size": "大小",
   "productionBlockNode": "出块节点",
   "rootHashTree": "哈希数根",

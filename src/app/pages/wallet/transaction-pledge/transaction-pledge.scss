@@ -157,6 +157,9 @@
   .pledge_confirm_button {
     margin-top: 2rem;
     width: 10rem;
+    &.pledge_step_button {
+      margin: 1rem;
+    }
   }
   .pledge_box_tip {
     padding: 0.5rem 0;

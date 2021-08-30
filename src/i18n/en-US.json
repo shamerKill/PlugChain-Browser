@@ -82,6 +82,7 @@
 	"block": "Block",
 	"transactionList": "Transaction List",
 	"blockInfo": "Block Info",
+	"transferInfo": "Transfer Info",
 	"size": "Size",
 	"productionBlockNode": "Block Production Node",
 	"rootHashTree": "Hash Number Root",

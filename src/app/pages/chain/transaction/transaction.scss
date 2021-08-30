@@ -33,13 +33,13 @@
     }
   }
   .transaction_page_info {
-    background-color: var(--color-primary-background-contrast);
     margin: 1rem;
     padding: 0 1rem;
     position: relative;
     .transaction_content_title {
       padding: 1rem;
       font-size: (16/12)+rem;
+      background-color: var(--color-primary-background-contrast);
       border-bottom: 1px solid var(--color-primary-background);
     }
   }
@@ -47,6 +47,8 @@
     padding: 1rem 0.5rem;
     max-width: 100%;
     overflow: auto;
+    background-color: var(--color-primary-background-contrast);
+    margin-top: 1rem;
     .transaction_info_dl {
       display: flex;
       justify-content: space-between;

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, Fragment, useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import I18 from '../../../../i18n/component';
 import { fetchData, formatClass, formatTime, useFormatPath, useFormatSearch, walletVerifyAddress } from '../../../../tools';
@@ -23,7 +23,7 @@ const PageTransaction: FC = () => {
     hash: string; from: string; to: string;
     remarks: string; time: string; amount: string;
     type: string; status: boolean, rawLog: string;
-    sourceNode?: string;
+    sourceNode?: string; coin: string;
   }[]>([]);
   const [page, setPage] = useState(1);
   const [allCount, setAllCount] = useState(0);
@@ -40,9 +40,16 @@ const PageTransaction: FC = () => {
       if (data.loading === false) setInfoLoading(false);
       if (data.success) {
         if (!data.data?.data?.length) return;
-        console.log(data.data.count);
         setAllCount(data.data.count);
+        let rawLog: string|null = null;
         const dataArr = data.data.data.map((item: any) => {
+          if (!rawLog) {
+            try {
+              rawLog = JSON.stringify(JSON.parse(item.raw_log), null, 2);
+            } catch (e) {
+              rawLog = item.raw_log;
+            }
+          }
           const obj = {
             id: item.id,
             block: item.block_id,
@@ -55,8 +62,9 @@ const PageTransaction: FC = () => {
             amount: formatNumberStr(item.amount),
             type: item.type,
             status: item.code === 0,
-            rawLog: item.raw_log,
+            rawLog: rawLog,
             sourceNode: item.src_validator,
+            coin: item.coin,
           };
           switch(obj.type) {
             case 'undelegate':
@@ -92,6 +100,7 @@ const PageTransaction: FC = () => {
   }, [search]);
 
 
+  if (!transactionInfoArr.length) return null;
   return (
     <ComponentsLayoutBase className="transaction_page">
       <h1 className="transaction_page_title">
@@ -105,82 +114,123 @@ const PageTransaction: FC = () => {
       </h1>
       <div className="transaction_page_info">
         <h2 className="transaction_content_title"><I18 text="transferInfo" /></h2>
-        {
-          transactionInfoArr.map((transactionInfo, index) => (
-            <div className="transaction_info_box" key={index}>
+            <div className="transaction_info_box">
               <dl className="transaction_info_dl">
                 <dt className="transaction_info_dt"><I18 text="status" /></dt>
-                <dd className={formatClass(['transaction_info_dd', transactionInfo.status ? 'transaction_info_green' : 'transaction_info_red'])}>
-                  {transactionInfo.status ? <I18 text="exeSuccess" /> : <I18 text="exeError" />}
+                <dd className={formatClass(['transaction_info_dd', transactionInfoArr[0].status ? 'transaction_info_green' : 'transaction_info_red'])}>
+                  {transactionInfoArr[0].status ? <I18 text="exeSuccess" /> : <I18 text="exeError" />}
                 </dd>
               </dl>
               <dl className="transaction_info_dl">
                 <dt className="transaction_info_dt"><I18 text="type" /></dt>
-                <dd className="transaction_info_dd">{transactionInfo.type}</dd>
-              </dl>
-              <dl className="transaction_info_dl">
-                <dt className="transaction_info_dt"><I18 text="blockId" /></dt>
-                <dd className="transaction_info_dd"><Link to={`/block/${transactionInfo.block}`}>{transactionInfo.block ? transactionInfo.block : ''}</Link></dd>
-              </dl>
-              <dl className="transaction_info_dl">
-                <dt className="transaction_info_dt"><I18 text="feeNumber" /></dt>
-                <dd className="transaction_info_dd">{transactionInfo.fee ? transactionInfo.fee : ''}</dd>
-              </dl>
-              <dl className="transaction_info_dl">
-                <dt className="transaction_info_dt"><I18 text="transactionOfNumber" /></dt>
-                <dd className="transaction_info_dd">{transactionInfo.amount ? transactionInfo.amount : ''}</dd>
-              </dl>
-              <dl className="transaction_info_dl">
-                <dt className="transaction_info_dt"><I18 text="transactionHash" /></dt>
-                <dd className="transaction_info_dd">{transactionInfo.hash}</dd>
-              </dl>
-              <dl className="transaction_info_dl">
-                <dt className="transaction_info_dt"><I18 text="from" /></dt>
-                <dd className="transaction_info_dd">
-                  <Link to={walletVerifyAddress(transactionInfo.from)}>{transactionInfo.from}</Link>
-                </dd>
-              </dl>
-              {
-                transactionInfo.sourceNode && (
-                  <dl className="transaction_info_dl">
-                    <dt className="transaction_info_dt"><I18 text="source" /></dt>
-                    <dd className="transaction_info_dd">
-                      <Link to={walletVerifyAddress(transactionInfo.sourceNode)}>{transactionInfo.sourceNode}</Link>
-                    </dd>
-                  </dl>
-                )
-              }
-              <dl className="transaction_info_dl">
-                <dt className="transaction_info_dt"><I18 text="to" /></dt>
-                <dd className="transaction_info_dd">
-                  <Link to={walletVerifyAddress(transactionInfo.to)}>{transactionInfo.to}</Link>
-                </dd>
-              </dl>
-              <dl className="transaction_info_dl">
-                <dt className="transaction_info_dt"><I18 text="remarks" /></dt>
-                <dd className="transaction_info_dd">
-                  { transactionInfo.remarks && <div className="transaction_info_remarks">{transactionInfo.remarks}</div> }
-                </dd>
+                <dd className="transaction_info_dd">{transactionInfoArr[0].type}</dd>
               </dl>
               <dl className="transaction_info_dl">
                 <dt className="transaction_info_dt"><I18 text="time" /></dt>
-                <dd className="transaction_info_dd">{transactionInfo.time}</dd>
+                <dd className="transaction_info_dd">{transactionInfoArr[0].time}</dd>
+              </dl>
+              <dl className="transaction_info_dl">
+                <dt className="transaction_info_dt"><I18 text="blockId" /></dt>
+                <dd className="transaction_info_dd"><Link to={`/block/${transactionInfoArr[0].block}`}>{transactionInfoArr[0].block ? transactionInfoArr[0].block : ''}</Link></dd>
+              </dl>
+              <dl className="transaction_info_dl">
+                <dt className="transaction_info_dt"><I18 text="feeNumber" /></dt>
+                <dd className="transaction_info_dd">{transactionInfoArr[0].fee ? transactionInfoArr[0].fee : ''}</dd>
+              </dl>
+              <dl className="transaction_info_dl">
+                <dt className="transaction_info_dt"><I18 text="transactionHash" /></dt>
+                <dd className="transaction_info_dd">{transactionInfoArr[0].hash}</dd>
               </dl>
               {
-                !transactionInfo.status && (
+                transactionInfoArr.length > 1 && (
                   <dl className="transaction_info_dl">
-                    <dt className="transaction_info_dt"><I18 text="rawLog" /></dt>
+                    <dt className="transaction_info_dt"><I18 text="transactionItem" /></dt>
                     <dd className="transaction_info_dd">
                       {
-                        transactionInfo.rawLog && <div className="transaction_info_remarks">{transactionInfo.rawLog}</div>
+                        transactionInfoArr.map((transactionInfo, index) => (
+                          <div className="transaction_info_list" key={index}>
+                            <dl className="transaction_info_dl">
+                              <dt className="transaction_info_dt"><I18 text="from" /></dt>
+                              <dd className="transaction_info_dd">
+                                <Link to={walletVerifyAddress(transactionInfo.from)}>{transactionInfo.from}</Link>
+                              </dd>
+                            </dl>
+                            {
+                              transactionInfo.sourceNode && (
+                                <dl className="transaction_info_dl">
+                                  <dt className="transaction_info_dt"><I18 text="source" /></dt>
+                                  <dd className="transaction_info_dd">
+                                    <Link to={walletVerifyAddress(transactionInfo.sourceNode)}>{transactionInfo.sourceNode}</Link>
+                                  </dd>
+                                </dl>
+                              )
+                            }
+                            <dl className="transaction_info_dl">
+                              <dt className="transaction_info_dt"><I18 text="to" /></dt>
+                              <dd className="transaction_info_dd">
+                                <Link to={walletVerifyAddress(transactionInfo.to)}>{transactionInfo.to}</Link>
+                              </dd>
+                            </dl>
+                            <dl className="transaction_info_dl">
+                              <dt className="transaction_info_dt"><I18 text="transactionOfNumber" /></dt>
+                              <dd className="transaction_info_dd">{transactionInfo.amount ? transactionInfo.amount : ''}{transactionInfo.coin}</dd>
+                            </dl>
+                          </div>
+                        ))
                       }
                     </dd>
                   </dl>
                 )
               }
+              {
+                transactionInfoArr.length === 1 && transactionInfoArr.map((transactionInfo, index) => (
+                  <Fragment key={index}>
+                    <dl className="transaction_info_dl">
+                      <dt className="transaction_info_dt"><I18 text="from" /></dt>
+                      <dd className="transaction_info_dd">
+                        <Link to={walletVerifyAddress(transactionInfo.from)}>{transactionInfo.from}</Link>
+                      </dd>
+                    </dl>
+                    {
+                      transactionInfo.sourceNode && (
+                        <dl className="transaction_info_dl">
+                          <dt className="transaction_info_dt"><I18 text="source" /></dt>
+                          <dd className="transaction_info_dd">
+                            <Link to={walletVerifyAddress(transactionInfo.sourceNode)}>{transactionInfo.sourceNode}</Link>
+                          </dd>
+                        </dl>
+                      )
+                    }
+                    <dl className="transaction_info_dl">
+                      <dt className="transaction_info_dt"><I18 text="to" /></dt>
+                      <dd className="transaction_info_dd">
+                        <Link to={walletVerifyAddress(transactionInfo.to)}>{transactionInfo.to}</Link>
+                      </dd>
+                    </dl>
+                    <dl className="transaction_info_dl">
+                      <dt className="transaction_info_dt"><I18 text="transactionOfNumber" /></dt>
+                      <dd className="transaction_info_dd">{transactionInfoArr[0].amount ? transactionInfoArr[0].amount : ''}</dd>
+                    </dl>
+                  </Fragment>
+                ))
+              }
+              {
+                transactionInfoArr[0].remarks && <dl className="transaction_info_dl">
+                  <dt className="transaction_info_dt"><I18 text="remarks" /></dt>
+                  <dd className="transaction_info_dd">
+                    { transactionInfoArr[0].remarks && <div className="transaction_info_remarks">{transactionInfoArr[0].remarks}</div> }
+                  </dd>
+                </dl>
+              }
+              <dl className="transaction_info_dl">
+                <dt className="transaction_info_dt"><I18 text="rawLog" /></dt>
+                <dd className="transaction_info_dd">
+                  {
+                    transactionInfoArr[0].rawLog && <div className="transaction_info_remarks">{transactionInfoArr[0].rawLog}</div>
+                  }
+                </dd>
+              </dl>
             </div>
-          ))
-        }
         <TablePageTools allCount={allCount} limit={pageLimit} page={page} showTools={allCount > pageLimit} onPageChange={setPage} />
         <ComConLoading visible={infoLoading} />
       </div>

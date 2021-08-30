@@ -25,10 +25,11 @@ const PageChainNetwork: FC = () => {
     pledgeRate: number;
     nowVolume: string; 
     historyMaxVolume: string;
+    activeAddress: string;
   }>({
     blockHeight: '', transactionVolume: '', pendingBlockVolume: '', newBlockTransaction: '',
     transactionRate: 0, price: '', priceRate: 0, markValue: '', allTokenVolume: '',
-    allPledge: '', pledgeRate: 0, nowVolume: '', historyMaxVolume: '',
+    allPledge: '', pledgeRate: 0, nowVolume: '', historyMaxVolume: '', activeAddress: '',
   });
 
   const DayTransactionVolumeView = useMemo(() => <DayTransactionVolume />, []);
@@ -41,6 +42,7 @@ const PageChainNetwork: FC = () => {
       if (unNum.success) setInfoData(state => ({ ...state, pendingBlockVolume: formatNumberStr(`${unNum.data}`) }));
       if (coin.success) setInfoData(state => ({
         ...state,
+        activeAddress: coin.data.valid_address,
         price: formatNumberStr(`${coin.data.price}`),
         priceRate: parseFloat(`${coin.data.price_drift_ratio}`),
         markValue: `${coin.data.total_price}`,
@@ -113,6 +115,14 @@ const PageChainNetwork: FC = () => {
             <dt className="chain_info_dt"><I18 text="markValue" /></dt>
             <dd className="chain_info_dd">{ infoData.markValue }</dd>
           </dl> */}
+          {
+            infoData.activeAddress && (
+              <dl className="chain_info_dl">
+                <dt className="chain_info_dt"><I18 text="activeAddress" /></dt>
+                <dd className="chain_info_dd">{ infoData.activeAddress }</dd>
+              </dl>
+            )
+          }
           <dl className="chain_info_dl">
             <dt className="chain_info_dt"><I18 text="allTokenVolume" /></dt>
             <dd className="chain_info_dd">{ infoData.allTokenVolume }</dd>

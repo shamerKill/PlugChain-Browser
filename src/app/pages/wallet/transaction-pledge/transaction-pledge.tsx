@@ -92,11 +92,19 @@ const PageWalletTransactionPledge: FC = () => {
   }, [fee, nodeInfo.address, password, volume, wallet.encryptionKey, goLink, balance]);
 
   const pledgeAllBalance = () => {
-    setVolume(`${new NumberTools(formatStringNum(balance)).cut(formatStringNum(fee)).get()}`);
+    confirmTools.create({
+      message: <p><I18 text="allAmountUseInfo" /></p>,
+      buttons: [
+        {
+          text: <I18 text="success" />,
+          onClick: () => setVolume(`${new NumberTools(formatStringNum(balance)).cut(formatStringNum(fee)).get()}`),
+        }
+      ]
+    });
   };
 
   useEffect(() => {
-    if (!wallet.hasWallet) return goLink('./login');
+    // if (!wallet.hasWallet) return goLink('./login');
     const balanceSub = fetchData('GET', 'balance', { address: wallet.address, coin: getEnvConfig.APP_TOKEN_NAME }).subscribe(({ success, data }) => {
       if (success) setBalance(formatNumberStr(`${data.Balance}`));
     });

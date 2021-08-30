@@ -86,6 +86,7 @@
   "productionBlockNode": "出块节点",
   "rootHashTree": "哈希数根",
   "transactionHash": "交易哈希",
+  "transactionItem": "交易组成",
   "transactionId": "交易ID",
   "remarks": "备注",
   "goTo": "前往",
@@ -230,5 +231,7 @@
   "volumeInputMinError": "质押数量低于最低数量",
   "noHadWithdraw": "暂无收益",
   "rePledgingLocking": "转让质押锁定中",
-  "rePledgingLockingTip": "当前锁定完成前，该验证者节点无法进行转让质押"
+  "rePledgingLockingTip": "当前锁定完成前，该验证者节点无法进行转让质押",
+  "activeAddress": "活跃地址",
+  "allAmountUseInfo": "全部划转将不保留赎回手续费，是否需要填入全部数量？"
 }

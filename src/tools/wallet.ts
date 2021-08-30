@@ -182,11 +182,6 @@ type: 'delegate'|'unDelegate'|'reDelegate'|'withdrawRewards' = 'delegate') => {
         validatorAddress: validatorAddress,
       });
     } else {
-      console.log({
-        delegatorAddress: account.address,
-        validatorAddress: validatorAddress,
-        amount: { amount: inputVolume, denom: appTokenName },
-      });
       typeUrl = '/cosmos.staking.v1beta1.MsgDelegate';
       value = MsgDelegate.fromPartial({
         delegatorAddress: account.address,
@@ -233,7 +228,7 @@ const walletGetFee = (type: 'transfer'|'delegate', fee?: { allAmount?: string; g
     if (fee.gasLimit) defaultGasLimit = fee.gasLimit;
     else if ( type === 'transfer' ) defaultGasLimit = defaultTransGasLimit;
     else if ( type === 'delegate' ) defaultGasLimit = defaultDelegateLimit;
-    if (fee.allAmount) defaultAmount = `${(parseFloat(fee?.allAmount || '0') * parseFloat(defaultGasLimit))}`;
+    if (fee.allAmount) defaultAmount = walletTokenToAmount(fee?.allAmount || '0');
   }
   let resultFee: StdFee = {
     amount: [ {

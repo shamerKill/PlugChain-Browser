@@ -88,6 +88,7 @@
 	"rootHashTree": "Hash Number Root",
 	"transactionHash": "Transaction Hash",
 	"transactionId": "Transaction Id",
+	"transactionItems": "Transaction Items",
 	"remarks": "Remarks",
 	"goTo": "Enter",
 	"address": "Address",
@@ -231,5 +232,7 @@
   "volumeInputMinError": "Staking volume is lower then the minimum volume",
   "noHadWithdraw": "Don't Have Interests",
   "rePledgingLocking": "Transfer Staked Locking",
-  "rePledgingLockingTip": "While current staking is still in progress, the verifier node cannot transfer staked tokens"
+  "rePledgingLockingTip": "While current staking is still in progress, the verifier node cannot transfer staked tokens",
+  "activeAddress": "Active Address",
+	"allAmountUseInfo": ""
 }

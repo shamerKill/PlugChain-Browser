@@ -94,12 +94,8 @@ const PageWalletTransactionPledge: FC = () => {
   const pledgeAllBalance = () => {
     confirmTools.create({
       message: <p><I18 text="allAmountUseInfo" /></p>,
-      buttons: [
-        {
-          text: <I18 text="success" />,
-          onClick: () => setVolume(`${new NumberTools(formatStringNum(balance)).cut(formatStringNum(fee)).get()}`),
-        }
-      ]
+      success: () => setVolume(`${new NumberTools(formatStringNum(balance)).cut(formatStringNum(fee)).get()}`),
+      close: () => {},
     });
   };
 

@@ -1,5 +1,5 @@
 export const verifyPassword = (password: string): boolean => {
-  const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+  const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_-.*]{8,}$/;
   return reg.test(password);
 };
 

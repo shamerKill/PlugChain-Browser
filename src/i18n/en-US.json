@@ -234,5 +234,5 @@
   "rePledgingLocking": "Transfer Staked Locking",
   "rePledgingLockingTip": "While current staking is still in progress, the verifier node cannot transfer staked tokens",
   "activeAddress": "Active Address",
-	"allAmountUseInfo": ""
+	"allAmountUseInfo": "To avoid paying transfer fee,  do I need to fill in the full amount?"
 }

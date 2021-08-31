@@ -2,7 +2,7 @@ import { Provider } from 'react-redux';
 import { useEffect } from 'react';
 import Routers from './routers';
 import dataStore from '../databases';
-import { themeService } from '../services/config.services';
+import { themeService} from '../services/config.services';
 import { ComToolAlertBox } from './components/tools/alert';
 import { ComToolConfirmBox } from './components/tools/confirm';
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useRef, useEffect } from 'react';
 import { InRootState } from '../@types/redux';
 import { BehaviorSubject } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
@@ -24,14 +24,18 @@ configService.subscribe(({ theme }) => {
 // Change Language Hook
 export const useLanguageHook = (): [InRootState['config']['language'], (setLanguage: InRootState['config']['language']) => Promise<void>] => {
   const [ { language }, setConfig ] = useGetDispatch<InRootState['config']>('config');
-  const [ inTime, setInTime ] = useState(false);
+  const inTime = useRef(false);
+  const languageRef = useRef(language);
 
-  const shadowView = window.document.createElement('div');
-  shadowView.classList.add('change-language-shadow');
+  useEffect(() => {
+    languageRef.current = language;
+  }, [ language ]);
 
-  const changeLanguage = (setLanguage: InRootState['config']['language']) => {
-    if (language === setLanguage || inTime) return Promise.resolve();
-    setInTime(true);
+  const changeLanguage = useCallback((setLanguage: InRootState['config']['language']) => {
+    if (languageRef.current === setLanguage || inTime.current) return Promise.resolve();
+    inTime.current = true;
+    const shadowView = window.document.createElement('div');
+    shadowView.classList.add('change-language-shadow');
     window.document.body.appendChild(shadowView);
     return new Promise<void>(resolve => {
       setTimeout(() => {
@@ -42,10 +46,10 @@ export const useLanguageHook = (): [InRootState['config']['language'], (setLangu
         resolve();
         setTimeout(() => {
           window.document.body.removeChild(shadowView);
-          setInTime(false);
+          inTime.current = false;
         }, 500);
       }, 500);
     });
-  };
+  }, [ setConfig ]);
   return [ language, changeLanguage ];
 };

@@ -8,7 +8,7 @@ import ComConLogo, { TypeComponentsControlLogo } from '../control/logo';
 
 const ComLayFooter: FC = () => {
   const [friendsLink, setFriendsLink] = useState<TypeComponentsControlLogo[]>([]);
-  const [, changeLanguage] = useLanguageHook();
+  const [language, changeLanguage] = useLanguageHook();
 
   // const noOpenData = (e: MouseEvent<HTMLAnchorElement>) => {
   //   alertTools.create({ message: <I18 text="noOpen" />, type: 'warning' });
@@ -52,7 +52,7 @@ const ComLayFooter: FC = () => {
               </dt>
               <dd>
                 <p className={formatClass(['layout-footer-list-item'])}>
-                  <a href="https://oraclenetworkprotocol.github.io/plugchain/cn/api/swagger-api.html"><I18 text="footerList1-1" /></a>
+                  <a href={`https://oraclenetworkprotocol.github.io/plugchain${language === 'zh-CN' ? '/zh' : ''}/endpoints/intro.html`}><I18 text="footerList1-1" /></a>
                 </p>
                 <p className={formatClass(['layout-footer-list-item'])}>
                   <a href="https://github.com/oracleNetworkProtocol/plugchain">Github</a>
@@ -69,25 +69,25 @@ const ComLayFooter: FC = () => {
                 </p>
               </dd>
             </dl>
-            <dl className={formatClass(['layout-footer-list'])}>
+            {/* <dl className={formatClass(['layout-footer-list'])}>
               <dt className={formatClass(['layout-footer-list-title'])}>
                 <I18 text="footerList2Title" />
               </dt>
               <dd>
-                {/* <p className={formatClass(['layout-footer-list-item'])}>
+                <p className={formatClass(['layout-footer-list-item'])}>
                   <Link to="/" onClick={noOpenData}><I18 text="footerList2-1" /></Link>
-                </p> */}
+                </p>
                 <p className={formatClass(['layout-footer-list-item'])}>
                   <a href="https://etherscan.io/"><I18 text="footerList2-2" /></a>
                 </p>
-                {/* <p className={formatClass(['layout-footer-list-item'])}>
+                <p className={formatClass(['layout-footer-list-item'])}>
                   <Link to="/" onClick={noOpenData}><I18 text="footerList2-3" /></Link>
-                </p> */}
-                {/* <p className={formatClass(['layout-footer-list-item'])}>
+                </p>
+                <p className={formatClass(['layout-footer-list-item'])}>
                   <Link to="/" onClick={noOpenData}><I18 text="footerListMore" /></Link>
-                </p> */}
+                </p>
               </dd>
-            </dl>
+            </dl> */}
           </div>
         </div>
         {/* Friends Link */}

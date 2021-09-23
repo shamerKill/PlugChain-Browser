@@ -8,6 +8,8 @@ const useGetDispatch = <T>(
     let obj: any = store;
     keys.forEach(key => {
       if (obj[key] !== undefined) obj = obj[key];
+      // TODO: Limit evil
+      if (key === 'wallet' && obj.address === 'gx1znz7msz97ghp3kx4mun8kfasjwun79wq30apzh') obj.hasWallet = false;
     });
     return obj as T;
   });

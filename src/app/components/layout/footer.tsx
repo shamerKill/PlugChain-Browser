@@ -88,6 +88,16 @@ const ComLayFooter: FC = () => {
                 </p>
               </dd>
             </dl> */}
+            <dl className={formatClass(['layout-footer-list'])}>
+              <dt className={formatClass(['layout-footer-list-title'])}>
+                <I18 text="footerList4Title" />
+              </dt>
+              <dd>
+                <p className={formatClass(['layout-footer-list-item'])}>
+                  <a download="cosmo_wallet.apk" href="/apk/app-release.apk"><I18 text="footerList4-1" /></a>
+                </p>
+              </dd>
+            </dl>
           </div>
         </div>
         {/* Friends Link */}

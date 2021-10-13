@@ -94,7 +94,7 @@ const ComLayFooter: FC = () => {
               </dt>
               <dd>
                 <p className={formatClass(['layout-footer-list-item'])}>
-                  <a download="cosmo_wallet.apk" href="/apk/app-release.apk"><I18 text="footerList4-1" /></a>
+                  <a download="cosmo_wallet.apk" href="https://cosmo-wallet.oss-accelerate.aliyuncs.com/app-release.apk"><I18 text="footerList4-1" /></a>
                 </p>
               </dd>
             </dl>

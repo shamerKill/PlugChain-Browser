@@ -1,7 +1,7 @@
 import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import I18 from '../../../i18n/component';
 import { windowResizeObserver } from '../../../services/global.services';
-import { formatClass, getOnlyId, useSafeLink } from '../../../tools';
+import { formatClass, getEnvConfig, getOnlyId, useSafeLink } from '../../../tools';
 import { DayTransactionVolume, TokenPledgeRate } from './home-components';
 import { useLanguageHook } from '../../../services/config.services';
 import { debounceTime, distinctUntilKeyChanged } from 'rxjs/operators';
@@ -80,7 +80,7 @@ export const HomeChainInfo: FC<{observerData: BehaviorSubject<TypePageHomeData>}
         { DayTransactionVolumeView }
       </div>
       <div className="home_chain_box chain_market">
-        {/* <dl className="chain_info_dl">
+        <dl className="chain_info_dl">
           <dt className="chain_info_dt">
             { getEnvConfig.APP_TOKEN_NAME }&nbsp;<I18 text="price" />
             <span className={formatClass(['chain_info_rate', infoData.priceRate >= 0 ? 'chain_info_rate_green' : 'chain_info_rate_red'])}>
@@ -89,11 +89,11 @@ export const HomeChainInfo: FC<{observerData: BehaviorSubject<TypePageHomeData>}
             </span>
           </dt>
           <dd className="chain_info_dd">{ infoData.price }</dd>
-        </dl> */}
-        {/* <dl className="chain_info_dl">
+        </dl>
+        <dl className="chain_info_dl">
           <dt className="chain_info_dt"><I18 text="markValue" /></dt>
           <dd className="chain_info_dd">{ infoData.markValue }</dd>
-        </dl> */}
+        </dl>
         <dl className="chain_info_dl">
           <dt className="chain_info_dt"><I18 text="allTokenVolume" /></dt>
           <dd className="chain_info_dd">{ infoData.allTokenVolume }</dd>

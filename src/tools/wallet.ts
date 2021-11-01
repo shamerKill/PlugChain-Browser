@@ -151,6 +151,31 @@ export const walletTransfer = ({ wallet, toAddress, volume, gasAll, memo = '', g
   return resultObserver;
 };
 
+export const walletCreateToken = ({ wallet, gasAll, memo = '', gasLimit = defaultTransGasLimit }:
+  { wallet: DirectSecp256k1HdWallet; gasAll: string; memo?: string; gasLimit?: string; }) => {
+  const { fetchData, resultObserver } = walletFetchObserve();
+  (async () => {
+    const account = await walletGetAccountInfo(wallet);
+    const transferMessage: readonly EncodeObject[] = [ {
+      typeUrl: '/plugchain.token.MsgIssueToken',
+      value: {
+        owner: account.address,
+        name: 'doit',
+        symbol: 'it',
+        minUnit: 't',
+        initialSupply: '100000000000',
+        maxSupply: '100000000000',
+        mintable: true,
+        scale: 0,
+      },
+    } ];
+    const transferFee = walletGetFee('delegate', { allAmount: gasAll, gasLimit: gasLimit });
+    const signRaw = await walletSign({ wallet, message: transferMessage, fee: transferFee, memo });
+    fetchData(signRaw);
+  })();
+  return resultObserver;
+};
+
 export const walletDelegate = ({ wallet, validatorAddress, volume, gasAll, gasLimit = defaultDelegateLimit, reDelegateAddress }:
   { wallet: DirectSecp256k1HdWallet; validatorAddress: string; volume: string; gasAll: string; gasLimit?: string; reDelegateAddress?: string; },
 type: 'delegate'|'unDelegate'|'reDelegate'|'withdrawRewards' = 'delegate') => {

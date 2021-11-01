@@ -54,7 +54,7 @@ const PageChainAccount: FC = () => {
   useEffect(() => {
     if (!page || !address || !limit) return;
     setLoading(true);
-    const subOption = fetchData('GET', 'address_txs', { address, coin: getEnvConfig.APP_TOKEN_NAME, page, limit }).subscribe(({success, data}) => {
+    const subOption = fetchData('GET', 'address_txs', { address, page, limit }).subscribe(({success, data}) => {
       if (success) {
         setLoading(false);
         setAllCount(parseInt(data.TxNum));

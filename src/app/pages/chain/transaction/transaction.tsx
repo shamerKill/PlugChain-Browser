@@ -173,7 +173,7 @@ const PageTransaction: FC = () => {
                             </dl>
                             <dl className="transaction_info_dl">
                               <dt className="transaction_info_dt"><I18 text="transactionOfNumber" /></dt>
-                              <dd className="transaction_info_dd">{transactionInfo.amount ? transactionInfo.amount : ''}{transactionInfo.coin}</dd>
+                              <dd className="transaction_info_dd">{transactionInfo.amount ? transactionInfo.amount : ''} ({transactionInfoArr[index].coin})</dd>
                             </dl>
                           </div>
                         ))
@@ -209,7 +209,7 @@ const PageTransaction: FC = () => {
                     </dl>
                     <dl className="transaction_info_dl">
                       <dt className="transaction_info_dt"><I18 text="transactionOfNumber" /></dt>
-                      <dd className="transaction_info_dd">{transactionInfoArr[0].amount ? transactionInfoArr[0].amount : ''}</dd>
+                      <dd className="transaction_info_dd">{transactionInfoArr[index].amount ? transactionInfoArr[index].amount : ''} ({transactionInfoArr[index].coin})</dd>
                     </dl>
                   </Fragment>
                 ))

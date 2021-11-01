@@ -43,6 +43,7 @@
 	"producer": "Producer",
 	"blockId": "Block Id",
 	"feeNumber": "Fee",
+  "coinType": "Token",
 	"ID": "ID",
 	"time": "Time",
 	"from": "Caller",

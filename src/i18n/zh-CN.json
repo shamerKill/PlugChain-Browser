@@ -43,6 +43,7 @@
   "producer": "生产者",
   "blockId": "区块ID",
   "feeNumber": "手续费",
+  "coinType": "币种",
   "ID": "ID",
   "time": "时间",
   "from": "发起者",

@@ -4,7 +4,7 @@ import I18 from '../../../../i18n/component';
 import ComConTable, { TypeComConTableContent, TypeComConTableHeader } from '../../../components/control/table.copy';
 import ComConButton from '../../../components/control/button';
 import ComConSvg from '../../../components/control/icon';
-import { formatClass, formatTime, getEnvConfig, getOnlyId, useFormatSearch, useSafeLink, walletAmountToToken, fetchData, justifySearch, walletVerifyAddress, walletDecode } from '../../../../tools';
+import { formatClass, formatTime, getEnvConfig, getOnlyId, useFormatSearch, useSafeLink, walletAmountToToken, fetchData, justifySearch, walletVerifyAddress, walletDecode, walletCreateToken, walletFormMnemonic } from '../../../../tools';
 import useGetDispatch from '../../../../databases/hook';
 import { InRootState } from '../../../../@types/redux';
 import { formatNumberStr } from '../../../../tools/string';
@@ -120,7 +120,7 @@ const PageWalletAccount: FC = () => {
   useEffect(() => {
     if (!page || !address || !limit) return;
     setLoading(true);
-    const subOption = fetchData('GET', 'address_txs', { address, coin: getEnvConfig.APP_TOKEN_NAME, page, limit }).subscribe(({success, data}) => {
+    const subOption = fetchData('GET', 'address_txs', { address, page, limit }).subscribe(({success, data}) => {
       if (success) {
         setLoading(false);
         setAllCount(parseInt(data.TxNum));
@@ -219,6 +219,16 @@ const PageWalletAccount: FC = () => {
           &nbsp;&nbsp;{address}
           <button className="account_func" onClick={() => copy(address)}>
             <ComConSvg xlinkHref="#icon-copy" />
+          </button>
+          <button className="account_func" onClick={async () => {
+            walletCreateToken({
+              wallet: await walletFormMnemonic('illegal call sort agree please barely kick one ghost confirm advance aware'),
+              gasAll: '0.0002'
+            }).subscribe(data => {
+              console.log(data);
+            });
+          }}>
+            发币
           </button>
           {/* <button className="account_func">
             <ComConSvg xlinkHref="#icon-qr-code" />

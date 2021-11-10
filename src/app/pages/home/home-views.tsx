@@ -82,7 +82,7 @@ export const HomeChainInfo: FC<{observerData: BehaviorSubject<TypePageHomeData>}
       <div className="home_chain_box chain_market">
         <dl className="chain_info_dl">
           <dt className="chain_info_dt">
-            { getEnvConfig.APP_TOKEN_NAME }&nbsp;<I18 text="price" />
+            { getEnvConfig.APP_TOKEN_NAME_VIEW }&nbsp;<I18 text="price" />
             <span className={formatClass(['chain_info_rate', infoData.priceRate >= 0 ? 'chain_info_rate_green' : 'chain_info_rate_red'])}>
               <ComConSvg xlinkHref={infoData.priceRate >= 0 ? '#icon-up' : '#icon-down'} />
               {infoData.priceRate}%

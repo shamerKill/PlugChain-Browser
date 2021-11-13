@@ -19,7 +19,7 @@ const I18: FC<{ text: string }> = ({ text }) => {
   useEffect(() => {
     const reg = new RegExp(`\\$TOKEN`, 'g');
     if (json[language]) {
-      setValue(json[language].replace(reg, getEnvConfig.APP_TOKEN_NAME));
+      setValue(json[language].replace(reg, getEnvConfig.APP_TOKEN_NAME_VIEW));
     }
   }, [json, language]);
   return (

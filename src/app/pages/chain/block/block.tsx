@@ -126,7 +126,7 @@ const PageBlockInfo: FC = () => {
           </dl>
           {/* <dl className="block_info_dl">
             <dt className="block_info_dt"><I18 text="feeNumber" /></dt>
-            <dd className="block_info_dd">{blockInfo.fee}{ getEnvConfig.APP_TOKEN_NAME }</dd>
+            <dd className="block_info_dd">{blockInfo.fee}{ getEnvConfig.APP_TOKEN_NAME_VIEW }</dd>
           </dl> */}
           <dl className="block_info_dl">
             <dt className="block_info_dt"><I18 text="producer" /></dt>

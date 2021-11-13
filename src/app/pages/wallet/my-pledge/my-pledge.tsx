@@ -106,7 +106,7 @@ const PageMyPledge: FC = () => {
                       </dl>
                       <dl className="pledge_node_dl">
                         <dt className="pledge_node_dt">{node.pledgedVolume}</dt>
-                        <dt className="pledge_node_dd"><I18 text="pledgeVolume" />({ getEnvConfig.APP_TOKEN_NAME })</dt>
+                        <dt className="pledge_node_dd"><I18 text="pledgeVolume" />({ getEnvConfig.APP_TOKEN_NAME_VIEW })</dt>
                       </dl>
                     </div>
                   </div>

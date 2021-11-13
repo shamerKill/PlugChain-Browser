@@ -79,7 +79,7 @@ const PageTransferPledge: FC = () => {
         <div className="info_list">
           <div className="info_item_box">
             <dl className="info_item_dl">
-              <dt className="info_item_dt">{ pledgeNodeInfo.pledged }&nbsp;<small className="info_item_small">{ getEnvConfig.APP_TOKEN_NAME }</small></dt>
+              <dt className="info_item_dt">{ pledgeNodeInfo.pledged }&nbsp;<small className="info_item_small">{ getEnvConfig.APP_TOKEN_NAME_VIEW }</small></dt>
               <dd className="info_item_dd"><I18 text="pledged" /></dd>
             </dl>
           </div>
@@ -91,13 +91,13 @@ const PageTransferPledge: FC = () => {
           </div>
           <div className="info_item_box">
           <dl className="info_item_dl">
-            <dt className="info_item_dt">{ pledgeNodeInfo.fee }&nbsp;<small className="info_item_small">{ getEnvConfig.APP_TOKEN_NAME }</small></dt>
+            <dt className="info_item_dt">{ pledgeNodeInfo.fee }&nbsp;<small className="info_item_small">{ getEnvConfig.APP_TOKEN_NAME_VIEW }</small></dt>
             <dd className="info_item_dd"><I18 text="feeNumber" /></dd>
           </dl>
           </div>
           <div className="info_item_box">
             <dl className="info_item_dl">
-              <dt className="info_item_dt">{ pledgeNodeInfo.earned }&nbsp;<small className="info_item_small">{ getEnvConfig.APP_TOKEN_NAME }</small></dt>
+              <dt className="info_item_dt">{ pledgeNodeInfo.earned }&nbsp;<small className="info_item_small">{ getEnvConfig.APP_TOKEN_NAME_VIEW }</small></dt>
               <dd className="info_item_dd"><I18 text="earned" /></dd>
             </dl>
           </div>
@@ -123,11 +123,11 @@ const PageTransferPledge: FC = () => {
                       </dl>
                       <dl className="pledge_node_dl">
                         <dt className="pledge_node_dt">{node.pledgedVolume}</dt>
-                        <dt className="pledge_node_dd"><I18 text="pledgeVolume" />({ getEnvConfig.APP_TOKEN_NAME })</dt>
+                        <dt className="pledge_node_dd"><I18 text="pledgeVolume" />({ getEnvConfig.APP_TOKEN_NAME_VIEW })</dt>
                       </dl>
                       <dl className="pledge_node_dl">
                         <dt className="pledge_node_dt">{node.fee}</dt>
-                        <dt className="pledge_node_dd"><I18 text="feeNumber" />({ getEnvConfig.APP_TOKEN_NAME })</dt>
+                        <dt className="pledge_node_dd"><I18 text="feeNumber" />({ getEnvConfig.APP_TOKEN_NAME_VIEW })</dt>
                       </dl>
                     </div>
                   </div>

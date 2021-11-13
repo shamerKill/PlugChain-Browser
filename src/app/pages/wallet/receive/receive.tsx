@@ -107,11 +107,11 @@ const PageWalletReceive: FC = () => {
           <div className="receive_tips">
             <dl className="receive_tip_dl">
               <dt className="receive_tip_dt"><I18 text="receiveWeek" /></dt>
-              <dd className="receive_tip_dd">{ weekMax }&nbsp;{ getEnvConfig.APP_TOKEN_NAME }</dd>
+              <dd className="receive_tip_dd">{ weekMax }&nbsp;{ getEnvConfig.APP_TOKEN_NAME_VIEW }</dd>
             </dl>
             <dl className="receive_tip_dl">
               <dt className="receive_tip_dt"><I18 text="receiveOnce" /></dt>
-              <dd className="receive_tip_dd">{ onceMax }&nbsp;{ getEnvConfig.APP_TOKEN_NAME }</dd>
+              <dd className="receive_tip_dd">{ onceMax }&nbsp;{ getEnvConfig.APP_TOKEN_NAME_VIEW }</dd>
             </dl>
           </div>
           <p className="receive_box_title"><I18 text="address" /></p>
@@ -131,7 +131,7 @@ const PageWalletReceive: FC = () => {
               disabled={receiveLoading}
               value={volume}
               onChange={e => setVolume(e.target.value)} />
-            <p className="receive_box_info">{ getEnvConfig.APP_TOKEN_NAME }</p>
+            <p className="receive_box_info">{ getEnvConfig.APP_TOKEN_NAME_VIEW }</p>
           </div>
           <ComConButton
             loading={receiveLoading}

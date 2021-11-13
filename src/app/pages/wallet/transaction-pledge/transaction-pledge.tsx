@@ -198,11 +198,11 @@ const PageWalletTransactionPledge: FC = () => {
               disabled={pledgeLoading}
               value={volume}
               onChange={e => setVolume(e.target.value)} />
-            <p className="pledge_box_info">{ getEnvConfig.APP_TOKEN_NAME }</p>
+            <p className="pledge_box_info">{ getEnvConfig.APP_TOKEN_NAME_VIEW }</p>
           </div>
           <p className="pledge_box_tip">
             <I18 text="canTransactionNumber" />
-            <span className="pledge_tip_primary">{balance}{ getEnvConfig.APP_TOKEN_NAME }</span>
+            <span className="pledge_tip_primary">{balance}{ getEnvConfig.APP_TOKEN_NAME_VIEW }</span>
             <button className="pledge_tip_button" onClick={pledgeAllBalance}><I18 text="allTransaction" /></button>
           </p>
           <p className="pledge_box_title"><I18 text="feeNumber" /></p>
@@ -213,7 +213,7 @@ const PageWalletTransactionPledge: FC = () => {
               disabled={true}
               value={fee}
               onChange={e => setFee(e.target.value)} />
-            <p className="pledge_box_info">{ getEnvConfig.APP_TOKEN_NAME }</p>
+            <p className="pledge_box_info">{ getEnvConfig.APP_TOKEN_NAME_VIEW }</p>
           </div>
           <p className="pledge_box_title"><I18 text="password" /></p>
           <form>

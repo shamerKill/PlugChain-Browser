@@ -105,11 +105,11 @@ const PageWalletTransaction: FC = () => {
               disabled={transactionLoading}
               value={volume}
               onChange={e => setVolume(e.target.value)} />
-            <p className="transaction_box_info">{ getEnvConfig.APP_TOKEN_NAME }</p>
+            <p className="transaction_box_info">{ getEnvConfig.APP_TOKEN_NAME_VIEW }</p>
           </div>
           <p className="transaction_box_tip">
             <I18 text="canTransactionNumber" />
-            <span className="transaction_tip_primary">{balance}{ getEnvConfig.APP_TOKEN_NAME }</span>
+            <span className="transaction_tip_primary">{balance}{ getEnvConfig.APP_TOKEN_NAME_VIEW }</span>
             <button className="transaction_tip_button" onClick={transactionAllBalance}><I18 text="allTransaction" /></button>
           </p>
           <p className="transaction_box_title"><I18 text="feeNumber" /></p>
@@ -120,7 +120,7 @@ const PageWalletTransaction: FC = () => {
               disabled={true}
               value={fee}
               onChange={e => setFee(e.target.value)} />
-            <p className="transaction_box_info">{ getEnvConfig.APP_TOKEN_NAME }</p>
+            <p className="transaction_box_info">{ getEnvConfig.APP_TOKEN_NAME_VIEW }</p>
           </div>
           <p className="transaction_box_title"><I18 text="password" /></p>
           <form>

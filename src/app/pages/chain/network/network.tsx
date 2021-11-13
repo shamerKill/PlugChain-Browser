@@ -101,7 +101,7 @@ const PageChainNetwork: FC = () => {
           </dl>
           {/* <dl className="chain_info_dl">
             <dt className="chain_info_dt">
-            { getEnvConfig.APP_TOKEN_NAME }&nbsp;<I18 text="price" />
+            { getEnvConfig.APP_TOKEN_NAME_VIEW }&nbsp;<I18 text="price" />
             </dt>
             <dd className="chain_info_dd">
               { infoData.price }

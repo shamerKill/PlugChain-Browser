@@ -4,7 +4,7 @@ import I18 from '../../../../i18n/component';
 import ComConTable, { TypeComConTableContent, TypeComConTableHeader } from '../../../components/control/table.copy';
 import ComConButton from '../../../components/control/button';
 import ComConSvg from '../../../components/control/icon';
-import { formatClass, formatTime, getEnvConfig, getOnlyId, useFormatSearch, useSafeLink, walletAmountToToken, fetchData, justifySearch, walletVerifyAddress, walletDecode, walletCreateToken, walletFormMnemonic } from '../../../../tools';
+import { formatClass, formatTime, getEnvConfig, getOnlyId, useFormatSearch, useSafeLink, walletAmountToToken, fetchData, justifySearch, walletVerifyAddress, walletDecode } from '../../../../tools';
 import useGetDispatch from '../../../../databases/hook';
 import { InRootState } from '../../../../@types/redux';
 import { formatNumberStr } from '../../../../tools/string';
@@ -220,7 +220,7 @@ const PageWalletAccount: FC = () => {
           <button className="account_func" onClick={() => copy(address)}>
             <ComConSvg xlinkHref="#icon-copy" />
           </button>
-          <button className="account_func" onClick={async () => {
+          {/* <button className="account_func" onClick={async () => {
             walletCreateToken({
               wallet: await walletFormMnemonic('illegal call sort agree please barely kick one ghost confirm advance aware'),
               gasAll: '0.0002'
@@ -229,7 +229,7 @@ const PageWalletAccount: FC = () => {
             });
           }}>
             发币
-          </button>
+          </button> */}
           {/* <button className="account_func">
             <ComConSvg xlinkHref="#icon-qr-code" />
           </button> */}
@@ -238,7 +238,7 @@ const PageWalletAccount: FC = () => {
         <div className="account_info_account">
           <dl className="account_info_dl account_info_important">
             <dd className="account_info_dd">
-              { coinVolume }&nbsp;{ getEnvConfig.APP_TOKEN_NAME }
+              { coinVolume }&nbsp;{ getEnvConfig.APP_TOKEN_NAME_VIEW }
               {/* <span className="account_info_small">≈&nbsp;${marketValue}</span> */}
             </dd>
             <dt className="account_info_dt"><I18 text="extra" /></dt>
@@ -267,15 +267,15 @@ const PageWalletAccount: FC = () => {
         <h2 className="account_title"><I18 text="pledgeMining" /></h2>
         <div className="account_pledge_box">
           <dl className="account_pledge_dl">
-            <dt className="account_pledge_dt">{ pledgingVol }<small className="pledge_unit">{ getEnvConfig.APP_TOKEN_NAME }</small></dt>
+            <dt className="account_pledge_dt">{ pledgingVol }<small className="pledge_unit">{ getEnvConfig.APP_TOKEN_NAME_VIEW }</small></dt>
             <dd className="account_pledge_dd"><I18 text="pledging" /></dd>
           </dl>
           <dl className="account_pledge_dl">
-            <dt className="account_pledge_dt">{ redeemVol }<small className="pledge_unit">{ getEnvConfig.APP_TOKEN_NAME }</small></dt>
+            <dt className="account_pledge_dt">{ redeemVol }<small className="pledge_unit">{ getEnvConfig.APP_TOKEN_NAME_VIEW }</small></dt>
             <dd className="account_pledge_dd"><I18 text="redeeming" /></dd>
           </dl>
           <dl className="account_pledge_dl">
-            <dt className="account_pledge_dt">{ rewardVol }<small className="pledge_unit">{ getEnvConfig.APP_TOKEN_NAME }</small></dt>
+            <dt className="account_pledge_dt">{ rewardVol }<small className="pledge_unit">{ getEnvConfig.APP_TOKEN_NAME_VIEW }</small></dt>
             <dd className="account_pledge_dd"><I18 text="pledgeReward" /></dd>
           </dl>
           <div className="account_pledge_buttons">

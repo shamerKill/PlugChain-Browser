@@ -22,7 +22,7 @@ const useI18 = (text: string): string => {
   useEffect(() => {
     const reg = new RegExp(`\\$TOKEN`, 'g');
     if (json[text]) {
-      setResult(json[text].replace(reg, getEnvConfig.APP_TOKEN_NAME));
+      setResult(json[text].replace(reg, getEnvConfig.APP_TOKEN_NAME_VIEW));
     }
   }, [ json, text ]);
   return result;

@@ -330,7 +330,7 @@ const PageInfoPledge: FC = () => {
         <div className="info_list">
           <div className="info_item_box">
             <dl className="info_item_dl">
-              <dt className="info_item_dt">{ pledgeNodeInfo.pledged }&nbsp;<small className="info_item_small">{ getEnvConfig.APP_TOKEN_NAME }</small></dt>
+              <dt className="info_item_dt">{ pledgeNodeInfo.pledged }&nbsp;<small className="info_item_small">{ getEnvConfig.APP_TOKEN_NAME_VIEW }</small></dt>
               <dd className="info_item_dd"><I18 text="pledged" /></dd>
             </dl>
           </div>
@@ -342,14 +342,14 @@ const PageInfoPledge: FC = () => {
           </div>
           <div className="info_item_box">
             <dl className="info_item_dl">
-              <dt className="info_item_dt">{ pledgeNodeInfo.earned }&nbsp;<small className="info_item_small">{ getEnvConfig.APP_TOKEN_NAME }</small></dt>
+              <dt className="info_item_dt">{ pledgeNodeInfo.earned }&nbsp;<small className="info_item_small">{ getEnvConfig.APP_TOKEN_NAME_VIEW }</small></dt>
               <dd className="info_item_dd"><I18 text="earned" /></dd>
             </dl>
           </div>
           {
             pledgeNodeInfo.redeeming !== '0' && <div className="info_item_box">
               <dl className="info_item_dl">
-                <dt className="info_item_dt">{ pledgeNodeInfo.redeeming }&nbsp;<small className="info_item_small">{ getEnvConfig.APP_TOKEN_NAME }</small></dt>
+                <dt className="info_item_dt">{ pledgeNodeInfo.redeeming }&nbsp;<small className="info_item_small">{ getEnvConfig.APP_TOKEN_NAME_VIEW }</small></dt>
                 <dd className="info_item_dd"><I18 text="redeeming" /></dd>
               </dl>
             </div>
@@ -357,7 +357,7 @@ const PageInfoPledge: FC = () => {
           {
             pledgeNodeInfo.rePledging !== '0' && <div className="info_item_box">
               <dl className="info_item_dl">
-                <dt className="info_item_dt">{ pledgeNodeInfo.rePledging }&nbsp;<small className="info_item_small">{ getEnvConfig.APP_TOKEN_NAME }</small></dt>
+                <dt className="info_item_dt">{ pledgeNodeInfo.rePledging }&nbsp;<small className="info_item_small">{ getEnvConfig.APP_TOKEN_NAME_VIEW }</small></dt>
                 <dd className="info_item_dd">
                   <I18 text="rePledgingLocking" />
                   <span className="info_item_dd_tip">
@@ -370,7 +370,7 @@ const PageInfoPledge: FC = () => {
           }
           <div className="info_item_box">
             <dl className="info_item_dl">
-              <dt className="info_item_dt">{ balance }&nbsp;<small className="info_item_small">{ getEnvConfig.APP_TOKEN_NAME }</small></dt>
+              <dt className="info_item_dt">{ balance }&nbsp;<small className="info_item_small">{ getEnvConfig.APP_TOKEN_NAME_VIEW }</small></dt>
               <dd className="info_item_dd"><I18 text="extra" /></dd>
             </dl>
           </div>
@@ -403,11 +403,11 @@ const PageInfoPledge: FC = () => {
                           </dl>
                           <dl className="pledge_node_dl">
                             <dt className="pledge_node_dt">{node.pledgedVolume}</dt>
-                            <dt className="pledge_node_dd"><I18 text="pledgeVolume" />({ getEnvConfig.APP_TOKEN_NAME })</dt>
+                            <dt className="pledge_node_dd"><I18 text="pledgeVolume" />({ getEnvConfig.APP_TOKEN_NAME_VIEW })</dt>
                           </dl>
                           <dl className="pledge_node_dl">
                             <dt className="pledge_node_dt">{node.minVolume}</dt>
-                            <dt className="pledge_node_dd"><I18 text="minPledgeVolume" />({ getEnvConfig.APP_TOKEN_NAME })</dt>
+                            <dt className="pledge_node_dd"><I18 text="minPledgeVolume" />({ getEnvConfig.APP_TOKEN_NAME_VIEW })</dt>
                           </dl>
                         </div>
                       </div>
@@ -432,7 +432,7 @@ const PageInfoPledge: FC = () => {
                       disabled={exeLoading}
                       value={volume}
                       onChange={e => setVolume(e.target.value)} />
-                    <p className="transaction_box_info">{ getEnvConfig.APP_TOKEN_NAME }</p>
+                    <p className="transaction_box_info">{ getEnvConfig.APP_TOKEN_NAME_VIEW }</p>
                   </div>
                 </React.Fragment>
               )
@@ -445,7 +445,7 @@ const PageInfoPledge: FC = () => {
                 disabled={true}
                 value={fee}
                 onChange={e => setFee(e.target.value)} />
-              <p className="transaction_box_info">{ getEnvConfig.APP_TOKEN_NAME }</p>
+              <p className="transaction_box_info">{ getEnvConfig.APP_TOKEN_NAME_VIEW }</p>
             </div>
             <p className="transaction_box_title"><I18 text="password" /></p>
             <form>

@@ -94,7 +94,17 @@ const ComLayFooter: FC = () => {
               </dt>
               <dd>
                 <p className={formatClass(['layout-footer-list-item'])}>
-                  <a download="cosmo_wallet.apk" href="https://cosmo-wallet.oss-accelerate.aliyuncs.com/app-release.apk"><I18 text="footerList4-1" /></a>
+                  <a download="cosmo_wallet.apk" href="https://cosmo-wallet.oss-accelerate.aliyuncs.com/app-release.apk">Android</a>
+                </p>
+              </dd>
+              <dd>
+                <p className={formatClass(['layout-footer-list-item'])}>
+                  <a download="cosmo_wallet.apk" href="https://cosmo-wallet-desktop.oss-ap-southeast-1.aliyuncs.com/wallet-desktop.dmg">MacOS</a>
+                </p>
+              </dd>
+              <dd>
+                <p className={formatClass(['layout-footer-list-item'])}>
+                  <a download="cosmo_wallet.apk" href="https://cosmo-wallet-desktop.oss-ap-southeast-1.aliyuncs.com/wallet-desktop.exe">Windows</a>
                 </p>
               </dd>
             </dl>

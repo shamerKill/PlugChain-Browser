@@ -33,6 +33,9 @@
     width: 20%;
     position: relative;
     padding: 2rem 0;
+    &:nth-last-child(1) {
+      width: 40%;
+    }
     .chain_info_dt {
       opacity: var(--opacity-level-2);
       font-size: (14/12)+rem;
@@ -98,7 +101,7 @@
     }
     .chain_info_dl {
       width: 50%;
-      &:nth-last-child(2), &:nth-last-child(3) {
+      &:nth-last-child(1), &:nth-last-child(2), &:nth-last-child(3) {
         width: 100%;
       }
     }

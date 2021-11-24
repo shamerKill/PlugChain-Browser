@@ -139,6 +139,17 @@
         opacity: var(--opacity-level-2);
       }
     }
+    @media (max-width: 1300px) {
+      .chain_market {
+        .chain_info_dl {
+          width: 50%;
+          padding: 1rem 0;
+          &:nth-child(2)::after {
+            display: none;
+          }
+        }
+      }
+    }
     @media (max-width: 720px) {
       .chain_first {
         width: 100%;

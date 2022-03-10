@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Route, BrowserRouter, Switch } from 'react-router-dom';
+import { Route, BrowserRouter, Switch, Redirect } from 'react-router-dom';
 import RoutersRoot from '../routers';
 import { useLanguageHook } from '../services/config.services';
 
@@ -23,6 +23,7 @@ const Routers = () => {
             <Route {...router} />
           ))
         }
+        <Redirect to={{ pathname: '/wallet/account' }} />
       </Switch>
     </BrowserRouter>
   );

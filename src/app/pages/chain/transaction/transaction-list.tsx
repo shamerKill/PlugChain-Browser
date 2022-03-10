@@ -56,7 +56,7 @@ const PageBlocksList: FC = () => {
               { key: getOnlyId(), value: formatTime(tx.create_time) },
               { key: getOnlyId(), value: <ComConLink link={walletVerifyAddress(tx.from)}>{ tx.from }</ComConLink> },
               { key: getOnlyId(), value: <ComConLink link={walletVerifyAddress(tx.to)}>{ tx.to }</ComConLink> },
-              { key: getOnlyId(), value: tx.amount },
+              { key: getOnlyId(), value:`${tx.amount} ${tx.coin}`},
               { key: getOnlyId(), value: tx.fee },
             ]
           };

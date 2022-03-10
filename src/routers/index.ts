@@ -11,7 +11,7 @@ const routeTools = (routeArr: RouteProps[], prev: string): InRouteConfig[] => ro
 }));
 
 const RoutersRoot: InRouteConfig[] = [
-  ...routeTools(chainInfoRouter, chainInfoPath),
+  // ...routeTools(chainInfoRouter, chainInfoPath),
   ...routeTools(walletsRouter, walletsPath),
 ];
 

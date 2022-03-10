@@ -86,7 +86,7 @@ const PageChainAccount: FC = () => {
               { key: getOnlyId(), value: <ComConLink noLink={txTypeOutput} link={walletVerifyAddress(tx.from)}>{ tx.from }</ComConLink> },
               { key: getOnlyId(), value: <ComConLink noLink={!txTypeOutput} link={walletVerifyAddress(tx.to)}>{ tx.to }</ComConLink> },
               { key: getOnlyId(), value: type },
-              { key: getOnlyId(), value: tx.amount },
+              { key: getOnlyId(), value:`${tx.amount} ${tx.coin}`},
               { key: getOnlyId(), value: tx.fee },
             ]
           };

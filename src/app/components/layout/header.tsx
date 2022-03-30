@@ -43,11 +43,11 @@ const ComLayHeader: FC<{ headerBg: boolean }> = ({ headerBg }) => {
       <div className={formatClass(['layout-header-inner'])}>
         <ComConLogo
           className={formatClass(['layout-header-logo'])}
-          link="/"
+          link="/v2"
           src={require('../../../assets/logo/chain-full-dark.png')} />
         <div className={formatClass(['layout-header-menu', 'layout-header-pc'])}>
           <ul className={formatClass(['layout-header-menu-ul'])}>
-            <li className={formatClass(['layout-header-menu-list'])}><Link to="/"><I18 text="home" /></Link></li>
+            <li className={formatClass(['layout-header-menu-list'])}><a href="/v2"><I18 text="home" /></a></li>
             <li className={formatClass(['layout-header-menu-list'])}><Link to="/"><I18 text="blockChain" /></Link></li>
             {
               wallet.hasWallet && webConfig.deployType === 'test' && <li className={formatClass(['layout-header-menu-list'])}><Link to="/wallet/receive"><ComConSvg xlinkHref="#icon-water" /></Link></li>
@@ -90,7 +90,7 @@ const ComLayHeader: FC<{ headerBg: boolean }> = ({ headerBg }) => {
               </ComConButton>
             </div> */}
             <ul className={formatClass(['layout-header-menu-ul'])}>
-              <li className={formatClass(['layout-header-menu-list'])}><Link to="/"><I18 text="home" /></Link></li>
+              <li className={formatClass(['layout-header-menu-list'])}><a href="/v2"><I18 text="home" /></a></li>
               <li className={formatClass(['layout-header-menu-list'])}><Link to="/"><I18 text="blockChain" /></Link></li>
               {/* <li className={formatClass(['layout-header-menu-list'])}><Link to="/"><I18 text="wallet" /></Link></li> */}
               <li className={formatClass(['layout-header-menu-list'])}>

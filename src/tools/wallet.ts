@@ -1,4 +1,4 @@
-import { DirectSecp256k1HdWallet, DirectSecp256k1HdWalletOptions, EncodeObject } from '@cosmjs/proto-signing';
+import { DirectSecp256k1HdWallet, DirectSecp256k1HdWalletOptions, EncodeObject } from '@shamer.lib/proto-signing';
 import { SigningStargateClient, accountFromAny, Account, StdFee } from '@cosmjs/stargate';
 import minimal from 'protobufjs/minimal';
 import base64js from 'base64-js';
@@ -93,7 +93,7 @@ export const walletFormMnemonic = async (mnemonic: string, options?: Partial<Dir
 };
 
 export const walletGetOffline = async (wallet: DirectSecp256k1HdWallet) => {
-  const client = await SigningStargateClient.offline(wallet);
+  const client = await SigningStargateClient.offline(wallet as any);
   return client;
 };
 

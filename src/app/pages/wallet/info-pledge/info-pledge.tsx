@@ -13,7 +13,7 @@ import confirmTools from '../../../components/tools/confirm';
 import { Link } from 'react-router-dom';
 
 import './info-pledge.scss';
-import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
+import { DirectSecp256k1HdWallet } from '@shamer.lib//proto-signing';
 import { Subscription } from 'rxjs';
 import { NumberTools } from '../../../../tools/number';
 

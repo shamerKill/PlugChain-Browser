@@ -13,9 +13,9 @@ import confirmTools from '../../../components/tools/confirm';
 import { Link } from 'react-router-dom';
 
 import './info-pledge.scss';
-import { DirectSecp256k1HdWallet } from '@shamer.lib//proto-signing';
 import { Subscription } from 'rxjs';
 import { NumberTools } from '../../../../tools/number';
+import { PlugDirectSecp256k1HdWallet } from '../../../../tools/plugWallet';
 
 type TypePledgeNodeInfo = {
   avatar: any;
@@ -79,7 +79,7 @@ const PageInfoPledge: FC = () => {
   };
   const submitBackup = useCallback(async () => {
     await sleep(0.1);
-    let useWallet: DirectSecp256k1HdWallet
+    let useWallet: PlugDirectSecp256k1HdWallet
     try {
       useWallet = await walletDecode( wallet.encryptionKey, password );
     } catch (err) {

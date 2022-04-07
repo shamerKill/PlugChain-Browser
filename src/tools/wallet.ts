@@ -1,4 +1,4 @@
-import { DirectSecp256k1HdWallet, DirectSecp256k1HdWalletOptions, EncodeObject } from '@shamer.lib/proto-signing';
+import { EncodeObject } from '@cosmjs/proto-signing';
 import { SigningStargateClient, accountFromAny, Account, StdFee } from '@cosmjs/stargate';
 import minimal from 'protobufjs/minimal';
 import base64js from 'base64-js';
@@ -13,6 +13,7 @@ import { toHex } from './string';
 import { BehaviorSubject, Subscription, timer, zip } from 'rxjs';
 import { take as RxTake } from 'rxjs/operators';
 import { changeSeconds } from './time';
+import { PlugDirectSecp256k1HdWallet, PlugDirectSecp256k1HdWalletOptions } from './plugWallet';
 
 const rpcURI = getEnvConfig.WALLET_RPC_BASE;
 const appTokenName = getEnvConfig.APP_TOKEN_NAME;
@@ -66,40 +67,40 @@ export const walletVerifyMnemonic = async (mnemonics: string[]) => {
 };
 
 export const walletCreate = async () => {
-  const newWallet = await DirectSecp256k1HdWallet.generate(12, { prefix: addressPrefix });
+  const newWallet = await PlugDirectSecp256k1HdWallet.generate(12, { prefix: addressPrefix, accountType: 'evm' });
   return newWallet;
 };
 
-export const walletEncode = async (wallet: DirectSecp256k1HdWallet, password: string) => {
+export const walletEncode = async (wallet: PlugDirectSecp256k1HdWallet, password: string) => {
   const encodeStr = await wallet.serialize(password);
   return encodeStr;
 };
 
 export const walletDecode = async (encodeStr: string, password: string) => {
-  const backWallet = await DirectSecp256k1HdWallet.deserialize(encodeStr, password);
+  const backWallet = await PlugDirectSecp256k1HdWallet.deserialize(encodeStr, password);
   return backWallet;
 };
 
-export const walletToAddress = async (wallet: DirectSecp256k1HdWallet) => {
+export const walletToAddress = async (wallet: PlugDirectSecp256k1HdWallet) => {
   const [ { address } ] = await wallet.getAccounts();
   return address;
 };
 
-export const walletToMnemonic = async (wallet: DirectSecp256k1HdWallet) => wallet.mnemonic;
+export const walletToMnemonic = async (wallet: PlugDirectSecp256k1HdWallet) => wallet.mnemonic;
 
-export const walletFormMnemonic = async (mnemonic: string, options?: Partial<DirectSecp256k1HdWalletOptions>) => {
-  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: addressPrefix, ...options });
+export const walletFormMnemonic = async (mnemonic: string, options?: Partial<PlugDirectSecp256k1HdWalletOptions>) => {
+  const wallet = await PlugDirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: addressPrefix, accountType: 'evm', ...options });
   return wallet;
 };
 
-export const walletGetOffline = async (wallet: DirectSecp256k1HdWallet) => {
-  const client = await SigningStargateClient.offline(wallet as any);
+export const walletGetOffline = async (wallet: PlugDirectSecp256k1HdWallet) => {
+  const client = await SigningStargateClient.offline(wallet);
   return client;
 };
 
 export const walletAddressToHex = (address: string) => toHex(minimal.Writer.create().uint32(10).string(address).finish());
 
-export const walletGetAccountInfo = async (wallet: DirectSecp256k1HdWallet) => new Promise<Account>((resolve, reject) => {
+export const walletGetAccountInfo = async (wallet: PlugDirectSecp256k1HdWallet) => new Promise<Account>((resolve, reject) => {
   (async () => {
     const address = await walletToAddress(wallet);
     walletFetch('abci_query', {
@@ -120,7 +121,7 @@ export const walletGetAccountInfo = async (wallet: DirectSecp256k1HdWallet) => n
 });
 
 export const walletSign = async ({ wallet, message, fee, memo = '' }:
-  { wallet: DirectSecp256k1HdWallet, message: readonly EncodeObject[], fee: StdFee, memo?: string }) => {
+  { wallet: PlugDirectSecp256k1HdWallet, message: readonly EncodeObject[], fee: StdFee, memo?: string }) => {
   const account = await walletGetAccountInfo(wallet);
   const result = await ((await walletGetOffline(wallet)).sign(
     account.address, [ ...message ], fee, memo, { accountNumber: account.accountNumber, sequence: account.sequence, chainId: chainId },
@@ -131,7 +132,7 @@ export const walletSign = async ({ wallet, message, fee, memo = '' }:
 };
 
 export const walletTransfer = ({ wallet, toAddress, volume, gasAll, memo = '', gasLimit = defaultTransGasLimit }:
-  { wallet: DirectSecp256k1HdWallet; toAddress: string; volume: string; gasAll: string; memo?: string; gasLimit?: string; }) => {
+  { wallet: PlugDirectSecp256k1HdWallet; toAddress: string; volume: string; gasAll: string; memo?: string; gasLimit?: string; }) => {
   const { fetchData, resultObserver } = walletFetchObserve();
   (async () => {
     const account = await walletGetAccountInfo(wallet);
@@ -152,7 +153,7 @@ export const walletTransfer = ({ wallet, toAddress, volume, gasAll, memo = '', g
 };
 
 export const walletCreateToken = ({ wallet, gasAll, memo = '', gasLimit = defaultTransGasLimit }:
-  { wallet: DirectSecp256k1HdWallet; gasAll: string; memo?: string; gasLimit?: string; }) => {
+  { wallet: PlugDirectSecp256k1HdWallet; gasAll: string; memo?: string; gasLimit?: string; }) => {
   const { fetchData, resultObserver } = walletFetchObserve();
   (async () => {
     const account = await walletGetAccountInfo(wallet);
@@ -177,7 +178,7 @@ export const walletCreateToken = ({ wallet, gasAll, memo = '', gasLimit = defaul
 };
 
 export const walletDelegate = ({ wallet, validatorAddress, volume, gasAll, gasLimit = defaultDelegateLimit, reDelegateAddress }:
-  { wallet: DirectSecp256k1HdWallet; validatorAddress: string; volume: string; gasAll: string; gasLimit?: string; reDelegateAddress?: string; },
+  { wallet: PlugDirectSecp256k1HdWallet; validatorAddress: string; volume: string; gasAll: string; gasLimit?: string; reDelegateAddress?: string; },
 type: 'delegate'|'unDelegate'|'reDelegate'|'withdrawRewards' = 'delegate') => {
   const { fetchData, resultObserver } = walletFetchObserve();
   (async () => {

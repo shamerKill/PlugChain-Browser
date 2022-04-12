@@ -20,7 +20,7 @@
     "@loadable/component": "^5.14.1",
     "@multiavatar/multiavatar": "^1.0.6",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
-    "@shamer.lib/proto-signing": "^0.28.1-rc1",
+    "@shamer.lib/proto-signing": "0.28.1-rc2",
     "@svgr/webpack": "5.5.0",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.6",

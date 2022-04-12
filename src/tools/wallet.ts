@@ -1,4 +1,4 @@
-import { EncodeObject } from '@cosmjs/proto-signing';
+import { EncodeObject, DirectSecp256k1HdWallet, DirectSecp256k1HdWalletOptions, makeSignDoc, makeSignBytes } from '@shamer.lib/proto-signing';
 import { SigningStargateClient, accountFromAny, Account, StdFee } from '@cosmjs/stargate';
 import minimal from 'protobufjs/minimal';
 import base64js from 'base64-js';
@@ -13,7 +13,16 @@ import { toHex } from './string';
 import { BehaviorSubject, Subscription, timer, zip } from 'rxjs';
 import { take as RxTake } from 'rxjs/operators';
 import { changeSeconds } from './time';
-import { PlugDirectSecp256k1HdWallet, PlugDirectSecp256k1HdWalletOptions } from './plugWallet';
+import { accountFromBaseAccount } from './cosmo.copy';
+import { EthAccount } from './proto/ethermint/types/v1/account';
+import { Int53 } from '@cosmjs/math';
+import { makeAuthInfoBytes } from '@cosmjs/proto-signing';
+import { fromBase64 } from '@cosmjs/encoding';
+import { PubKey } from './proto/crypto/v1/ethsecp256k1/keys';
+import { Any } from '@cosmjs/proto-signing/build/codec/google/protobuf/any';
+import { Secp256k1 } from '@cosmjs/crypto';
+// eslint-disable-next-line
+import { keccak_256 } from '@noble/hashes/sha3';
 
 const rpcURI = getEnvConfig.WALLET_RPC_BASE;
 const appTokenName = getEnvConfig.APP_TOKEN_NAME;
@@ -67,40 +76,40 @@ export const walletVerifyMnemonic = async (mnemonics: string[]) => {
 };
 
 export const walletCreate = async () => {
-  const newWallet = await PlugDirectSecp256k1HdWallet.generate(12, { prefix: addressPrefix, accountType: 'evm' });
+  const newWallet = await DirectSecp256k1HdWallet.generate(12, { prefix: addressPrefix, accountType: 'evm' });
   return newWallet;
 };
 
-export const walletEncode = async (wallet: PlugDirectSecp256k1HdWallet, password: string) => {
+export const walletEncode = async (wallet: DirectSecp256k1HdWallet, password: string) => {
   const encodeStr = await wallet.serialize(password);
   return encodeStr;
 };
 
 export const walletDecode = async (encodeStr: string, password: string) => {
-  const backWallet = await PlugDirectSecp256k1HdWallet.deserialize(encodeStr, password);
+  const backWallet = await DirectSecp256k1HdWallet.deserialize(encodeStr, password);
   return backWallet;
 };
 
-export const walletToAddress = async (wallet: PlugDirectSecp256k1HdWallet) => {
+export const walletToAddress = async (wallet: DirectSecp256k1HdWallet) => {
   const [ { address } ] = await wallet.getAccounts();
   return address;
 };
 
-export const walletToMnemonic = async (wallet: PlugDirectSecp256k1HdWallet) => wallet.mnemonic;
+export const walletToMnemonic = async (wallet: DirectSecp256k1HdWallet) => wallet.mnemonic;
 
-export const walletFormMnemonic = async (mnemonic: string, options?: Partial<PlugDirectSecp256k1HdWalletOptions>) => {
-  const wallet = await PlugDirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: addressPrefix, accountType: 'evm', ...options });
+export const walletFormMnemonic = async (mnemonic: string, options?: Partial<DirectSecp256k1HdWalletOptions>) => {
+  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: addressPrefix, accountType: 'evm', ...options });
   return wallet;
 };
 
-export const walletGetOffline = async (wallet: PlugDirectSecp256k1HdWallet) => {
-  const client = await SigningStargateClient.offline(wallet);
+export const walletGetOffline = async (wallet: DirectSecp256k1HdWallet) => {
+  const client = await SigningStargateClient.offline(wallet as any);
   return client;
 };
 
 export const walletAddressToHex = (address: string) => toHex(minimal.Writer.create().uint32(10).string(address).finish());
 
-export const walletGetAccountInfo = async (wallet: PlugDirectSecp256k1HdWallet) => new Promise<Account>((resolve, reject) => {
+export const walletGetAccountInfo = async (wallet: DirectSecp256k1HdWallet) => new Promise<Account>((resolve, reject) => {
   (async () => {
     const address = await walletToAddress(wallet);
     walletFetch('abci_query', {
@@ -112,7 +121,11 @@ export const walletGetAccountInfo = async (wallet: PlugDirectSecp256k1HdWallet) 
       if (success && data.response.code === 0) {
         const reader = new minimal.Reader(base64js.toByteArray(data.response.value));
         const decodeData = QueryAccountResponse.decode(reader).account;
-        if (decodeData) resolve(accountFromAny(decodeData));
+        if (decodeData && decodeData.typeUrl === '/ethermint.types.v1.EthAccount') {
+          let account = EthAccount.decode(decodeData.value);
+          let demo = accountFromBaseAccount(account.baseAccount);
+          resolve(demo);
+        } else if (decodeData) resolve(accountFromAny(decodeData));
         else reject(data.response);
       } else if (success && data.response.code !== 0) reject(data.response);
       if (error) reject(message);
@@ -120,11 +133,48 @@ export const walletGetAccountInfo = async (wallet: PlugDirectSecp256k1HdWallet) 
   })();
 });
 
-export const walletSign = async ({ wallet, message, fee, memo = '' }:
-  { wallet: PlugDirectSecp256k1HdWallet, message: readonly EncodeObject[], fee: StdFee, memo?: string }) => {
+export const walletSign = async ({ wallet, messages, fee, memo = '' }:
+  { wallet: DirectSecp256k1HdWallet, messages: readonly EncodeObject[], fee: StdFee, memo?: string }) => {
   const account = await walletGetAccountInfo(wallet);
-  const result = await ((await walletGetOffline(wallet)).sign(
-    account.address, [ ...message ], fee, memo, { accountNumber: account.accountNumber, sequence: account.sequence, chainId: chainId },
+  const walletClient = await walletGetOffline(wallet);
+  let result: TxRaw;
+  // 重写转账签名方法
+  if ((await wallet.getAccounts())[0].algo === 'eth_secp256k1') {
+    const [ accountNumber, sequence ] = [ account.accountNumber, account.sequence ];
+    const pubkeyProto = PubKey.fromPartial({
+      key: fromBase64(account.pubkey!.value),
+    });
+    const pubkey = Any.fromPartial({
+      typeUrl: '/ethermint.crypto.v1.ethsecp256k1.PubKey',
+      value: pubkeyProto.key,
+    });
+    const txBodyEncodeObject = {
+      typeUrl: '/cosmos.tx.v1beta1.TxBody',
+      value: {
+        messages: messages,
+        memo: memo,
+      },
+    };
+    const txBodyBytes = walletClient.registry.encode(txBodyEncodeObject);
+    const gasLimit = Int53.fromString(fee.gas).toNumber();
+    const authInfoBytes = makeAuthInfoBytes(
+      [ pubkey ], fee.amount, gasLimit, sequence,
+    );
+    const signDoc = makeSignDoc(
+      txBodyBytes, authInfoBytes, chainId, accountNumber,
+    );
+    const signBytes = makeSignBytes(signDoc);
+    const hashedMessage = keccak_256(signBytes);
+    const accounts = (await (wallet as any).getAccountsWithPrivkeys());
+    const signatureA = await Secp256k1.createSignature(hashedMessage, accounts[0].privkey);
+    const signatureBytes = new Uint8Array([ ...signatureA.r(32), ...signatureA.s(32), (signatureA.recovery + 27) ]);
+    result = TxRaw.fromPartial({
+      bodyBytes: signDoc.bodyBytes,
+      authInfoBytes: signDoc.authInfoBytes,
+      signatures: [ signatureBytes ],
+    });
+  } else result = await ((await walletGetOffline(wallet)).sign(
+    account.address, [ ...messages ], fee, memo, { accountNumber: account.accountNumber, sequence: account.sequence, chainId: chainId },
   ));
   const raw = TxRaw.encode(result).finish();
   const rawTx = base64js.fromByteArray(raw);
@@ -132,7 +182,7 @@ export const walletSign = async ({ wallet, message, fee, memo = '' }:
 };
 
 export const walletTransfer = ({ wallet, toAddress, volume, gasAll, memo = '', gasLimit = defaultTransGasLimit }:
-  { wallet: PlugDirectSecp256k1HdWallet; toAddress: string; volume: string; gasAll: string; memo?: string; gasLimit?: string; }) => {
+  { wallet: DirectSecp256k1HdWallet; toAddress: string; volume: string; gasAll: string; memo?: string; gasLimit?: string; }) => {
   const { fetchData, resultObserver } = walletFetchObserve();
   (async () => {
     const account = await walletGetAccountInfo(wallet);
@@ -146,14 +196,14 @@ export const walletTransfer = ({ wallet, toAddress, volume, gasAll, memo = '', g
       },
     } ];
     const transferFee = walletGetFee('transfer', { allAmount: gasAll, gasLimit: gasLimit });
-    const signRaw = await walletSign({ wallet, message: transferMessage, fee: transferFee, memo });
+    const signRaw = await walletSign({ wallet, messages: transferMessage, fee: transferFee, memo });
     fetchData(signRaw);
   })();
   return resultObserver;
 };
 
 export const walletCreateToken = ({ wallet, gasAll, memo = '', gasLimit = defaultTransGasLimit }:
-  { wallet: PlugDirectSecp256k1HdWallet; gasAll: string; memo?: string; gasLimit?: string; }) => {
+  { wallet: DirectSecp256k1HdWallet; gasAll: string; memo?: string; gasLimit?: string; }) => {
   const { fetchData, resultObserver } = walletFetchObserve();
   (async () => {
     const account = await walletGetAccountInfo(wallet);
@@ -171,14 +221,14 @@ export const walletCreateToken = ({ wallet, gasAll, memo = '', gasLimit = defaul
       },
     } ];
     const transferFee = walletGetFee('delegate', { allAmount: gasAll, gasLimit: gasLimit });
-    const signRaw = await walletSign({ wallet, message: transferMessage, fee: transferFee, memo });
+    const signRaw = await walletSign({ wallet, messages: transferMessage, fee: transferFee, memo });
     fetchData(signRaw);
   })();
   return resultObserver;
 };
 
 export const walletDelegate = ({ wallet, validatorAddress, volume, gasAll, gasLimit = defaultDelegateLimit, reDelegateAddress }:
-  { wallet: PlugDirectSecp256k1HdWallet; validatorAddress: string; volume: string; gasAll: string; gasLimit?: string; reDelegateAddress?: string; },
+  { wallet: DirectSecp256k1HdWallet; validatorAddress: string; volume: string; gasAll: string; gasLimit?: string; reDelegateAddress?: string; },
 type: 'delegate'|'unDelegate'|'reDelegate'|'withdrawRewards' = 'delegate') => {
   const { fetchData, resultObserver } = walletFetchObserve();
   (async () => {
@@ -220,7 +270,7 @@ type: 'delegate'|'unDelegate'|'reDelegate'|'withdrawRewards' = 'delegate') => {
       value: value,
     } ];
     const transferFee = walletGetFee('delegate', { allAmount: gasAll, gasLimit: gasLimit });
-    const signRaw = await walletSign({ wallet, message: transferMessage, fee: transferFee });
+    const signRaw = await walletSign({ wallet, messages: transferMessage, fee: transferFee });
     fetchData(signRaw);
   })();
   return resultObserver;

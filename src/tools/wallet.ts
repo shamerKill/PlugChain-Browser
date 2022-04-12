@@ -13,7 +13,7 @@ import { toHex } from './string';
 import { BehaviorSubject, Subscription, timer, zip } from 'rxjs';
 import { take as RxTake } from 'rxjs/operators';
 import { changeSeconds } from './time';
-import { accountFromBaseAccount } from './cosmo.copy';
+import { accountFromBaseAccount, accountPubKeyFormat } from './cosmo.copy';
 import { EthAccount } from './proto/ethermint/types/v1/account';
 import { Int53 } from '@cosmjs/math';
 import { makeAuthInfoBytes } from '@cosmjs/proto-signing';
@@ -140,9 +140,11 @@ export const walletSign = async ({ wallet, messages, fee, memo = '' }:
   let result: TxRaw;
   // 重写转账签名方法
   if ((await wallet.getAccounts())[0].algo === 'eth_secp256k1') {
+    const memPubkey = Uint8Array.from([ 10, 33, ...(await wallet.getAccounts())[0].pubkey ]);
+    const accountPubKey = account.pubkey || accountPubKeyFormat(memPubkey);
     const [ accountNumber, sequence ] = [ account.accountNumber, account.sequence ];
     const pubkeyProto = PubKey.fromPartial({
-      key: fromBase64(account.pubkey!.value),
+      key: fromBase64(accountPubKey.value),
     });
     const pubkey = Any.fromPartial({
       typeUrl: '/ethermint.crypto.v1.ethsecp256k1.PubKey',

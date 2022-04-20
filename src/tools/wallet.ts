@@ -175,7 +175,7 @@ export const walletSign = async ({ wallet, messages, fee, memo = '' }:
       authInfoBytes: signDoc.authInfoBytes,
       signatures: [ signatureBytes ],
     });
-  } else result = await ((await walletGetOffline(wallet)).sign(
+  } else result = await (walletClient.sign(
     account.address, [ ...messages ], fee, memo, { accountNumber: account.accountNumber, sequence: account.sequence, chainId: chainId },
   ));
   const raw = TxRaw.encode(result).finish();

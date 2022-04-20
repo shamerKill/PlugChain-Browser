@@ -107,8 +107,7 @@
   },
   "pre-commit": {
     "run": [
-      "lint",
-      "test:jest"
+      "lint"
     ]
   },
   "browserslist": {

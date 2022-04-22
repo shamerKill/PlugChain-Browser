@@ -12,6 +12,7 @@ import I18 from '../../../../i18n/component';
 import useI18 from '../../../../i18n/hooks';
 
 import './login.scss';
+import { accountTypeEnum, ComAccountsType, typeAccountType } from '../../../components/control/accountsType';
 
 const PageWalletLogin: FC = () => {
   const goLink = useSafeLink();
@@ -23,6 +24,7 @@ const PageWalletLogin: FC = () => {
   const [areaFocus, setAreaFocus] = useState(false);
   const [inputType, setInputType] = useState<'password'|'text'>('password');
   const [password, setPassword] = useState('');
+  const [accountType, setAccountType] = useState<typeAccountType>(accountTypeEnum.prc20);
 
   const changeInputType = () => {
     setInputType(status => status === 'text' ? 'password' : 'text');
@@ -40,7 +42,9 @@ const PageWalletLogin: FC = () => {
       setSignInIng(false);
       return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
     }
-    const wallet = await walletFormMnemonic(words.join(' '));
+    const wallet = await walletFormMnemonic(words.join(' '), {
+      accountType: accountType === accountTypeEnum.prc20 ? 'evm': 'default'
+    });
     const saveWalletKey = await walletEncode(wallet, password);
     const address = await walletToAddress(wallet);
     setWallet({
@@ -48,7 +52,8 @@ const PageWalletLogin: FC = () => {
       data: {
         hasWallet: true,
         address: address,
-        encryptionKey: saveWalletKey
+        encryptionKey: saveWalletKey,
+        type: accountType
       }
     });
     alertTools.create({ message: <I18 text="success" />, type: 'success' });
@@ -62,6 +67,11 @@ const PageWalletLogin: FC = () => {
   return (
     <ComponentsLayoutBase className="wallet_login_page">
       <h2 className="wallet_title"><I18 text="signInToYourAccount" /></h2>
+      <div className='wallet_title_select'>
+        <ComAccountsType
+          type={accountType}
+          onChange={setAccountType} />
+      </div>
       <textarea
         className="wallet_login_area"
         placeholder={textAreaPlaceholder + (areaFocus ? '\n\n/[^a-zA-Z]+/g' : '')}

@@ -177,6 +177,41 @@
   height: 2.4rem;
   text-align: center;
 }
+.control-radio-box {
+  display: flex;
+  align-items: center;
+}
+.control-radio-label {
+  display: flex;
+  align-items: center;
+  padding: 1rem 0;
+  cursor: pointer;
+}
+.control-radio-space {
+  width: 1rem;
+}
+.control-radio-span {
+  display: inline-block;
+  font-size: 1.2rem;
+  padding-left: 0.3rem;
+}
+.control-radio {
+  margin: 0;
+  height: 1.4rem;
+  width: 1.4rem;
+  padding: 0.6rem;
+  border-radius: 50%;
+  display: inline-block;
+  background-clip: content-box;
+  background-color: transparent;
+  border: 1px solid var(--color-primary-gray);
+  transition: background-color 0.1s, border-color 0.1s, padding 0.1s;
+}
+.control-radio[type='radio']:checked {
+  padding: 0.2rem;
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
 
 @keyframes loadingAnimate {
   0% {

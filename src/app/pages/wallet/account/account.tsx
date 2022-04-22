@@ -211,6 +211,7 @@ const PageWalletAccount: FC = () => {
         {/* title */}
         <h2 className="account_info_title">
           <I18 text="myAssets" />
+          <span>({wallet.type})</span>
           <Link className="account_info_reset" to="./reset"><I18 text="resetAccount"/></Link>
           <span className="account_info_export" onClick={() => onChangeShowExport()}><I18 text="exportAccount"/></span>
         </h2>

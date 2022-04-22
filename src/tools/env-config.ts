@@ -6,13 +6,13 @@ interface InEnvConfig {
 }
 
 const getEnvConfig = (): InEnvConfig => {
-  const mode = process.env.NODE_ENV;
-  const deployType = process.env.DEPLOY_TYPE || 'test';
+  const mode = process?.env?.NODE_ENV || 'production';
+  const deployType = process?.env?.DEPLOY_TYPE || 'production';
   const modeConfig = {
     TEST: mode === 'test',
     PRODUCTION: mode === 'production',
     DEVELOPMENT: mode === 'development',
-    deployType: process.env.DEPLOY_TYPE,
+    deployType: deployType,
   };
 
   try {

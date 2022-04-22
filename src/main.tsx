@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 import App from './app/App';
 // import { reportWebVitals } from './tools';
 import 'default-passive-events';
+import envConfig from './tools/env-config';
 
 
 (async () => {
@@ -14,7 +15,7 @@ import 'default-passive-events';
   );
 })();
 
-if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator && envConfig.PRODUCTION) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/service-worker.js').then(registration => {
       console.log('SW registered: ', 'ok');

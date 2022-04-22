@@ -12,6 +12,7 @@ import { InRootState } from '../../../../@types/redux';
 import { changeWallet } from '../../../../databases/store/wallet';
 import confirmTools from '../../../components/tools/confirm';
 import { useHistory } from 'react-router-dom';
+import { accountTypeEnum, ComAccountsType, typeAccountType } from '../../../components/control/accountsType';
 
 const PageWalletReset: FC = () => {
   const [, setWallet] = useGetDispatch<InRootState['wallet']>('wallet');
@@ -23,6 +24,7 @@ const PageWalletReset: FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [resetLoading ,setResetLoading] = useState(false);
   const [areaFocus, setAreaFocus] = useState(false);
+  const [accountType, setAccountType] = useState<typeAccountType>(accountTypeEnum.prc20);
 
   const verifyReset = async () => {
     if (!verifyPassword(newPassword)) return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
@@ -38,7 +40,9 @@ const PageWalletReset: FC = () => {
       setResetLoading(false);
       return alertTools.create({ message: <I18 text="passwordError" />, type: 'warning' });
     }
-    const wallet = await walletFormMnemonic(words.join(' '));
+    const wallet = await walletFormMnemonic(words.join(' '), {
+      accountType: accountType === accountTypeEnum.prc20 ? 'evm': 'default'
+    });
     const saveWalletKey = await walletEncode(wallet, newPassword);
     const address = await walletToAddress(wallet);
     setWallet({
@@ -46,7 +50,8 @@ const PageWalletReset: FC = () => {
       data: {
         hasWallet: true,
         address: address,
-        encryptionKey: saveWalletKey
+        encryptionKey: saveWalletKey,
+        type: accountType
       }
     });
     setResetLoading(false);
@@ -111,6 +116,9 @@ const PageWalletReset: FC = () => {
                 onChange={e => setConfirmPassword(e.target.value)} />
             </div>
           </form>
+          <ComAccountsType
+            type={accountType}
+            onChange={setAccountType} />
           <ComConButton
             loading={resetLoading}
             onClick={verifyReset}

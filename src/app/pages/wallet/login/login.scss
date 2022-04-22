@@ -81,6 +81,11 @@
     background: var(--color-primary-background-contrast);
     font-size: (20/12)+rem;
   }
+  .wallet_title_select {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 @media (max-width: 720px) {

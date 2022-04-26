@@ -8,6 +8,9 @@ const ComConLink: FC<{ link: string; noLink?: boolean; }> = ({ link, children, n
   if (noLink) return (
     <span className={formatClass(['a_link_no'])} title={children as string}>{children}</span>
   );
+  if (/^http/.test(link)) {
+    return <a className={formatClass(['a_link'])} target="_blank" href={link} title={children as string} rel="noreferrer">{children}</a>
+  }
   return (
     <Link className={formatClass(['a_link'])} to={link} title={children as string}>{children}</Link>
   );
